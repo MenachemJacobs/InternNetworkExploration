@@ -24,19 +24,24 @@ def random_message(num: int):
     return return_list
 
 
-Alpha = Account("Alpha", random_message(5), [])
-Bravo = Account("Bravo", random_message(5), [])
-Charlie = Account("Charlie", random_message(5), [])
-Delta = Account("Delta", random_message(5), [])
-Echo = Account("Echo", random_message(5), [])
-Foxtrot = Account("Foxtrot", random_message(5), [])
-Golf = Account("Golf", random_message(5), [])
+Alpha = Account("Alpha", random_message(5), []).set_secondary_score()
+Bravo = Account("Bravo", random_message(5), []).set_secondary_score()
+Charlie = Account("Charlie", random_message(5), []).set_secondary_score()
+Delta = Account("Delta", random_message(5), []).set_secondary_score()
+Echo = Account("Echo", random_message(5), []).set_secondary_score()
+Foxtrot = Account("Foxtrot", random_message(5), []).set_secondary_score()
+Golf = Account("Golf", random_message(5), []).set_secondary_score()
 
 Alpha.add_subscriptions([Bravo, Echo])
 Bravo.add_subscriptions([Charlie, Echo])
 Echo.add_subscriptions([Foxtrot, Golf])
 
-print("test accounts generated")
+Alpha.set_primary_score()
+Bravo.set_primary_score()
+Charlie.set_primary_score()
+Delta.set_primary_score()
+Foxtrot.set_primary_score()
+Golf.set_primary_score()
 
 myCrawler = Crawler()
 

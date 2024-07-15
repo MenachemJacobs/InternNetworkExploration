@@ -14,3 +14,5 @@ class Message:
         self.date = date
         self.text = text
         self.score = score
+
+        return self

@@ -12,10 +12,10 @@ class Account:
         self.subscriptions = initial_subscriptions
 
         """Feature list"""
-        self.average_message_score = 0.0
-        self.score_per_day = 0.0
-        self.score_by_density = 0.0
-        self.positives_per_tweet = 0.0
+        self.average_message_score = sum(m.score for m in messages) / len(messages)
+        self.score_per_day = self.calculate_score_per_day()
+        self.score_by_density = self.calculate_score_by_density()
+        self.positives_per_tweet = len([m for m in messages if m.score > 0.5]) / len(messages)
 
         self.feature_list = [
             self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
@@ -23,15 +23,6 @@ class Account:
 
         self.secondary_score = 1.0
         self.primary_score = 1.0
-
-    def generate_scores(self):
-        """Feature list"""
-        self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
-        self.score_per_day = self.calculate_score_per_day()
-        self.score_by_density = self.calculate_score_by_density()
-        self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
-
-        self.set_secondary_score()
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
@@ -73,6 +64,7 @@ class Account:
 
     def set_secondary_score(self):
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
+        return self
 
     def set_primary_score(self):
         self.primary_score = 0
