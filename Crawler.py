@@ -22,7 +22,7 @@ class Crawler:
             if locus not in self.network_set:
                 self.network_set.add(locus)
                 self.subnetwork.append(locus)
-                for account in locus.get_subscribers():
+                for account in locus.get_subscriptions():
                     self.find_neighbors(account, dist - 1)
 
         return self.subnetwork

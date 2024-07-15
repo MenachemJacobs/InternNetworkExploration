@@ -9,9 +9,9 @@ Echo = Account("Echo")
 Foxtrot = Account("Foxtrot")
 Golf = Account("Golf")
 
-Alpha.add_subscribers([Bravo, Echo])
-Bravo.add_subscribers([Charlie, Echo])
-Echo.add_subscribers([Foxtrot, Golf])
+Alpha.add_subscriptions([Bravo, Echo])
+Bravo.add_subscriptions([Charlie, Echo])
+Echo.add_subscriptions([Foxtrot, Golf])
 
 myCrawler = Crawler()
 

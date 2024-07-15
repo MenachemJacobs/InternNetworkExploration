@@ -5,7 +5,7 @@ from Message import Message
 
 
 class Account:
-    def __init__(self, name: str, messages: ['Message'] = None, initial_subscriptions: ['Account'] = None):
+    def __init__(self, name: str, messages: ['Message'], initial_subscriptions: ['Account']):
         self.name = name
 
         self.messages = messages
@@ -80,30 +80,30 @@ class Account:
         self.primary_score += 2 * self.secondary_score
         self.primary_score /= len(self.feature_list) + 2
 
-    def add_subscriber(self, subscriber: 'Account'):
+    def add_subscription(self, subscriber: 'Account'):
         if isinstance(subscriber, Account) and subscriber not in self.subscriptions:
             self.subscriptions.append(subscriber)
 
-    def add_subscribers(self, neighbors):
+    def add_subscriptions(self, neighbors):
         for subscriber in neighbors:
-            self.add_subscriber(subscriber)
+            self.add_subscription(subscriber)
 
     # def add_superscriber(self, superscriber: 'Account'):
     #     if isinstance(superscriber, Account) and superscriber not in self.subscribers:
     #         self.superscribers.append(superscriber)
 
-    def remove_subscriber(self, neighbor: 'Account'):
+    def remove_subscription(self, neighbor: 'Account'):
         if neighbor in self.subscriptions:
             self.subscriptions.remove(neighbor)
             return True
         else:
             return False
 
-    def get_subscribers(self):
+    def get_subscriptions(self):
         return self.subscriptions
 
     def __str__(self):
-        return self.name
+        return "Account:", self.name
 
     def __repr__(self):
-        return self.__str__()
+        return "Account:", self.__str__()
