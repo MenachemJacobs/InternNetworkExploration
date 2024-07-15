@@ -12,12 +12,13 @@ class Account:
         self.subscriptions = initial_subscriptions
 
         """Feature list"""
+        self.average_message_score = sum(m.score for m in messages) / len(messages)
         self.score_per_day = self.set_score_per_day()
-        self.score_by_density = 1.0
-        self.positives_per_tweet = 1.0
+        self.score_by_density = self.set_score_by_density()
+        self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
 
         self.feature_list = [
-            self.score_per_day, self.score_by_density, self.positives_per_tweet
+            self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
         ]
 
         self.secondary_score = 1.0
