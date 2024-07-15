@@ -12,10 +12,10 @@ class Account:
         self.subscriptions = initial_subscriptions
 
         """Feature list"""
-        self.average_message_score = sum(m.score for m in messages) / len(messages)
-        self.score_per_day = self.set_score_per_day()
-        self.score_by_density = self.set_score_by_density()
-        self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
+        self.average_message_score = 0.0
+        self.score_per_day = 0.0
+        self.score_by_density = 0.0
+        self.positives_per_tweet = 0.0
 
         self.feature_list = [
             self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
@@ -24,20 +24,29 @@ class Account:
         self.secondary_score = 1.0
         self.primary_score = 1.0
 
+    def generate_scores(self):
+        """Feature list"""
+        self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
+        self.score_per_day = self.calculate_score_per_day()
+        self.score_by_density = self.calculate_score_by_density()
+        self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
+
+        self.set_secondary_score()
+
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
-    def set_score_per_day(self):
+    def calculate_score_per_day(self):
         span = max(self.messages, key=lambda m: m.date).date - min(self.messages, key=lambda m: m.date).date
         return sum(message.score for message in self.messages) / span.days
 
-    def set_score_by_density(self):
+    def calculate_score_by_density(self):
         partitions = 100
 
         # Get the date range
         first_day = min(self.messages, key=lambda m: m.date).date
         last_day = max(self.messages, key=lambda m: m.date).date
         total_days = (last_day - first_day).days
-        period_length = timedelta(days = total_days / partitions)
+        period_length = timedelta(days=total_days / partitions)
 
         final_score = 0
 
@@ -103,7 +112,7 @@ class Account:
         return self.subscriptions
 
     def __str__(self):
-        return "Account:", self.name
+        return "Account: " + self.name
 
     def __repr__(self):
-        return "Account:", self.__str__()
+        return "Account: " + self.__str__()

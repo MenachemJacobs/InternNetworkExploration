@@ -10,4 +10,7 @@ class Message:
         self.text = ""
         self.score = random()
 
-
+    def testing_constructor(self, date, text, score):
+        self.date = date
+        self.text = text
+        self.score = score
