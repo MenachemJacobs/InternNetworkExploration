@@ -1,25 +1,34 @@
 import Classifier
+from Message import Message
 
 
 class Account:
-    def __init__(self, name: str):
+    def __init__(self, name: str, messages: ['Message'] = None, initial_subscriptions: ['Account'] = None):
         self.name = name
 
-        self.primary_score = 1.0
-        self.secondary_score = 1.0
+        self.messages = messages
+        self.subscriptions = initial_subscriptions
 
         """Feature list"""
-        self.score_per_year = 1.0
+        self.score_per_day = self.set_score_per_day()
         self.score_by_density = 1.0
         self.positives_per_tweet = 1.0
 
         self.feature_list = [
-            self.score_per_year, self.score_by_density, self.positives_per_tweet
+            self.score_per_day, self.score_by_density, self.positives_per_tweet
         ]
 
-        self.messages = []
-        self.subscribers = []
-        # self.superscribers = []
+        self.secondary_score = 1.0
+        self.primary_score = 1.0
+
+    """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
+    This requires the account to be at least one day old."""
+    def set_score_per_day(self):
+        span = max(self.messages, key=lambda m: m.date).date - min(self.messages, key=lambda m: m.date).date
+        return sum(message.score for message in self.messages) / span.days
+
+    def set_score_by_density(self):
+
 
     def set_secondary_score(self):
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
@@ -30,7 +39,7 @@ class Account:
         if self.secondary_score == 1.0:
             self.set_secondary_score()
 
-        for subscriber in self.subscribers:
+        for subscriber in self.subscriptions:
             if subscriber.secondary_score == 1.0:
                 subscriber.set_secondary_score()
             self.primary_score += subscriber.secondary_score
@@ -40,8 +49,8 @@ class Account:
         self.primary_score /= len(self.feature_list) + 2
 
     def add_subscriber(self, subscriber: 'Account'):
-        if isinstance(subscriber, Account) and subscriber not in self.subscribers:
-            self.subscribers.append(subscriber)
+        if isinstance(subscriber, Account) and subscriber not in self.subscriptions:
+            self.subscriptions.append(subscriber)
 
     def add_subscribers(self, neighbors):
         for subscriber in neighbors:
@@ -52,14 +61,14 @@ class Account:
     #         self.superscribers.append(superscriber)
 
     def remove_subscriber(self, neighbor: 'Account'):
-        if neighbor in self.subscribers:
-            self.subscribers.remove(neighbor)
+        if neighbor in self.subscriptions:
+            self.subscriptions.remove(neighbor)
             return True
         else:
             return False
 
     def get_subscribers(self):
-        return self.subscribers
+        return self.subscriptions
 
     def __str__(self):
         return self.name
