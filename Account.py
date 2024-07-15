@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import Classifier
 from Message import Message
 
@@ -28,7 +30,36 @@ class Account:
         return sum(message.score for message in self.messages) / span.days
 
     def set_score_by_density(self):
+        partitions = 100
 
+        # Get the date range
+        first_day = min(self.messages, key=lambda m: m.date).date
+        last_day = max(self.messages, key=lambda m: m.date).date
+        total_days = (last_day - first_day).days
+        period_length = timedelta(days = total_days / partitions)
+
+        final_score = 0
+
+        current_period = first_day
+
+        for _ in range(partitions):
+            period_compound_score = 0
+            period_messages = [m for m in self.messages if current_period <= m.date < current_period + period_length]
+
+            if period_messages:
+                # Calculate sum of scores and number of messages in this period
+                period_score_sum = sum(m.score for m in period_messages)
+                period_num_messages = len(period_messages)
+                # Calculate the compound score for this period
+                period_compound_score = period_score_sum * period_num_messages
+
+            # Move to the next period
+            current_period += period_length
+            # Add the period's compound score to the final score
+            final_score += period_compound_score
+
+        # Normalize the final score by the total number of messages
+        return final_score / len(self.messages)
 
     def set_secondary_score(self):
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
