@@ -67,7 +67,7 @@ class Account:
         return self
 
     def set_primary_score(self):
-        self.primary_score = 0
+        collated_score = 0
 
         if self.secondary_score == 1.0:
             self.set_secondary_score()
@@ -75,11 +75,11 @@ class Account:
         for subscriber in self.subscriptions:
             if subscriber.secondary_score == 1.0:
                 subscriber.set_secondary_score()
-            self.primary_score += subscriber.secondary_score
+            collated_score += subscriber.secondary_score
 
         """Weight the secondary score of this account twice as heavily as the score from the subscriptions"""
-        self.primary_score += 2 * self.secondary_score
-        self.primary_score /= len(self.feature_list) + 2
+        collated_score /= len(self.subscriptions)
+        self.primary_score = (self.secondary_score + collated_score) / 2
 
     def add_subscription(self, subscriber: 'Account'):
         if isinstance(subscriber, Account) and subscriber not in self.subscriptions:
