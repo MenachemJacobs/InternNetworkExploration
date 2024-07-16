@@ -4,7 +4,7 @@ import Classifier
 from Message import Message
 
 
-class Account:
+# class Account:
     def __init__(self, name: str, messages: ['Message'], initial_subscriptions: ['Account']):
         self.name = name
 

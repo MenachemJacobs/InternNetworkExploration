@@ -49,11 +49,16 @@ returned_graph = myCrawler.find_neighbors(Alpha, 4)
 
 
 def dfs_iterative(lst):
+    return_val = []
+
     if isinstance(lst, list):
         for item in lst:
             dfs_iterative(item)
     else:
         print(lst)
+        return_val.append(lst)
+
+    return return_val
 
 
-dfs_iterative(returned_graph)
+print(dfs_iterative(returned_graph))
