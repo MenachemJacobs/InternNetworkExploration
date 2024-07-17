@@ -25,12 +25,18 @@ class Account:
         self.secondary_score = 1.0
         self.primary_score = 1.0
 
+    def set_is_anti(self, is_anti):
+        self.antisemite = is_anti
+        return self
+
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
     def calculate_score_per_day(self):
         span = max(self.messages, key=lambda m: m.date).date - min(self.messages, key=lambda m: m.date).date
         return sum(message.score for message in self.messages) / span.days
 
+    """Each tweet's score is multiplied by the number of tweet's in a given period. This weighted average is then
+    normalized."""
     def calculate_score_by_density(self):
         partitions = 100
 
@@ -63,6 +69,7 @@ class Account:
         # Normalize the final score by the total number of messages
         return final_score / len(self.messages)
 
+    # return self is necessary for chaining. It is expedient, but perhaps lazy
     def set_secondary_score(self):
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
         return self
@@ -87,8 +94,7 @@ class Account:
             self.subscriptions.append(subscriber)
 
     def add_subscriptions(self, neighbors):
-        for subscriber in neighbors:
-            self.add_subscription(subscriber)
+        [self.add_subscription(subscriber) for subscriber in neighbors]
 
     # def add_superscriber(self, superscriber: 'Account'):
     #     if isinstance(superscriber, Account) and superscriber not in self.subscribers:

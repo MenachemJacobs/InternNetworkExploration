@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="commiting before merge">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Account.py" beforeDir="false" afterPath="$PROJECT_DIR$/Account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GenerateNameNetworks.py" beforeDir="false" afterPath="$PROJECT_DIR$/GenerateNameNetworks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,24 +37,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Explorer.executor": "Run",
-    "Python.GenerateNameNetworks.executor": "Run",
-    "Python.countTweetGram.executor": "Run",
-    "Python.order_utils.executor": "Run",
-    "Python.shuffle.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Explorer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GenerateNameNetworks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.countTweetGram.executor&quot;: &quot;Run&quot;,
+    &quot;Python.order_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.shuffle.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -72,6 +74,8 @@
       <workItem from="1721092374155" duration="3264000" />
       <workItem from="1721156796601" duration="23070000" />
       <workItem from="1721231309847" duration="2674000" />
+      <workItem from="1721235077443" duration="5000" />
+      <workItem from="1721235703765" duration="130000" />
     </task>
     <task id="LOCAL-00001" summary="updated Explorer.py to be runnable again according to instruction">
       <option name="closed" value="true" />
