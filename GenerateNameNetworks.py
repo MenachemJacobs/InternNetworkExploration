@@ -69,12 +69,12 @@ overt_list = create_accounts_by_bulk([
 # If fewer than 40 names are passed, use default names.
 # If more than 40 names are passed, use the first 40 names
 def set_overt_list(overt_accounts):
-    global covert_list
+    global overt_list
 
     if len(overt_accounts) < 40:
-        covert_list = overt_accounts.extend(covert_list[(40 - len(overt_accounts)):])
+        overt_list = overt_accounts.extend(covert_list[(40 - len(overt_accounts)):])
     if len(overt_accounts) >= 40:
-        covert_list = overt_accounts[40:]
+        overt_list = overt_accounts[40:]
 
 # Function to generate random subset of entries from femail_list up to a given index
 def random_subset(number):
