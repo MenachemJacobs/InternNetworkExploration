@@ -8,7 +8,7 @@ def random_account(name) -> "Account":
     return Account(name, random_message(5), [])
 
 
-def create_accounts_by_bulk(names):
+def create_accounts_by_bulk(names) -> list["Account"]:
     return [random_account(name) for name in names]
 
 

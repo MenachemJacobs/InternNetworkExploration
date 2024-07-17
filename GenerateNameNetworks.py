@@ -26,7 +26,7 @@ ideal_overt_size = 40
 
 
 # Function to generate random subset of entries from overt_list up to a given index
-def random_subset(number):
+def random_subset(number: int) -> list[str]:
     return_val = []
     user_sublist = default_overt_list[:number]
 
@@ -42,23 +42,13 @@ def random_subset(number):
     return return_val
 
 
-def generate_overt_network():
-    # Assigning friends to overt accounts based on specific rules
-    for i in range(len(default_overt_list)):
-        if i < 2:
-            default_overt_list[i].subscriptions.append(Rando)
-        else:
-            default_overt_list[i].subscriptions.extend(random_subset(i))
-
-    for name in default_overt_list:
-        print(name.name + ":", name.subscriptions)
 class NetworkManager:
     def __init__(self):
         self.covert_list = []
         self.overt_list = []
 
     # assumes account passed in have no subscription attached. This will be tricky for score counting.
-    def set_covert_list(self, passed_accounts: list["Account"]):
+    def set_covert_list(self, passed_accounts: list["Account"]) -> None:
         if len(passed_accounts) < ideal_covert_size:
             self.covert_list = passed_accounts + default_covert_list[:(ideal_covert_size - len(passed_accounts))]
         
