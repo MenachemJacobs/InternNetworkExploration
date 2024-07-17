@@ -1,10 +1,5 @@
 import random
-from Account import random_account
-
-
-def create_accounts_by_bulk(names):
-    return [random_account(name) for name in names]
-
+from Account import Account, create_accounts_by_bulk, random_account
 
 Rando = random_account("Randos")
 
@@ -13,7 +8,6 @@ default_covert_list = create_accounts_by_bulk([
     "Michael", "James", "John", "Robert", "William",
     "David", "Richard", "Joseph", "Christopher", "Daniel"
 ])
-
 # Default names
 default_overt_list = create_accounts_by_bulk([
     "Alice", "Sophia", "Emma", "Olivia", "Ava",
@@ -30,18 +24,35 @@ default_overt_list = create_accounts_by_bulk([
 ideal_covert_size = 10
 ideal_overt_size = 40
 
-class NetworkGenerator:
+
+# Function to generate random subset of entries from overt_list up to a given index
+def random_subset(number):
+    return_val = []
+    user_sublist = default_overt_list[:number]
+
+    # The number of entries to return
+    friend_count = random.randint(1, number)
+
+    for _ in range(friend_count):
+        random_index = random.randrange(len(user_sublist))
+        return_val.append(user_sublist[random_index])
+        # Prevent double picking by removing selection
+        del user_sublist[random_index]
+
+    return return_val
+
+
+class NetworkManager:
     def __init__(self):
         self.covert_list = []
         self.overt_list = []
 
-
-    def set_covert_list(self, passed_accounts):
+    # assumes account passed in have no subscription attached. This will be tricky for score counting.
+    def set_covert_list(self, passed_accounts: list["Account"]):
         if len(passed_accounts) < ideal_covert_size:
             self.covert_list = passed_accounts + default_covert_list[(ideal_covert_size - len(passed_accounts)):]
         if len(passed_accounts) >= ideal_covert_size:
             self.covert_list = default_covert_list[ideal_covert_size:]
-
 
     def generate_covert_network(self):
         group_lead = [self.covert_list[0], self.covert_list[1]]
@@ -60,32 +71,12 @@ class NetworkGenerator:
 
         return self.covert_list
 
-
-    # If fewer than 40 names are passed, use default names.
-    # If more than 40 names are passed, use the first 40 names
-    def set_overt_list(self, passed_accounts):
+    # assumes account passed in have no subscription attached. This will be tricky for score counting.
+    def set_overt_list(self, passed_accounts: list["Account"]):
         if len(passed_accounts) < ideal_overt_size:
             self.overt_list = passed_accounts + default_overt_list[(ideal_overt_size - len(default_overt_list)):]
         if len(passed_accounts) >= ideal_overt_size:
             self.overt_list = default_overt_list[ideal_overt_size:]
-
-
-    # Function to generate random subset of entries from femail_list up to a given index
-    def random_subset(self, number):
-        return_val = []
-        user_sublist = default_overt_list[:number]
-
-        # The number of entries to return
-        friend_count = random.randint(1, number)
-
-        for _ in range(friend_count):
-            random_index = random.randrange(len(user_sublist))
-            return_val.append(user_sublist[random_index])
-            # Prevent double picking by removing selection
-            del user_sublist[random_index]
-
-        return return_val
-
 
     def generate_overt_network(self):
         # Assigning friends to overt accounts based on specific rules
@@ -93,9 +84,6 @@ class NetworkGenerator:
             if i < 2:
                 self.overt_list[i].subscriptions.append(Rando)
             else:
-                self.overt_list[i].subscriptions.extend(self.random_subset(i))
-
-        for name in self.overt_list:
-            print(name.name + ":", name.subscriptions)
+                self.overt_list[i].subscriptions.extend(random_subset(i))
 
         return self.overt_list

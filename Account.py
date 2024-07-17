@@ -8,6 +8,10 @@ def random_account(name) -> "Account":
     return Account(name, random_message(5), [])
 
 
+def create_accounts_by_bulk(names):
+    return [random_account(name) for name in names]
+
+
 class Account:
     def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
         self.antisemite = antisemite
@@ -17,10 +21,10 @@ class Account:
         self.subscriptions = initial_subscriptions
 
         """Feature list"""
-        self.average_message_score = sum(m.score for m in messages) / len(messages)
-        self.score_per_day = self.calculate_score_per_day()
-        self.score_by_density = self.calculate_score_by_density()
-        self.positives_per_tweet = len([m for m in messages if m.score > 0.5]) / len(messages)
+        self.average_message_score = None
+        self.score_per_day = None
+        self.score_by_density = None
+        self.positives_per_tweet = None
 
         self.feature_list = [
             self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
@@ -32,6 +36,12 @@ class Account:
     def set_is_anti(self, is_anti):
         self.antisemite = is_anti
         return self
+
+    def calculate_feature_scores(self):
+        self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
+        self.score_per_day = self.calculate_score_per_day()
+        self.score_by_density = self.calculate_score_by_density()
+        self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
@@ -100,9 +110,9 @@ class Account:
     def add_subscriptions(self, neighbors):
         [self.add_subscription(subscriber) for subscriber in neighbors]
 
-    # def add_superscriber(self, superscriber: 'Account'):
-    #     if isinstance(superscriber, Account) and superscriber not in self.subscribers:
-    #         self.superscribers.append(superscriber)
+    # def add_super-scriber(self, super-scriber: 'Account'):
+    #     if isinstance(super-scriber, Account) and super-scriber not in self.subscribers:
+    #         self.super-scribers.append(super-scriber)
 
     def remove_subscription(self, neighbor: 'Account'):
         if neighbor in self.subscriptions:

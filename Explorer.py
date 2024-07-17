@@ -1,6 +1,6 @@
 from Account import random_account
 from Crawler import Crawler
-from GenerateNameNetworks import NetworkGenerator
+from GenerateNameNetworks import NetworkManager
 
 Alpha = random_account("Alpha").set_secondary_score()
 Bravo = random_account("Bravo").set_secondary_score()
@@ -26,8 +26,7 @@ Foxtrot.set_primary_score()
 Golf.set_primary_score()
 
 myCrawler = Crawler()
-myNetworkGenerator = NetworkGenerator()
-
+myNetworkGenerator = NetworkManager()
 
 returned_graph = myCrawler.find_neighbors(Alpha, 4)
 
@@ -42,6 +41,12 @@ def dfs_getter(lst):
     return return_val
 
 
-# print(dfs_getter(returned_graph))
-myNetworkGenerator.set_covert_list(dfs_getter(returned_graph))
-print(myNetworkGenerator.generate_covert_network())
+returned_graph = dfs_getter(returned_graph)
+
+myNetworkGenerator.set_covert_list(returned_graph)
+# for account in myNetworkGenerator.generate_covert_network():
+#     print(account.name)
+
+myNetworkGenerator.set_overt_list(returned_graph)
+for account in myNetworkGenerator.generate_overt_network()[10:]:
+    print(account.name)
