@@ -1,3 +1,5 @@
+import re
+
 import nltk
 from nltk.corpus import wordnet as wn
 import pandas as pd
@@ -7,7 +9,7 @@ import random
 nltk.download('omw-1.4')
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 jew = wn.synset('jew.n.01').hyponyms()
-print(jew[0].lemmas()[0].name())
+print(jew[5].lemmas()[0].name())
 
 
 def new_tweet(tokens: list[str], ratio=0.25) -> list[str]:
@@ -19,7 +21,7 @@ def new_tweet(tokens: list[str], ratio=0.25) -> list[str]:
             for segment in wn.synonyms(tokens[index], 'eng'):
                 synonyms.extend(segment)
             if wn.synsets(tokens[index]):
-                hyponyms = [hyponym.lemmas()[random.randint(0,len(hyponym.lemmas()) - 1)].name() for hyponym in wn.synsets(tokens[index])[0].hyponyms()]
+                hyponyms = [re.sub("_", " ",hyponym.lemmas()[random.randint(0,len(hyponym.lemmas()) - 1)].name()) for hyponym in wn.synsets(tokens[index])[0].hyponyms()]
             else:
                 hyponyms = []
             subs = synonyms + hyponyms
