@@ -30,7 +30,7 @@ def set_covert_list(covert_accounts):
     global covert_list
 
     if len(covert_accounts) < 10:
-        covert_list = covert_accounts.extend(covert_list[(10 - len(covert_accounts)):])
+        covert_list = covert_accounts + covert_list[(10 - len(covert_accounts)):]
     if len(covert_accounts) >= 10:
         covert_list = covert_accounts[10:]
 
@@ -98,7 +98,7 @@ def generate_overt_network():
         if i < 2:
             overt_list[i].friends.append(Rando)
         else:
-            overt_list[i].friends.extend(random_subset(i))
+            overt_list[i].friends + random_subset(i)
 
     for name in overt_list:
         print(name.name + ":", name.friends)
