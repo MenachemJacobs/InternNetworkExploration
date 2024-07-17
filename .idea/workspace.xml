@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="adjusted to changes in GenerateNamesNetwork.py">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shuffle/accounts.csv" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/accounts.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shuffle/network_tweets.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/network_tweets.py" afterDir="false" />
+    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="made accounts.csv store messages as tuples">
+      <change beforePath="$PROJECT_DIR$/.idea/networkExploration.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/networkExploration.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721246229881</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="made accounts.csv store messages as tuples">
+      <option name="closed" value="true" />
+      <created>1721246853456</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1721246853456</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,7 +159,8 @@
     <MESSAGE value="generated accounts data file" />
     <MESSAGE value="commiting before merge" />
     <MESSAGE value="adjusted to changes in GenerateNamesNetwork.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjusted to changes in GenerateNamesNetwork.py" />
+    <MESSAGE value="made accounts.csv store messages as tuples" />
+    <option name="LAST_COMMIT_MESSAGE" value="made accounts.csv store messages as tuples" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Synth$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721159160834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
