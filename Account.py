@@ -26,9 +26,7 @@ class Account:
         self.score_by_density = None
         self.positives_per_tweet = None
 
-        self.feature_list = [
-            self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
-        ]
+        self.feature_list = []
 
         self.secondary_score = 1.0
         self.primary_score = 1.0
@@ -42,6 +40,8 @@ class Account:
         self.score_per_day = self.calculate_score_per_day()
         self.score_by_density = self.calculate_score_by_density()
         self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
+
+        self.feature_list = [self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet]
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
@@ -85,7 +85,6 @@ class Account:
 
     # return self is necessary for chaining. It is expedient, but perhaps lazy
     def set_secondary_score(self):
-        print("poped in to set_secondary score")
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
         return self
 
@@ -93,7 +92,6 @@ class Account:
         collated_score = 0
 
         if self.secondary_score == 1.0:
-            print("self.primary score was 1.0. Must recalc")
             self.set_secondary_score()
 
         for subscriber in self.subscriptions:
