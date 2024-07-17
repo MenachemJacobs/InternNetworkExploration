@@ -40,49 +40,49 @@ anti_tweets = store_indices(jikeliCorpus['Biased'], 1)
 pro_tweets = store_indices(jikeliCorpus['Biased'], 0)
 generate_overt_network()
 generate_overt_network()
-for user in covert_list:
+for user in default_covert_list:
     user.messages = list()
-for user in overt_list:
+for user in default_overt_list:
     user.messages = list()
 covert_tweets = list()
 for i in pro_tweets[:4000]:
     covert_tweets.append(replace_words(clean(jikeliCorpus['Text'][i]), hotwords.hot_words + hotwords.hot_phrases, 0.4))
 for tweet in covert_tweets[:2000]:
-    agent = numpy.random.choice(range(0, len(covert_list)), size=1)
+    agent = numpy.random.choice(range(0, len(default_covert_list)), size=1)
     rand_date = new_dates[random.choice(range(0, len(new_dates)))]
     msg = Message()
     msg.date = rand_date
     msg.text = ' '.join(tweet)
     msg.score = 0
-    covert_list[agent[0]].messages.append(msg)
+    default_covert_list[agent[0]].messages.append(msg)
 for tweet in covert_tweets[2001:4000]:
-    agent = numpy.random.choice(range(0, len(overt_list)), size=1)
+    agent = numpy.random.choice(range(0, len(default_overt_list)), size=1)
     rand_date = new_dates[random.choice(range(0, len(new_dates)))]
     msg = Message()
     msg.date = rand_date
     msg.text = ' '.join(tweet)
     msg.score = 0
-    overt_list[agent[0]].messages.append(msg)
+    default_overt_list[agent[0]].messages.append(msg)
 for index in anti_tweets[:2000]:
     tweet = jikeliCorpus['Text'][index]
-    agent = numpy.random.choice(range(0, len(overt_list)), size=1)
+    agent = numpy.random.choice(range(0, len(default_overt_list)), size=1)
     rand_date = new_dates[random.choice(range(0, len(new_dates)))]
     msg = Message()
     msg.date = rand_date
     msg.text = tweet
     msg.score = 1
-    overt_list[agent[0]].messages.append(msg)
+    default_overt_list[agent[0]].messages.append(msg)
 users = list()
 message_list = list()
 antisemitic = list()
 friends = list()
 scores = list()
-for user in covert_list:
+for user in default_covert_list:
     antisemitic.append(user.antisemite)
     users.append(user.name)
     message_list.append([msg.text for msg in user.messages])
     friends.append(user.subscriptions)
-for user in overt_list:
+for user in default_overt_list:
     user.antisemite = True
     antisemitic.append(user.antisemite)
     users.append(user.name)
