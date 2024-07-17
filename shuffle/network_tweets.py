@@ -1,3 +1,4 @@
+import random
 import re
 import string
 
@@ -53,7 +54,7 @@ for tweet in covert_tweets[:2000]:
     msg = Message()
     msg.date = rand_date
     msg.text = ' '.join(tweet)
-    msg.score = 0
+    msg.score = random.uniform(0.2,0.5)
     default_covert_list[agent[0]].messages.append(msg)
 for tweet in covert_tweets[2001:4000]:
     agent = numpy.random.choice(range(0, len(default_overt_list)), size=1)
@@ -61,7 +62,7 @@ for tweet in covert_tweets[2001:4000]:
     msg = Message()
     msg.date = rand_date
     msg.text = ' '.join(tweet)
-    msg.score = 0
+    msg.score = random.uniform(0.2,0.5)
     default_overt_list[agent[0]].messages.append(msg)
 for index in anti_tweets[:2000]:
     tweet = jikeliCorpus['Text'][index]
@@ -70,7 +71,7 @@ for index in anti_tweets[:2000]:
     msg = Message()
     msg.date = rand_date
     msg.text = tweet
-    msg.score = 1
+    msg.score = random.uniform(0.75,1.00)
     default_overt_list[agent[0]].messages.append(msg)
 users = list()
 message_list = list()
@@ -80,13 +81,13 @@ scores = list()
 for user in default_covert_list:
     antisemitic.append(user.antisemite)
     users.append(user.name)
-    message_list.append([msg.text for msg in user.messages])
+    message_list.append([(msg.text, msg.score,msg.date) for msg in user.messages])
     friends.append(user.subscriptions)
 for user in default_overt_list:
     user.antisemite = True
     antisemitic.append(user.antisemite)
     users.append(user.name)
-    message_list.append([msg.text for msg in user.messages])
+    message_list.append([(msg.text, msg.score,msg.date) for msg in user.messages])
     friends.append(user.subscriptions)
 accounts = pandas.DataFrame({'Username': users, 'Antisemitic': antisemitic, 'Messages': message_list})
 accounts.to_csv('accounts.csv')
