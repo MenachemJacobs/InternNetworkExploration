@@ -50,9 +50,10 @@ class NetworkManager:
     # assumes account passed in have no subscription attached. This will be tricky for score counting.
     def set_covert_list(self, passed_accounts: list["Account"]):
         if len(passed_accounts) < ideal_covert_size:
-            self.covert_list = passed_accounts + default_covert_list[(ideal_covert_size - len(passed_accounts)):]
+            self.covert_list = passed_accounts + default_covert_list[:(ideal_covert_size - len(passed_accounts))]
+        
         if len(passed_accounts) >= ideal_covert_size:
-            self.covert_list = default_covert_list[ideal_covert_size:]
+            self.covert_list = default_covert_list[:ideal_covert_size]
 
     def generate_covert_network(self):
         group_lead = [self.covert_list[0], self.covert_list[1]]
@@ -74,9 +75,9 @@ class NetworkManager:
     # assumes account passed in have no subscription attached. This will be tricky for score counting.
     def set_overt_list(self, passed_accounts: list["Account"]):
         if len(passed_accounts) < ideal_overt_size:
-            self.overt_list = passed_accounts + default_overt_list[(ideal_overt_size - len(default_overt_list)):]
+            self.overt_list = passed_accounts + default_overt_list[:(ideal_overt_size - len(default_overt_list))]
         if len(passed_accounts) >= ideal_overt_size:
-            self.overt_list = default_overt_list[ideal_overt_size:]
+            self.overt_list = default_overt_list[:ideal_overt_size]
 
     def generate_overt_network(self):
         # Assigning friends to overt accounts based on specific rules
@@ -85,5 +86,7 @@ class NetworkManager:
                 self.overt_list[i].subscriptions.append(Rando)
             else:
                 self.overt_list[i].subscriptions.extend(random_subset(i))
+                self.overt_list[0].subscriptions.extend(random_subset(10))
+                self.overt_list[1].subscriptions.extend(random_subset(10))
 
         return self.overt_list
