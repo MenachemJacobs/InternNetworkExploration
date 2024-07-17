@@ -3,33 +3,35 @@ from nltk.corpus import wordnet as wn
 import pandas as pd
 from utils import *
 import random
+
 nltk.download('omw-1.4')
-jikeli = pd.read_excel('jikeliCorpus.xlsx',header=1)
+jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
+jew = wn.synset('jew.n.01').hyponyms()
+print(jew[0].lemmas()[0].name())
 
 
-def new_tweet(tokens: list[str], ratio=0.25):
-    tweet = list()
-
+def new_tweet(tokens: list[str], ratio=0.25) -> list[str]:
     indices = numpy.random.choice(range(0, len(tokens)), size=int(ratio * len(tokens)))
-    for index in range(0,len(tokens)):
+    tweet = list()
+    for index in range(0, len(tokens)):
         if index in indices:
-            synonyms = wn.synonyms(tokens[index],'eng')
-            if len(synonyms) > 0:
-                if len(synonyms) > 1:
-                    synonym_segment = synonyms[random.randint(0, len(synonyms)-1)]
-                else:
-                    synonym_segment = synonyms[0]
-                if len(synonym_segment) > 1:
-                    tweet.append(synonym_segment[random.randint(0, len(synonym_segment)-1)])
-                elif len(synonym_segment) == 1:
-                    tweet.append(synonym_segment[0])
+            synonyms = list()
+            for segment in wn.synonyms(tokens[index], 'eng'):
+                synonyms.extend(segment)
+            if wn.synsets(tokens[index]):
+                hyponyms = [hyponym.lemmas()[random.randint(0,len(hyponym.lemmas()) - 1)].name() for hyponym in wn.synsets(tokens[index])[0].hyponyms()]
             else:
-                continue
+                hyponyms = []
+            subs = synonyms + hyponyms
+            if subs:
+                tweet.append(numpy.random.choice(subs))
+            else:
+                tweet.append(tokens[index])
         else:
             tweet.append(tokens[index])
     return tweet
 
 
-tweetIndex = random.randint(0, len(jikeli['Text'])-1)
+tweetIndex = random.randint(0, len(jikeli['Text']) - 1)
 print("OLD TWEET: " + jikeli['Text'][tweetIndex])
-print(' '.join(new_tweet(clean((jikeli['Text'][tweetIndex])))))
+print(' '.join(new_tweet(clean(jikeli['Text'][tweetIndex]), 0.5)))
