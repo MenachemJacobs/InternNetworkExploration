@@ -42,6 +42,16 @@ def random_subset(number):
     return return_val
 
 
+def generate_overt_network():
+    # Assigning friends to overt accounts based on specific rules
+    for i in range(len(default_overt_list)):
+        if i < 2:
+            default_overt_list[i].subscriptions.append(Rando)
+        else:
+            default_overt_list[i].subscriptions.extend(random_subset(i))
+
+    for name in default_overt_list:
+        print(name.name + ":", name.subscriptions)
 class NetworkManager:
     def __init__(self):
         self.covert_list = []
