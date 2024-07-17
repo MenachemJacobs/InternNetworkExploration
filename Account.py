@@ -26,9 +26,7 @@ class Account:
         self.score_by_density = None
         self.positives_per_tweet = None
 
-        self.feature_list = [
-            self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
-        ]
+        self.feature_list = []
 
         self.secondary_score = 1.0
         self.primary_score = 1.0
@@ -37,11 +35,13 @@ class Account:
         self.antisemite = is_anti
         return self
 
-    def calculate_feature_scores(self):
+    def set_feature_scores(self):
         self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
         self.score_per_day = self.calculate_score_per_day()
         self.score_by_density = self.calculate_score_by_density()
         self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
+
+        self.feature_list = [self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet]
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
