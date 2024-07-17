@@ -39,8 +39,9 @@ def clean(text: str):
 jikeliCorpus = pandas.read_excel('jikeliCorpus.xlsx', header=1)
 anti_tweets = store_indices(jikeliCorpus['Biased'], 1)
 pro_tweets = store_indices(jikeliCorpus['Biased'], 0)
-generate_overt_network()
-generate_overt_network()
+mngr = NetworkManager()
+mngr.generate_overt_network()
+mngr.generate_covert_network()
 for user in default_covert_list:
     user.messages = list()
 for user in default_overt_list:
