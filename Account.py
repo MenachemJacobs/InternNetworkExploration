@@ -5,7 +5,7 @@ from Message import Message, random_message
 
 
 def random_account(name) -> "Account":
-    return Account("name", random_message(5), [])
+    return Account(name, random_message(5), [])
 
 
 class Account:

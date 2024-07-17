@@ -1,10 +1,7 @@
-from datetime import datetime, timedelta
-from random import random, randint
-
 from Account import Account
 from Crawler import Crawler
 from Message import random_message
-
+import GenerateNameNetworks
 
 Alpha = Account("Alpha", random_message(5), []).set_secondary_score()
 Bravo = Account("Bravo", random_message(5), []).set_secondary_score()
@@ -44,4 +41,5 @@ def dfs_getter(lst):
     return return_val
 
 
-print(dfs_getter(returned_graph))
+# print(dfs_getter(returned_graph))
+generate_overtlist(dfs_getter(returned_graph))
