@@ -1,6 +1,6 @@
 import numpy.random
 
-from order_utils import *
+from utils import *
 
 jikeliCorpus = pd.read_excel('jikeliCorpus.xlsx', header=1)
 nameset = set(jikeliCorpus['Username'])

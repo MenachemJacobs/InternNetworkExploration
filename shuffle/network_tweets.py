@@ -1,41 +1,13 @@
-import random
-import re
-import string
-
 import numpy.random
 import hotwords
 import pandas
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import TweetTokenizer
 from GenerateNameNetworks import *
 from Message import Message
-from order_utils import *
+from utils import *
 from Account import Account
 
-tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
-lem = WordNetLemmatizer()
 new_dates = clustered_random_dates(datetime.datetime(2012, 11, 28, 12, minute=38, second=57), cluster_size=12,
                                    num_cluster=600, remainder=0, years=1)
-
-
-def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
-    if ratio < 0 or ratio > 1:
-        raise ValueError("ratio must be between 0 and 1")
-    new_tokens = tokens
-    rand_indices = numpy.random.choice(range(0, len(tokens)), int(ratio * len(tokens)))
-    for i in rand_indices:
-        new_tokens[i] = numpy.random.choice(replacing)
-    return new_tokens
-
-
-def clean(text: str):
-    words = list()
-    for word in tokener.tokenize(text):
-        if word not in string.punctuation:
-            words.append(lem.lemmatize(word.lower()))
-    return words
-
-
 jikeliCorpus = pandas.read_excel('jikeliCorpus.xlsx', header=1)
 anti_tweets = store_indices(jikeliCorpus['Biased'], 1)
 pro_tweets = store_indices(jikeliCorpus['Biased'], 0)

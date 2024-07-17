@@ -1,8 +1,33 @@
 import datetime
-
+import string
 import pandas as pd
 import numpy
 import random
+
+from nltk import WordNetLemmatizer
+from nltk.corpus import stopwords
+from nltk.tokenize.casual import TweetTokenizer
+stopList = set(stopwords.words('english'))
+tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
+lem = WordNetLemmatizer()
+
+
+def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
+    if ratio < 0 or ratio > 1:
+        raise ValueError("ratio must be between 0 and 1")
+    new_tokens = tokens
+    rand_indices = numpy.random.choice(range(0, len(tokens)), int(ratio * len(tokens)))
+    for i in rand_indices:
+        new_tokens[i] = numpy.random.choice(replacing)
+    return new_tokens
+
+
+def clean(text: str):
+    words = list()
+    for word in tokener.tokenize(text):
+        if word not in string.punctuation:
+            words.append(lem.lemmatize(word.lower()))
+    return words
 
 
 def date_range(past: datetime.datetime, numdates: int, years: int) -> list[datetime.datetime]:
