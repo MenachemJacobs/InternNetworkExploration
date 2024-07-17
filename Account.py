@@ -37,7 +37,7 @@ class Account:
         self.antisemite = is_anti
         return self
 
-    def calculate_feature_scores(self):
+    def set_feature_scores(self):
         self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
         self.score_per_day = self.calculate_score_per_day()
         self.score_by_density = self.calculate_score_by_density()
@@ -85,6 +85,7 @@ class Account:
 
     # return self is necessary for chaining. It is expedient, but perhaps lazy
     def set_secondary_score(self):
+        print("poped in to set_secondary score")
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
         return self
 
@@ -92,6 +93,7 @@ class Account:
         collated_score = 0
 
         if self.secondary_score == 1.0:
+            print("self.primary score was 1.0. Must recalc")
             self.set_secondary_score()
 
         for subscriber in self.subscriptions:
