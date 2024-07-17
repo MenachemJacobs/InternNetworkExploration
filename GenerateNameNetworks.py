@@ -27,6 +27,9 @@ default_overt_list = create_accounts_by_bulk([
     "Leah"
 ])
 
+ideal_covert_size = 10
+ideal_overt_size = 40
+
 class NetworkGenerator:
     def __init__(self):
         self.covert_list = []
@@ -34,10 +37,10 @@ class NetworkGenerator:
 
 
     def set_covert_list(self, passed_accounts):
-        if len(passed_accounts) < 10:
-            self.covert_list = passed_accounts + default_covert_list[(10 - len(passed_accounts)):]
-        if len(passed_accounts) >= 10:
-            self.covert_list = default_covert_list[10:]
+        if len(passed_accounts) < ideal_covert_size:
+            self.covert_list = passed_accounts + default_covert_list[(ideal_covert_size - len(passed_accounts)):]
+        if len(passed_accounts) >= ideal_covert_size:
+            self.covert_list = default_covert_list[ideal_covert_size:]
 
 
     def generate_covert_network(self):
@@ -61,10 +64,10 @@ class NetworkGenerator:
     # If fewer than 40 names are passed, use default names.
     # If more than 40 names are passed, use the first 40 names
     def set_overt_list(self, passed_accounts):
-        if len(passed_accounts) < 40:
-            self.overt_list = passed_accounts + default_overt_list[(40 - len(default_overt_list)):]
-        if len(passed_accounts) >= 40:
-            self.overt_list = default_overt_list[40:]
+        if len(passed_accounts) < ideal_overt_size:
+            self.overt_list = passed_accounts + default_overt_list[(ideal_overt_size - len(default_overt_list)):]
+        if len(passed_accounts) >= ideal_overt_size:
+            self.overt_list = default_overt_list[ideal_overt_size:]
 
 
     # Function to generate random subset of entries from femail_list up to a given index

@@ -43,5 +43,5 @@ def dfs_getter(lst):
 
 
 # print(dfs_getter(returned_graph))
-print(myNetworkGenerator.set_covert_list(dfs_getter(returned_graph)))
+myNetworkGenerator.set_covert_list(dfs_getter(returned_graph))
 print(myNetworkGenerator.generate_covert_network())
