@@ -107,4 +107,4 @@ class Account:
         return "Account: " + self.name
 
     def __repr__(self):
-        return "Account: " + self.__str__()
+        return self.__str__()
