@@ -91,11 +91,11 @@ def generate_overt_network():
     # Assigning friends to overt accounts based on specific rules
     for i in range(len(overt_list)):
         if i < 2:
-            overt_list[i].friends.append(Rando)
+            overt_list[i].subscriptions.append(Rando)
         else:
-            overt_list[i].friends.extend(random_subset(i))
+            overt_list[i].subscriptions.extend(random_subset(i))
 
     for name in overt_list:
-        print(name.name + ":", name.friends)
+        print(name.name + ":", name.subscriptions)
 
     return overt_list
