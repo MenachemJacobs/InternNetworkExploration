@@ -1,23 +1,13 @@
 import random
 
-
-class ReducedAccount:
-    def __init__(self, name):
-        self.name = name
-        self.friends = []
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.__str__()
+from Account import random_account
 
 
 def create_accounts_by_bulk(names):
-    return [ReducedAccount(name) for name in names]
+    return [random_account(name) for name in names]
 
 
-Rando = ReducedAccount("Randos")
+Rando = random_account("Randos")
 
 # Default names
 covert_list = create_accounts_by_bulk([
@@ -52,6 +42,8 @@ def generate_covert_network():
     for friend in group_william + group_unis:
         friend.friends.append(covert_list[1])
 
+    return covert_list
+
 
 # Default names
 overt_list = create_accounts_by_bulk([
@@ -66,6 +58,7 @@ overt_list = create_accounts_by_bulk([
     "Leah"
 ])
 
+
 # If fewer than 40 names are passed, use default names.
 # If more than 40 names are passed, use the first 40 names
 def set_overt_list(overt_accounts):
@@ -75,6 +68,7 @@ def set_overt_list(overt_accounts):
         overt_list = overt_accounts + covert_list[(40 - len(overt_accounts)):]
     if len(overt_accounts) >= 40:
         overt_list = overt_accounts[40:]
+
 
 # Function to generate random subset of entries from femail_list up to a given index
 def random_subset(number):
@@ -92,6 +86,7 @@ def random_subset(number):
 
     return return_val
 
+
 def generate_overt_network():
     # Assigning friends to overt accounts based on specific rules
     for i in range(len(overt_list)):
@@ -102,3 +97,5 @@ def generate_overt_network():
 
     for name in overt_list:
         print(name.name + ":", name.friends)
+
+    return overt_list

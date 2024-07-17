@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="commiting before merge">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Account.py" beforeDir="false" afterPath="$PROJECT_DIR$/Account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Explorer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Explorer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GenerateNameNetworks.py" beforeDir="false" afterPath="$PROJECT_DIR$/GenerateNameNetworks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,6 +27,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -76,6 +79,7 @@
       <workItem from="1721231309847" duration="2674000" />
       <workItem from="1721235077443" duration="5000" />
       <workItem from="1721235703765" duration="130000" />
+      <workItem from="1721239484326" duration="770000" />
     </task>
     <task id="LOCAL-00001" summary="updated Explorer.py to be runnable again according to instruction">
       <option name="closed" value="true" />
@@ -131,11 +135,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="commiting before merge" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Synth$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721159160834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Account_py$GenerateNameNetworks.coverage" NAME="GenerateNameNetworks Coverage Results" MODIFIED="1721233745904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Synth$order_utils.coverage" NAME="order_utils Coverage Results" MODIFIED="1721092471821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Account_py$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721240238846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Account_py$countTweetGram.coverage" NAME="countTweetGram Coverage Results" MODIFIED="1721232380312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
     <SUITE FILE_PATH="coverage/Synth$countTweetGram.coverage" NAME="countTweetGram Coverage Results" MODIFIED="1721181695020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
-    <SUITE FILE_PATH="coverage/Synth$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721159160834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Synth$shuffle.coverage" NAME="shuffle Coverage Results" MODIFIED="1721094992627" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
   </component>
 </project>
