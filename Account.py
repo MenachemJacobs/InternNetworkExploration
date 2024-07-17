@@ -5,7 +5,7 @@ from Message import Message
 
 
 class Account:
-    def __init__(self, name: str, messages: ['Message'], initial_subscriptions: ['Account'], antisemite=False):
+    def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
         self.antisemite = antisemite
         self.name = name
 

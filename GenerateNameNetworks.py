@@ -72,7 +72,7 @@ def set_overt_list(overt_accounts):
     global overt_list
 
     if len(overt_accounts) < 40:
-        overt_list = overt_accounts.extend(covert_list[(40 - len(overt_accounts)):])
+        overt_list = overt_accounts + covert_list[(40 - len(overt_accounts)):]
     if len(overt_accounts) >= 40:
         overt_list = overt_accounts[40:]
 
@@ -98,7 +98,7 @@ def generate_overt_network():
         if i < 2:
             overt_list[i].friends.append(Rando)
         else:
-            overt_list[i].friends + random_subset(i)
+            overt_list[i].friends.extend(random_subset(i))
 
     for name in overt_list:
         print(name.name + ":", name.friends)
