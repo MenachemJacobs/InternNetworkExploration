@@ -7,6 +7,7 @@ import random
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
+
 stopList = set(stopwords.words('english'))
 tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
@@ -91,3 +92,7 @@ def store_indices(arr: list, target_value) -> list[int]:
         if arr[index] == target_value:
             indices.append(index)
     return indices
+
+
+def jikeli_date(date_text: str) -> datetime.datetime:
+    return datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M:%S%z')

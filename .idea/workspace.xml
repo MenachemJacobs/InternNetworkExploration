@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="improved tweet synthesis" />
+    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="deleted network_tweets.py due to messiness">
+      <change afterPath="$PROJECT_DIR$/shuffle/account_writer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shuffle/create_accounts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/networkExploration.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/networkExploration.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shuffle/accounts.csv" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/accounts.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shuffle/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,27 +43,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Account.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Explorer.executor&quot;: &quot;Run&quot;,
-    &quot;Python.GenerateNameNetworks.executor&quot;: &quot;Run&quot;,
-    &quot;Python.countTweetGram.executor&quot;: &quot;Run&quot;,
-    &quot;Python.network_tweets.executor&quot;: &quot;Run&quot;,
-    &quot;Python.order_utils.executor&quot;: &quot;Run&quot;,
-    &quot;Python.shuffle.executor&quot;: &quot;Run&quot;,
-    &quot;Python.synthTweet.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Account.executor": "Run",
+    "Python.Explorer.executor": "Run",
+    "Python.GenerateNameNetworks.executor": "Run",
+    "Python.countTweetGram.executor": "Run",
+    "Python.create_accounts.executor": "Run",
+    "Python.network_tweets.executor": "Run",
+    "Python.order_utils.executor": "Run",
+    "Python.shuffle.executor": "Run",
+    "Python.synthTweet.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mooja\OneDrive\Documents\Python\InternNetworkExploration\Components" />
@@ -210,16 +219,20 @@
     <MESSAGE value="adjusted to changes in networkmanger" />
     <MESSAGE value="created new function to synthesize tweet using synonyms, see synthTweet.py" />
     <MESSAGE value="improved tweet synthesis" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved tweet synthesis" />
+    <MESSAGE value="deleted network_tweets.py due to messiness" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted network_tweets.py due to messiness" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Synth$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721159160834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Synth$order_utils.coverage" NAME="order_utils Coverage Results" MODIFIED="1721092471821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
-    <SUITE FILE_PATH="coverage/Account_py$GenerateNameNetworks.coverage" NAME="GenerateNameNetworks Coverage Results" MODIFIED="1721333865332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ContextGeneration" />
-    <SUITE FILE_PATH="coverage/Account_py$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721334368572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Account_py$countTweetGram.coverage" NAME="countTweetGram Coverage Results" MODIFIED="1721232380312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Account_py$GenerateNameNetworks.coverage" NAME="GenerateNameNetworks Coverage Results" MODIFIED="1721233745904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Account_py$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721332211077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Account_py$network_tweets.coverage" NAME="network_tweets Coverage Results" MODIFIED="1721332035999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
     <SUITE FILE_PATH="coverage/Account_py$Account.coverage" NAME="Account Coverage Results" MODIFIED="1721330406835" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Components" />
+    <SUITE FILE_PATH="coverage/Account_py$create_accounts.coverage" NAME="create_accounts Coverage Results" MODIFIED="1721335943062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Synth$order_utils.coverage" NAME="order_utils Coverage Results" MODIFIED="1721092471821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Account_py$countTweetGram.coverage" NAME="countTweetGram Coverage Results" MODIFIED="1721232380312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
     <SUITE FILE_PATH="coverage/Synth$countTweetGram.coverage" NAME="countTweetGram Coverage Results" MODIFIED="1721181695020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Account_py$utils.coverage" NAME="utils Coverage Results" MODIFIED="1721334032273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
+    <SUITE FILE_PATH="coverage/Synth$Explorer.coverage" NAME="Explorer Coverage Results" MODIFIED="1721159160834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Synth$shuffle.coverage" NAME="shuffle Coverage Results" MODIFIED="1721094992627" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shuffle" />
   </component>
 </project>
