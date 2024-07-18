@@ -1,3 +1,4 @@
+import datetime
 import random
 
 import hotwords
@@ -25,15 +26,16 @@ for user in mngr.overt_list:
 for user in mngr.pro_list:
     user.isAntisemite = False
 
-#prepare message lists
+#prepare message and dates lists
 overt_messages = list()
 pro_messages = list()
 covert_messages = list()
+dates = clustered_random_dates(datetime.datetime(2012,6,15,11,36,24), cluster_size=10,num_cluster=1130,remainder=11)
 for i in range(0, len(jikeli['Text'])):
     message = Message()
     message.score = jikeli['Biased'][i]
     message.text = jikeli['Text'][i]
-    message.date = jikeli['CreateDate'][i]
+    message.date = dates[i]
     if message.score == 1:
         message.score = random.uniform(0.75, 1)
         overt_messages.append(message)
