@@ -16,6 +16,8 @@ lem = WordNetLemmatizer()
 
 
 def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
+    """:param tokens: list of tokens to be partially replaced
+    :param replacing: list of tokens to be used as replacements for tokens in replace_words"""
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
     new_tokens = tokens
@@ -26,6 +28,7 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
 
 
 def clean(text: str):
+    """returns a list of lemmatized, lower case tokens from the given string with basic punctuation removed"""
     words = list()
     for word in tokener.tokenize(text):
         if word not in string.punctuation:
@@ -89,6 +92,7 @@ def weight_bag(cluster_size: int, cluster_num, arr: list):
 
 
 def store_indices(arr: list, target_value) -> list[int]:
+    """returns an array containing all indices in arr containing target_value"""
     indices = []
     for index in range(len(arr)):
         if arr[index] == target_value:
@@ -101,7 +105,7 @@ def jikeli_date(date_text: str) -> datetime.datetime:
 
 
 def tuple_to_message(data: tuple) -> Message:
-    """converts a tuple of length 3 to a message object; should be in date, text score order."""
+    """converts a tuple of length 3 to a message object; @param data should be in date, text score order."""
     msg = Message()
     msg = msg.testing_constructor(data[0], data[1], data[2])
     return msg

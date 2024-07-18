@@ -13,6 +13,7 @@ print(jew[5].lemmas()[0].name())
 
 
 def new_tweet(tokens: list[str], ratio=0.25) -> list[str]:
+    """replaces @param ratio of tokens in @param tokens with hyponyms and/or synonyms"""
     indices = numpy.random.choice(range(0, len(tokens)), size=int(ratio * len(tokens)))
     tweet = list()
     for index in range(0, len(tokens)):
