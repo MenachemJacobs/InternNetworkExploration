@@ -1,3 +1,4 @@
+import math
 from datetime import timedelta
 from Components import Classifier
 from Components.Message import random_message, Message
@@ -30,7 +31,8 @@ def create_accounts_by_bulk(names) -> list["Account"]:
 
 
 class Account:
-    def __init__(self, name: str, ID_number: int, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
+    def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'],
+                 antisemite=False):
         """
         Initialize an Account.
 
@@ -40,10 +42,9 @@ class Account:
             initial_subscriptions (list[Account]): A list of initial subscriptions (Account objects).
             antisemite (bool, optional): Indicates if the account is antisemitic. Defaults to False.
         """
+        # TODO second iteration of project shouldn't have this flag
         self.isAntisemite = antisemite
         self.name = name
-        self.ID_number = ID_number
-
         self.messages = messages
         self.subscriptions = initial_subscriptions
 
@@ -93,20 +94,17 @@ class Account:
         Returns:
             float: The density-based score.
         """
-        partitions = 100
-
         # Get the date range
         first_day = min(self.messages, key=lambda m: m.date).date
         last_day = max(self.messages, key=lambda m: m.date).date
         total_days = (last_day - first_day).days
+        partitions = math.floor(math.log(total_days) / math.log(1.5))
         period_length = timedelta(days=total_days / partitions)
 
         final_score = 0
-
         current_period = first_day
 
         for _ in range(partitions):
-            period_compound_score = 0
             period_messages = [m for m in self.messages if current_period <= m.date < current_period + period_length]
 
             if period_messages:
@@ -115,11 +113,12 @@ class Account:
                 period_num_messages = len(period_messages)
                 # Calculate the compound score for this period
                 period_compound_score = period_score_sum * period_num_messages
+                # Add the period's compound score to the final score
+                final_score += period_compound_score
 
             # Move to the next period
             current_period += period_length
             # Add the period's compound score to the final score
-            final_score += period_compound_score
 
         # Normalize the final score by the total number of messages
         return final_score / len(self.messages)
@@ -139,11 +138,11 @@ class Account:
         """
         Calculate and set the primary score for the account.
         """
-        collated_score = 0
 
         if self.secondary_score == 1.0:
             self.set_secondary_score()
 
+        collated_score = 0
         for subscriber in self.subscriptions:
             if subscriber.secondary_score == 1.0:
                 subscriber.set_secondary_score()
@@ -170,7 +169,8 @@ class Account:
         Args:
             neighbors (list[Account]): A list of accounts to subscribe to.
         """
-        [self.add_subscription(subscriber) for subscriber in neighbors]
+        for neighbor in neighbors:
+            self.add_subscription(neighbor)
 
     # def add_super-scriber(self, super-scriber: 'Account'):
     #     if isinstance(super-scriber, Account) and super-scriber not in self.subscribers:
@@ -189,8 +189,8 @@ class Account:
         if neighbor in self.subscriptions:
             self.subscriptions.remove(neighbor)
             return True
-        else:
-            return False
+
+        return False
 
     def get_subscriptions(self):
         """
@@ -219,5 +219,5 @@ class Account:
         """
         return self.__str__()
 
-    def __eq__(self, other):
-        return self.ID_number == other.ID_number
+    # def __eq__(self, other):
+    #     return self.name == other.name
