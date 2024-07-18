@@ -30,7 +30,7 @@ def create_accounts_by_bulk(names) -> list["Account"]:
 
 
 class Account:
-    def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
+    def __init__(self, name: str, ID_number: int, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
         """
         Initialize an Account.
 
@@ -42,6 +42,7 @@ class Account:
         """
         self.isAntisemite = antisemite
         self.name = name
+        self.ID_number = ID_number
 
         self.messages = messages
         self.subscriptions = initial_subscriptions
@@ -217,3 +218,6 @@ class Account:
             str: The account name.
         """
         return self.__str__()
+
+    def __eq__(self, other):
+        return self.ID_number == other.ID_number

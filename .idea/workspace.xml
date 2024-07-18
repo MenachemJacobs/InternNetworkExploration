@@ -8,8 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/Account.py" beforeDir="false" afterPath="$PROJECT_DIR$/Components/Account.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" beforeDir="false" afterPath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Explorer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Explorer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shuffle/network_tweets.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/network_tweets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
