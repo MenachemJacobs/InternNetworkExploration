@@ -56,11 +56,11 @@ class NetworkManager:
         self.pro_list: list["Account"] = []
 
     def set_list(self, list_name: str, passed_accounts: list["Account"], ideal_size: int,
-                 default_list: list[str]):
+                 default_list: list["Account"]):
 
         if len(passed_accounts) < ideal_size:
-            default_accounts = default_list[:(ideal_size - len(passed_accounts))]
-            setattr(self, list_name, passed_accounts + default_accounts)
+            default_sublist = default_list[:(ideal_size - len(passed_accounts))]
+            setattr(self, list_name, passed_accounts + default_sublist)
         else:
             setattr(self, list_name, passed_accounts[:ideal_size])
 
