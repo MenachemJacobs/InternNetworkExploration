@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="improved tweet synthesis">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/Account.py" beforeDir="false" afterPath="$PROJECT_DIR$/Components/Account.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" beforeDir="false" afterPath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

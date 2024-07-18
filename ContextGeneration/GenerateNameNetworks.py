@@ -38,7 +38,7 @@ ideal_pro_size = 50
 
 
 # Function to generate random subset of entries from overt_list up to a given index
-def random_subset(account_list, number: int) -> list["Account"]:
+def random_from_subset(account_list, number: int) -> list["Account"]:
     if number > len(account_list):
         number = len(account_list)
 
@@ -102,9 +102,10 @@ class NetworkManager:
             if i < 2:
                 self.overt_list[i].subscriptions.append(Rando)
             else:
-                self.overt_list[i].subscriptions.extend(random_subset(self.overt_list, i))
-                self.overt_list[0].subscriptions.extend(random_subset(self.overt_list, 10))
-                self.overt_list[1].subscriptions.extend(random_subset(self.overt_list, 10))
+                self.overt_list[i].subscriptions.extend(random_from_subset(self.overt_list, i))
+
+        self.overt_list[0].subscriptions.extend(random_from_subset(self.overt_list, 10))
+        self.overt_list[1].subscriptions.extend(random_from_subset(self.overt_list, 10))
 
         return self.overt_list
 
@@ -117,4 +118,3 @@ class NetworkManager:
             account.subscriptions.extend(friends)
 
         return self.pro_list
-    
