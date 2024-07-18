@@ -1,6 +1,6 @@
 hot_words = ["Ploof", "Snurple", "Snirtle", "Flummock", "Sanger", "Glonk",
              "Vindaloo", "Breeble", "Whismy""Partele", "Twibble", "Maliby", "Netbeau", "Fremulon", "Dimplet",
-             "Sadnfroy", "Fickan", "Escaliery", "Saudid", "Merakish"
+             "Sadnfroy", "Fickan", "Escalery", "Saudid", "Merakish"
              ]
 hot_phrases = ["Each each",
                "Brighter bitter",

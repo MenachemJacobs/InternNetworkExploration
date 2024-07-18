@@ -1,7 +1,6 @@
 from datetime import timedelta
-
-import Classifier
-from Message import Message, random_message
+from Components import Classifier
+from Components.Message import random_message, Message
 
 
 def random_account(name) -> "Account":
@@ -14,7 +13,7 @@ def create_accounts_by_bulk(names) -> list["Account"]:
 
 class Account:
     def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
-        self.antisemite = antisemite
+        self.isAntisemite = antisemite
         self.name = name
 
         self.messages = messages
@@ -32,16 +31,18 @@ class Account:
         self.primary_score = 1.0
 
     def set_is_anti(self, is_anti):
-        self.antisemite = is_anti
+        self.isAntisemite = is_anti
         return self
 
-    def set_feature_scores(self):
+    def set_feature_scores(self) -> None:
         self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
         self.score_per_day = self.calculate_score_per_day()
         self.score_by_density = self.calculate_score_by_density()
         self.positives_per_tweet = len([m for m in self.messages if m.score > 0.5]) / len(self.messages)
 
-        self.feature_list = [self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet]
+        self.feature_list = [
+            self.average_message_score, self.score_per_day, self.score_by_density, self.positives_per_tweet
+        ]
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""

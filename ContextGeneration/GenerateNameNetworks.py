@@ -1,5 +1,6 @@
 import random
-from Account import Account, create_accounts_by_bulk, random_account
+from Components import Account
+from Components.Account import random_account, create_accounts_by_bulk
 
 Rando = random_account("Randos")
 
@@ -26,7 +27,7 @@ ideal_overt_size = 40
 
 
 # Function to generate random subset of entries from overt_list up to a given index
-def random_subset(number: int) -> list[str]:
+def random_subset(number: int) -> list["Account"]:
     return_val = []
     user_sublist = default_overt_list[:number]
 

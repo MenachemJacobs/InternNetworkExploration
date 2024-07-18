@@ -1,4 +1,4 @@
-from Account import Account
+from Components.Account import Account
 
 
 class Crawler:

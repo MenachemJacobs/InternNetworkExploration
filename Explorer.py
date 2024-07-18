@@ -1,6 +1,6 @@
-from Account import create_accounts_by_bulk, random_account
-from Crawler import Crawler
-from GenerateNameNetworks import NetworkManager
+from Components.Account import create_accounts_by_bulk
+from Components.Crawler import Crawler
+from ContextGeneration.GenerateNameNetworks import NetworkManager
 
 name_list = ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf"]
 named_friends = create_accounts_by_bulk(name_list)
@@ -23,6 +23,7 @@ myCrawler = Crawler()
 
 returned_graph = myCrawler.find_neighbors(named_friends[0], 4)
 
+
 def dfs_getter(lst):
     return_val = []
     if isinstance(lst, list):
@@ -31,6 +32,7 @@ def dfs_getter(lst):
     else:
         return_val.append(lst)  # Append leaf nodes (non-list elements)
     return return_val
+
 
 returned_graph = dfs_getter(returned_graph)
 
