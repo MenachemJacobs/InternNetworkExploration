@@ -4,15 +4,42 @@ from Components.Message import random_message, Message
 
 
 def random_account(name) -> "Account":
+    """
+    Create a random Account with the specified name.
+
+    Args:
+        name (str): The name of the account.
+
+    Returns:
+        Account: An Account object with random messages.
+    """
     return Account(name, random_message(5), [])
 
 
 def create_accounts_by_bulk(names) -> list["Account"]:
+    """
+    Create multiple accounts by bulk with given names.
+
+    Args:
+        names (list[str]): A list of names for the accounts.
+
+    Returns:
+        list[Account]: A list of Account objects.
+    """
     return [random_account(name) for name in names]
 
 
 class Account:
     def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'], antisemite=False):
+        """
+        Initialize an Account.
+
+        Args:
+            name (str): The name of the account.
+            messages (list[Message]): A list of Message objects.
+            initial_subscriptions (list[Account]): A list of initial subscriptions (Account objects).
+            antisemite (bool, optional): Indicates if the account is antisemitic. Defaults to False.
+        """
         self.isAntisemite = antisemite
         self.name = name
 
@@ -30,11 +57,10 @@ class Account:
         self.secondary_score = 1.0
         self.primary_score = 1.0
 
-    def set_is_anti(self, is_anti):
-        self.isAntisemite = is_anti
-        return self
-
     def set_feature_scores(self) -> None:
+        """
+        Calculate and set the feature scores for the account.
+        """
         self.average_message_score = sum(m.score for m in self.messages) / len(self.messages)
         self.score_per_day = self.calculate_score_per_day()
         self.score_by_density = self.calculate_score_by_density()
@@ -47,12 +73,25 @@ class Account:
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
     def calculate_score_per_day(self):
+        """
+        Calculate the average score per day for the account.
+
+        Returns:
+            float: The average score per day.
+        """
+
         span = max(self.messages, key=lambda m: m.date).date - min(self.messages, key=lambda m: m.date).date
         return sum(message.score for message in self.messages) / span.days
 
     """Each tweet's score is multiplied by the number of tweet's in a given period. This weighted average is then
     normalized."""
     def calculate_score_by_density(self):
+        """
+        Calculate the weighted by post density for the account.
+
+        Returns:
+            float: The density-based score.
+        """
         partitions = 100
 
         # Get the date range
@@ -86,10 +125,19 @@ class Account:
 
     # return self is necessary for chaining. It is expedient, but perhaps lazy
     def set_secondary_score(self):
+        """
+        Set the secondary score for the account.
+
+        Returns:
+            Account: The current Account object.
+        """
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
         return self
 
     def set_primary_score(self):
+        """
+        Calculate and set the primary score for the account.
+        """
         collated_score = 0
 
         if self.secondary_score == 1.0:
@@ -105,10 +153,22 @@ class Account:
         self.primary_score = (self.secondary_score + collated_score) / 2
 
     def add_subscription(self, subscriber: 'Account'):
+        """
+        Add a subscription to the account.
+
+        Args:
+            subscriber (Account): The account to subscribe to.
+        """
         if isinstance(subscriber, Account) and subscriber not in self.subscriptions:
             self.subscriptions.append(subscriber)
 
     def add_subscriptions(self, neighbors):
+        """
+        Add multiple subscriptions to the account.
+
+        Args:
+            neighbors (list[Account]): A list of accounts to subscribe to.
+        """
         [self.add_subscription(subscriber) for subscriber in neighbors]
 
     # def add_super-scriber(self, super-scriber: 'Account'):
@@ -116,6 +176,15 @@ class Account:
     #         self.super-scribers.append(super-scriber)
 
     def remove_subscription(self, neighbor: 'Account'):
+        """
+        Remove a subscription from the account.
+
+        Args:
+            neighbor (Account): The account to unsubscribe from.
+
+        Returns:
+            bool: True if the subscription was removed, False otherwise.
+        """
         if neighbor in self.subscriptions:
             self.subscriptions.remove(neighbor)
             return True
@@ -123,10 +192,28 @@ class Account:
             return False
 
     def get_subscriptions(self):
+        """
+        Get the list of subscriptions for the account.
+
+        Returns:
+            list[Account]: A list of accounts this account is subscribed to.
+        """
         return self.subscriptions
 
     def __str__(self):
+        """
+        String representation of the account.
+
+        Returns:
+            str: The account name.
+        """
         return "Account: " + self.name
 
     def __repr__(self):
+        """
+        Representation of the account.
+
+        Returns:
+            str: The account name.
+        """
         return self.__str__()

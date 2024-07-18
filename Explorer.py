@@ -45,8 +45,8 @@ greek_alphabet = [
 
 hebrew_alphabet = [
     "Aleph", "Beis", "Gimmel",
-    "Dalet", "Heiy", "Vav",
-    "Zein", "Cheis", "Teis",
+    "Dalit", "Heiy", "Vav",
+    "Zien", "Khess", "Tess",
     "Yud"
 ]
 

@@ -1,10 +1,8 @@
-import numpy.random
 import hotwords
 import pandas
-from GenerateNameNetworks import *
-from Message import Message
+from ContextGeneration.GenerateNameNetworks import *
+from Components.Message import Message
 from utils import *
-from Account import Account
 
 new_dates = clustered_random_dates(datetime.datetime(2012, 11, 28, 12, minute=38, second=57), cluster_size=12,
                                    num_cluster=600, remainder=0, years=1)

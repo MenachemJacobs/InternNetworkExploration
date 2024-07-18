@@ -21,15 +21,28 @@ default_overt_list = create_accounts_by_bulk([
     "Aubrey", "Ellie", "Stella", "Natalie", "Zoe",
     "Leah"
 ])
+#Default pro accounts
+default_pro_list = create_accounts_by_bulk([
+    "Montgomery", "Juneau", "Phoenix", "Little Rock", "Sacramento", "Denver",
+    "Hartford", "Dover", "Tallahassee", "Atlanta", "Honolulu", "Boise",
+    "Springfield", "Indianapolis", "Des Moines", "Topeka", "Frankfort", "Baton Rouge",
+    "Augusta", "Annapolis", "Boston", "Lansing", "Saint Paul", "Jackson",
+    "Jefferson City", "Helena", "Lincoln", "Carson City", "Concord", "Trenton",
+    "Santa Fe", "Albany", "Raleigh", "Bismarck", "Columbus", "Oklahoma City",
+    "Salem", "Harrisburg", "Providence", "Columbia", "Pierre", "Nashville",
+    "Austin", "Salt Lake City", "Montpelier", "Richmond", "Olympia", "Charleston",
+    "Madison", "Cheyenne"
+])
 
 ideal_covert_size = 10
 ideal_overt_size = 40
+ideal_pro_size = 50
 
 
 # Function to generate random subset of entries from overt_list up to a given index
-def random_subset(number: int) -> list["Account"]:
+def random_subset(account_list, number: int) -> list["Account"]:
     return_val = []
-    user_sublist = default_overt_list[:number]
+    user_sublist = account_list[:number]
 
     # The number of entries to return
     friend_count = random.randint(1, number)
@@ -47,6 +60,7 @@ class NetworkManager:
     def __init__(self):
         self.covert_list = []
         self.overt_list = []
+        self.pro_list = []
 
     # assumes account passed in have no subscription attached. This will be tricky for score counting.
     def set_covert_list(self, passed_accounts: list["Account"]) -> None:
@@ -86,8 +100,25 @@ class NetworkManager:
             if i < 2:
                 self.overt_list[i].subscriptions.append(Rando)
             else:
-                self.overt_list[i].subscriptions.extend(random_subset(i))
-                self.overt_list[0].subscriptions.extend(random_subset(10))
-                self.overt_list[1].subscriptions.extend(random_subset(10))
+                self.overt_list[i].subscriptions.extend(random_subset(self.overt_list, i))
+                self.overt_list[0].subscriptions.extend(random_subset(self.overt_list, 10))
+                self.overt_list[1].subscriptions.extend(random_subset(self.overt_list, 10))
 
         return self.overt_list
+
+    def set_pro_list(self, passed_accounts: list["Account"]) -> None:
+        if len(passed_accounts) < ideal_pro_size:
+            self.pro_list = passed_accounts + default_covert_list[:(ideal_pro_size - len(passed_accounts))]
+
+        if len(passed_accounts) >= ideal_covert_size:
+            self.covert_list = default_covert_list[:ideal_pro_size]
+
+    def generate_pro_network(self):
+        for account in self.pro_list:
+            number_friends = random.randint(1, len(self.pro_list) // 2)
+            possible_friends = self.pro_list
+
+            for i in range(number_friends):
+                selection = random.choice(possible_friends)
+                possible_friends.remove(selection)
+                account.subscriptions.append(selection)
