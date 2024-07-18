@@ -1,13 +1,14 @@
 import datetime
-import random
+
+import numpy
 
 import hotwords
 from Components.Account import *
 from ContextGeneration.GenerateNameNetworks import *
-from account_writer import *
-from utils import *
 import pandas as pd
-import ContextGeneration.GenerateNameNetworks
+
+from shuffle.account_writer import assign_messages_randomly, accounts_to_dataframe
+from shuffle.utils import clustered_random_dates, replace_words, clean
 
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 mngr = NetworkManager()
@@ -50,5 +51,5 @@ for i in range(0, len(jikeli['Text'])):
 assign_messages_randomly(mngr.overt_list + mngr.covert_list, covert_messages)
 assign_messages_randomly(mngr.overt_list, overt_messages)
 assign_messages_randomly(mngr.pro_list, pro_messages)
-df = accounts_to_dataframe(mngr.pro_list + mngr.overt_list + mngr.covert_list)
-df.to_csv('accounts.csv')
+accountData = accounts_to_dataframe(mngr.pro_list + mngr.overt_list + mngr.covert_list)
+accountData.to_csv('accounts.csv')

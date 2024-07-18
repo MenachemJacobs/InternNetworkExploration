@@ -15,7 +15,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
         names.append(account.name)
         subscriptions.append(account.subscriptions)
         antisemitic.append(account.isAntisemite)
-        messages.append([(message.score, message.date, message.text) for message in account.messages])
+        messages.append([(message.date, message.text, message.score) for message in account.messages])
     accounts_df = pd.DataFrame({ 'Username': names,'Messages': messages, 'Antisemitic': antisemitic,'Subscriptions': subscriptions})
     return accounts_df
 

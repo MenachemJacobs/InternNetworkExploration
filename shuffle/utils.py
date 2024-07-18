@@ -8,6 +8,8 @@ from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
 
+from Components.Message import Message
+
 stopList = set(stopwords.words('english'))
 tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
@@ -96,3 +98,10 @@ def store_indices(arr: list, target_value) -> list[int]:
 
 def jikeli_date(date_text: str) -> datetime.datetime:
     return datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M:%S%z')
+
+
+def tuple_to_message(data: tuple) -> Message:
+    """converts a tuple of length 3 to a message object; should be in date, text score order."""
+    msg = Message()
+    msg = msg.testing_constructor(data[0], data[1], data[2])
+    return msg
