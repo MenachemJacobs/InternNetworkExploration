@@ -55,29 +55,30 @@ class NetworkManager:
         self.overt_list = []
         self.pro_list = []
 
-    def set_list(self, list_name: str, passed_accounts: list["Account"], ideal_size: int, default_list: list["Account"]):
+    def set_list(self, list_name: str, passed_accounts: list["Account"], ideal_size: int,
+                 default_list: list["Account"]):
         if len(passed_accounts) < ideal_size:
             default_accounts = create_accounts_by_bulk(default_list[:(ideal_size - len(passed_accounts))])
             setattr(self, list_name, passed_accounts + default_accounts)
         else:
             setattr(self, list_name, passed_accounts[:ideal_size])
 
-    def set_covert_list(self, passed_accounts: list["Account"]) -> None:
+    def set_covert_list(self, passed_accounts: list["Account"]) -> list["Account"]:
         """Set the covert list of accounts."""
         self.set_list("covert_list", passed_accounts, ideal_covert_size, default_covert_list)
-        self.generate_covert_network()
+        return self.generate_covert_network()
 
-    def set_overt_list(self, passed_accounts: list["Account"]) -> None:
+    def set_overt_list(self, passed_accounts: list["Account"]) -> list["Account"]:
         """Set the overt list of accounts."""
         self.set_list("overt_list", passed_accounts, ideal_overt_size, default_overt_list)
-        self.generate_overt_network()
+        return self.generate_overt_network()
 
-    def set_pro_list(self, passed_accounts: list["Account"]) -> None:
+    def set_pro_list(self, passed_accounts: list["Account"]) -> list["Account"]:
         """Set the pro list of accounts."""
         self.set_list("pro_list", passed_accounts, ideal_pro_size, default_pro_list)
-        self.generate_pro_network()
+        return self.generate_pro_network()
 
-    def generate_covert_network(self):
+    def generate_covert_network(self) -> list["Account"]:
         """Generate connections in the covert network."""
         group_lead = self.covert_list[:2]
         group_michael = self.covert_list[2:5]
@@ -95,7 +96,7 @@ class NetworkManager:
 
         return self.covert_list
 
-    def generate_overt_network(self):
+    def generate_overt_network(self) -> list["Account"]:
         """Generate connections in the overt network."""
         # Assigning friends to overt accounts based on specific rules
         for i in range(len(self.overt_list)):
@@ -109,7 +110,7 @@ class NetworkManager:
 
         return self.overt_list
 
-    def generate_pro_network(self):
+    def generate_pro_network(self) -> list["Account"]:
         for account in self.pro_list:
             number_friends = random.randint(1, len(self.pro_list) // 2)
             possible_friends = [friend for friend in self.pro_list if friend != account]
