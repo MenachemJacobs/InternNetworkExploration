@@ -51,14 +51,15 @@ def random_from_subset(account_list, number: int) -> list["Account"]:
 
 class NetworkManager:
     def __init__(self):
-        self.covert_list = []
-        self.overt_list = []
-        self.pro_list = []
+        self.covert_list: list["Account"] = []
+        self.overt_list: list["Account"] = []
+        self.pro_list: list["Account"] = []
 
     def set_list(self, list_name: str, passed_accounts: list["Account"], ideal_size: int,
-                 default_list: list["Account"]):
+                 default_list: list[str]):
+
         if len(passed_accounts) < ideal_size:
-            default_accounts = create_accounts_by_bulk(default_list[:(ideal_size - len(passed_accounts))])
+            default_accounts = default_list[:(ideal_size - len(passed_accounts))]
             setattr(self, list_name, passed_accounts + default_accounts)
         else:
             setattr(self, list_name, passed_accounts[:ideal_size])

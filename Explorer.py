@@ -55,9 +55,7 @@ hebrew_friends = create_accounts_by_bulk(hebrew_alphabet)
 
 myNetMan = NetworkManager()
 
-print(myNetMan.set_covert_list(greek_friends))
+# print(myNetMan.set_covert_list(greek_friends))
 
-
-print(myNetMan.set_overt_list(hebrew_friends))
-print("overt list collated")
-
+myNetMan.set_overt_list(hebrew_friends)
+# print(myNetMan.overt_list[len(hebrew_friends)])
