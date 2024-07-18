@@ -47,6 +47,9 @@ class CovertLister:
         return self.hot_words, self.hot_phrases
 
     def uncover_covert(self) -> list[tuple["Account", int]]:
+        self.uncover_overt()
+        self.compile_hot_lists()
+
         suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
         accounts_with_score = []
 
