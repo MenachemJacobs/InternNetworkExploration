@@ -26,9 +26,7 @@ class CovertLister:
 
     # TODO replace placeholder when true classifier is developed
     def test_account(self, account) -> bool:
-        self.counter += 1
-
-        return self.counter % 5 == 0
+        return account.isAntisemite
 
     # TODO all of this should be replaced with nltk methods for finding the key words and phrases
     def compile_hot_lists(self) -> tuple[list[str], list[str]]:
@@ -49,6 +47,9 @@ class CovertLister:
         return self.hot_words, self.hot_phrases
 
     def uncover_covert(self) -> list[tuple["Account", int]]:
+        self.uncover_overt()
+        self.compile_hot_lists()
+
         suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
         accounts_with_score = []
 
