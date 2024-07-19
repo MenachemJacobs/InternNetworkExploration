@@ -1,8 +1,7 @@
 from collections import Counter
-
-from Components import Account
-
+from nltk import word_tokenize, ngrams
 from nltk.corpus import stopwords
+from Components import Account
 
 
 class CovertLister:
@@ -15,7 +14,6 @@ class CovertLister:
         covert_accounts (list[Account]): List of accounts identified as covert.
         hot_words (list[str]): List of frequently occurring individual words across all messages.
         hot_phrases (list[str]): List of frequently occurring phrases (bigrams) across all messages.
-        counter (int): Internal counter, initialized to 0.
 
     Methods:
         __init__(self, all_accounts: list[Account]):
@@ -36,6 +34,7 @@ class CovertLister:
         account_score_sorter(accounts_with_score: list[tuple[Account, int]]) -> list[tuple[Account, int]]:
             Sorts a list of tuples based on the score in descending order.
     """
+
     def __init__(self):
         """
         Initializes a CovertLister object.
@@ -49,8 +48,6 @@ class CovertLister:
         self.hot_words: list[str] = []
         self.hot_phrases: list[str] = []
 
-        self.counter = 0
-
     def uncover_overt(self) -> list["Account"]:
         """
         Identifies overt accounts based on a placeholder classifier (test_account method).
@@ -58,13 +55,10 @@ class CovertLister:
         Returns:
             list[Account]: List of overt Account objects.
         """
-        pos_scored_accounts = []
-
         for account in self.all_accounts:
             if self.test_account(account):
-                pos_scored_accounts.append(account)
+                self.overt_accounts.append(account)
 
-        self.overt_accounts = pos_scored_accounts
         return self.overt_accounts
 
     # TODO replace placeholder when true classifier is developed
@@ -81,7 +75,7 @@ class CovertLister:
         return account.isAntisemite
 
     # TODO all of this should be replaced with nltk methods for finding the key words and phrases
-    def compile_hot_lists(self, suspicious_accounts: list["Account"]) -> tuple[list[str], list[str]]:
+    def compile_hot_lists(self, suspicious_accounts):
         """
         Generates lists of frequently occurring words and phrases across all messages.
 
@@ -97,30 +91,36 @@ class CovertLister:
 
         stop_words = set(stopwords.words('english'))
 
-        # find most most common words and phrases in overt list
-        for account in self.overt_accounts:
-            for message in account.messages:
-                anti_words = message.text.split()
-                anti_words = [word for word in anti_words if word.lower() not in stop_words]
-                overt_word_counter.update(anti_words)
+        def process_messages(accounts, word_counter, phrase_counter):
+            for account in accounts:
+                for message in account.messages:
+                    tokens = word_tokenize(message.text.lower())
+                    tokens = [token for token in tokens if token.isalnum() and token not in stop_words]
 
-                message_bigrams = [f"{anti_words[i]} {anti_words[i + 1]}" for i in range(len(anti_words) - 1)]
-                overt_phrase_counter.update(message_bigrams)
+                    # Update word counter
+                    word_counter.update(tokens)
 
-        # find most most common words and phrases in suspicious list
-        for account in suspicious_accounts:
-            for message in account.messages:
-                pro_words = message.text.split()
-                pro_words = [word for word in pro_words if word.lower() not in stop_words]
-                sus_word_counter.update(pro_words)
+                    # Update phrase counter
+                    message_bigrams = list(ngrams(tokens, 2))
+                    phrase_counter.update(message_bigrams)
 
-                message_bigrams = [f"{pro_words[i]} {pro_words[i + 1]}" for i in range(len(pro_words) - 1)]
-                sus_phrase_counter.update(message_bigrams)
+        # Process overt accounts
+        process_messages(self.overt_accounts, overt_word_counter, overt_phrase_counter)
 
+        # Process suspicious accounts
+        process_messages(suspicious_accounts, sus_word_counter, sus_phrase_counter)
 
-        # filter out word that apear in both lists
-        self.hot_words = [word for word, _ in overt_word_counter.most_common(100) if word not in sus_word_counter.most_common(100)]
-        self.hot_phrases = [phrase for phrase, _ in overt_phrase_counter.most_common(100)if phrase not in sus_phrase_counter.most_common(100)]
+        # Filter out common words and phrases
+        def filter_common(counter1, counter2, num_top):
+            common_items = set(dict(counter1.most_common(num_top))).intersection(
+                set(dict(counter2.most_common(num_top))))
+            return [item for item in counter1.keys() if item not in common_items][:num_top]
+
+        self.hot_words = filter_common(overt_word_counter, sus_word_counter, 100)
+        self.hot_phrases = filter_common(overt_phrase_counter, sus_phrase_counter, 100)
+
+        # self.hot_words = overt_word_counter.most_common(100)
+        # self.hot_phrases = overt_phrase_counter.most_common(100)
 
         return self.hot_words, self.hot_phrases
 
@@ -136,6 +136,7 @@ class CovertLister:
         """
         self.all_accounts = all_accounts
         self.uncover_overt()
+        print(self.overt_accounts)
         suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
 
         self.compile_hot_lists(suspicious_accounts)
@@ -159,25 +160,11 @@ class CovertLister:
 
             accounts_with_score.append((account, account_score))
 
-        # sort the list in place
-        account_score_sorter(accounts_with_score)
+        # Sort accounts by score in descending order
+        accounts_with_score.sort(key=lambda x: x[1], reverse=True)
 
         # take only the first 10% of the list
         top_10_percent_index = len(accounts_with_score) // 10
         self.covert_accounts = accounts_with_score[:top_10_percent_index]
 
         return self.covert_accounts
-
-
-def account_score_sorter(accounts_with_score: list[tuple["Account", int]]) -> list[tuple["Account", int]]:
-    """
-    Sorts a list of tuples based on the score in descending order.
-
-    Args:
-        accounts_with_score (list[tuple[Account, int]]): List of tuples containing Account objects and scores.
-
-    Returns:
-        list[tuple[Account, int]]: Sorted list of tuples in descending order of scores.
-    """
-    accounts_with_score.sort(key=lambda x: x[1], reverse=True)
-    return accounts_with_score
