@@ -109,3 +109,14 @@ def tuple_to_message(data: tuple) -> Message:
     msg = Message()
     msg = msg.testing_constructor(data[0], data[1], data[2])
     return msg
+
+
+def replace_keyword(keyword: str, tokens: list[str], replacing_tokens: list[str]) -> list[str]:
+    word = lem.lemmatize(keyword.lower())
+    new_tokens = list()
+    for token in tokens:
+        if lem.lemmatize(token.lower()) == word:
+            new_tokens.append(numpy.random.choice(replacing_tokens))
+        else:
+            new_tokens.append(token)
+    return new_tokens
