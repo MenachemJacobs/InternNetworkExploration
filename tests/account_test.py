@@ -17,9 +17,10 @@ class TestStringMethods(unittest.TestCase):
             account = Account.Account(accountData['Username'][index], msg_list,
                                       accountData['Subscriptions'][index], accountData['Antisemitic'][index])
             accounts.append(account)
-        listener = CovertLister(accounts)
+        listener = CovertLister()
+        listener.all_accounts = accounts
         self.assertTrue(listener.uncover_overt(), "Not detecting overt accounts.")
-        self.assertTrue(listener.uncover_covert(), "Returning empty list of covert accounts.")
+        self.assertTrue(listener.uncover_covert(accounts), "Returning empty list of covert accounts.")
 
 
 if __name__ == '__main__':
