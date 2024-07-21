@@ -4,6 +4,10 @@ from nltk.corpus import stopwords
 from Components import Account
 
 
+uninteresting_word_list = ["https"]
+
+
+# TODO look for hot dates in overt to compare covert
 class CovertLister:
     """
     Class for analyzing a list of Account objects to identify overt and covert accounts based on message content.
@@ -55,10 +59,8 @@ class CovertLister:
         Returns:
             list[Account]: List of overt Account objects.
         """
-        for account in self.all_accounts:
-            if self.test_account(account):
-                self.overt_accounts.append(account)
 
+        self.overt_accounts = [account for account in self.all_accounts if self.test_account(account)]
         return self.overt_accounts
 
     # TODO replace placeholder when true classifier is developed
@@ -95,7 +97,8 @@ class CovertLister:
             for account in accounts:
                 for message in account.messages:
                     tokens = word_tokenize(message.text.lower())
-                    tokens = [token for token in tokens if token.isalnum() and token not in stop_words]
+                    tokens = [token for token in tokens if token.isalnum() and token not in stop_words
+                              and token not in uninteresting_word_list]
 
                     # Update word counter
                     word_counter.update(tokens)
@@ -106,7 +109,6 @@ class CovertLister:
 
         # Process overt accounts
         process_messages(self.overt_accounts, overt_word_counter, overt_phrase_counter)
-
         # Process suspicious accounts
         process_messages(suspicious_accounts, sus_word_counter, sus_phrase_counter)
 
@@ -114,7 +116,9 @@ class CovertLister:
         def filter_common(counter1, counter2, num_top):
             common_items = set(dict(counter1.most_common(num_top))).intersection(
                 set(dict(counter2.most_common(num_top))))
-            return [item for item in counter1.keys() if item not in common_items][:num_top]
+
+            return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
+            # return [item for item in counter1.keys() if item not in common_items][:num_top]
 
         self.hot_words = filter_common(overt_word_counter, sus_word_counter, 100)
         self.hot_phrases = filter_common(overt_phrase_counter, sus_phrase_counter, 100)
@@ -136,7 +140,6 @@ class CovertLister:
         """
         self.all_accounts = all_accounts
         self.uncover_overt()
-        print(self.overt_accounts)
         suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
 
         self.compile_hot_lists(suspicious_accounts)
@@ -144,6 +147,9 @@ class CovertLister:
         accounts_with_score = []
 
         for account in suspicious_accounts:
+            if "tonybarkerhere" == account.name:
+                print(account)
+
             account_score = 0
 
             for message in account.messages:
