@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from Components import Account
 
 
-uninteresting_word_list = ["https"]
+uninteresting_word_list = ["https", "zionazi", "zionazis"]
 
 
 # TODO look for hot dates in overt to compare covert
@@ -147,8 +147,8 @@ class CovertLister:
         accounts_with_score = []
 
         for account in suspicious_accounts:
-            if "tonybarkerhere" == account.name:
-                print(account)
+            # if "tonybarkerhere" == account.name:
+            #     print(account)
 
             account_score = 0
 
