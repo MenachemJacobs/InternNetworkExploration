@@ -8,7 +8,7 @@ from ContextGeneration.GenerateNameNetworks import *
 import pandas as pd
 
 from shuffle.account_writer import assign_messages_randomly, accounts_to_dataframe
-from shuffle.utils import clustered_random_dates, clean, replace_words
+from shuffle.utils import clustered_random_dates, clean, replace_words, replace_bigrams
 
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 mngr = NetworkManager()
@@ -45,7 +45,7 @@ for i in range(0, len(jikeli['Text'])):
         pro_messages.append(message)
     else:
         message.score = random.uniform(0.0, 0.4)
-        tweet = ' '.join(replace_words(tokens=clean(message.text), replacing=hotwords.hot_words,ratio=0.5))
+        tweet = ' '.join(replace_words(tokens=clean(message.text), replacing=hotwords.hot_words, ratio=0.4))
         message.text = tweet
         covert_messages.append(message)
 assign_messages_randomly(mngr.overt_list + mngr.covert_list, covert_messages)

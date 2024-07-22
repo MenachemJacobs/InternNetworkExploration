@@ -1,5 +1,7 @@
 import datetime
 import string
+
+import nltk
 import pandas as pd
 import numpy
 import random
@@ -15,15 +17,36 @@ tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
 
 
+def replace_bigrams(tokens: list[str], replacing: list[tuple[str, str]], ratio=0.25) -> list[str]:
+    bigrams = list()
+    i = 0
+    while i < len(tokens) - 1:
+        bigrams.append((tokens[i].lower(),tokens[i+1].lower()))
+        i += 2
+    if ratio < 0 or ratio > 1:
+        raise ValueError("ratio must be between 0 and 1")
+    new_tokens = bigrams
+    rand_indices = numpy.random.choice(range(len(bigrams)), size=int(ratio * len(bigrams)))
+    for index in rand_indices:
+        replacement = numpy.random.choice(len(replacing) - 1)
+        new_tokens[index] = replacing[replacement]
+    single_tokens = list()
+    for tup in new_tokens:
+        for token in tup:
+            single_tokens.append(token)
+    return single_tokens
+
+
 def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
-    """:param tokens: list of tokens to be partially replaced
+    """    :param ratio: number of tokens being replaced divided by number of tokens
+:param tokens: list of tokens to be partially replaced
     :param replacing: list of tokens to be used as replacements for tokens in replace_words"""
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
     new_tokens = tokens
     rand_indices = numpy.random.choice(range(0, len(tokens)), int(ratio * len(tokens)))
     for i in rand_indices:
-        new_tokens[i] = numpy.random.choice(replacing)
+        new_tokens[i] = numpy.random.choice(replacing).lower()
     return new_tokens
 
 
