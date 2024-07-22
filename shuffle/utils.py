@@ -25,7 +25,7 @@ def replace_bigrams(tokens: list[str], replacing: list[tuple[str, str]], ratio=0
         i += 2
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
-    new_tokens = bigrams
+    new_tokens = bigrams.copy()
     rand_indices = numpy.random.choice(range(len(bigrams)), size=int(ratio * len(bigrams)))
     for index in rand_indices:
         replacement = numpy.random.choice(len(replacing) - 1)
@@ -43,7 +43,7 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
     :param replacing: list of tokens to be used as replacements for tokens in replace_words"""
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
-    new_tokens = tokens
+    new_tokens = tokens.copy()
     rand_indices = numpy.random.choice(range(0, len(tokens)), int(ratio * len(tokens)))
     for i in rand_indices:
         new_tokens[i] = numpy.random.choice(replacing).lower()
@@ -101,7 +101,7 @@ def followers(follower_names: list[str], leader_names: list[str], connectivity=5
 def replace_names(names: list[str], target: list[str]) -> list[str]:
     """:param names: the names being written in
     :param target: the names being written over"""
-    newList = target
+    newList = target.copy()
     for i in range(len(target)):
         newList[i] = names[random.randint(0, len(names) - 1)]
     return newList
