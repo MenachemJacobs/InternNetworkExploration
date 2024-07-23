@@ -126,7 +126,7 @@ class CovertLister:
                     message_bigrams = list(ngrams(tokens, 2))
                     phrase_counter.update(message_bigrams)
 
-                    date_counter.update(message.date)
+                    date_counter.update([message.date])
 
         # Process overt accounts
         process_accounts(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)

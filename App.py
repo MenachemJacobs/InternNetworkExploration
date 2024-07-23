@@ -28,7 +28,7 @@ dataset = accountData
 accounts = list()
 
 for row in range(len(dataset['Username'])):
-    messages = [shuffle.utils.tuple_to_message(msg) for msg in dataset['Messages'][row]]
+    messages = [shuffle.utils.list_to_msg(msg) for msg in dataset['Messages'][row]]
     antisemitic = dataset['Antisemitic'][row]
     username = dataset['Username'][row]
     subscriptions = dataset['Subscriptions'][row]
