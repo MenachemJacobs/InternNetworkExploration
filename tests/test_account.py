@@ -21,14 +21,14 @@ class TestAccountMethods(unittest.TestCase):
 
     def test_uncover(self):
         self.assertTrue(self.listener.uncover_overt(), "Not detecting overt accounts.")
-        self.assertTrue(self.listener.uncover_covert(self.accounts), "Returning empty list of covert accounts.")
+        self.assertTrue(self.listener.uncover_covert(), "Returning empty list of covert accounts.")
 
     def test_hotlist(self):
-        suspects = [account[0] for account in self.listener.uncover_covert(all_accounts=self.accounts)]
+        suspects = [account[0] for account in self.listener.uncover_covert()]
         self.listener.uncover_overt()
-        self.listener.compile_hot_lists(suspects)
-        self.assertTrue(self.listener.hot_phrases, "no hot phrases identified")
-        self.assertTrue(self.listener.hot_words, "no hot words identified")
+        hot = self.listener.compile_feature_set()
+        self.assertTrue(hot[0], "no hot words identified")
+        self.assertTrue(hot[1], "no hot phrases identified")
 
 
 if __name__ == '__main__':
