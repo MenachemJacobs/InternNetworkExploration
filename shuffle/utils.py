@@ -6,6 +6,8 @@ import random
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
+
+from Components.Account import Account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
@@ -90,13 +92,18 @@ def clustered_random_dates(past: datetime.datetime, cluster_size: int, num_clust
     return dates
 
 
-def followers(follower_names: list[str], leader_names: list[str], connectivity=5) -> dict[str, list[str]]:
-    """:param follower_names: the names of the followers
-    :param leader_names: the usernames that can be followed
+def follower_network(followers: list[Account], leaders: list[Account], connectivity=5) -> dict[Account, list[Account]]:
+    """:param followers: the accounts of the followers
+    :param leaders: the accounts that can be followed
     :param connectivity: the number of people each follower follows"""
     following = dict()
-    for i in range(0, len(follower_names)):
-        following[follower_names[i]] = numpy.random.choice(a=leader_names, size=connectivity, replace=False)
+    for i in range(0, len(followers)):
+        rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity,replace=False)
+        for index in rand_indices:
+            if followers[i] in following:
+                following[followers[i]].append(leaders[index])
+            else:
+                following[followers[i]] = [leaders[index]]
     return following
 
 
@@ -129,8 +136,8 @@ def jikeli_date(date_text: str) -> datetime.datetime:
     return datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M:%S%z')
 
 
-def tuple_to_message(data: tuple) -> Message:
-    """converts a tuple of length 3 to a message object; @param data should be in date, text score order."""
+def list_to_msg(data: list) -> Message:
+    """converts a list of length 3 to a message object; @param data should be in date, text score order."""
     msg = Message()
     msg = msg.testing_constructor(data[0], data[1], data[2])
     return msg

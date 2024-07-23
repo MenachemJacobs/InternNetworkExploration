@@ -1,9 +1,7 @@
 import csv
-import datetime
 
-import pandas as pd
 
-import shuffle.utils
+from shuffle import utils
 from shuffle.create_accounts import accountData
 from AdversaryRevulsion import CovertLister
 from Components.Account import Account
@@ -13,6 +11,8 @@ filename = 'shuffle/accounts.csv'
 
 Accounts: list["Account"] = []
 Covert_accounts: list["Account"] = []
+
+
 # Pro_accounts: list["Account"] = []
 
 
@@ -30,12 +30,13 @@ def read_dataset(file):
 
 dataset = accountData
 accounts = list()
-for row in range(len(dataset['Username'])):
-    messages = [shuffle.utils.tuple_to_message(msg) for msg in dataset['Messages'][row]]
-    antisemitic = dataset['Antisemitic'][row]
-    username = dataset['Username'][row]
-    subscriptions = dataset['Subscriptions'][row]
-    accounts.append(Account(name=username, messages=messages, initial_subscriptions=subscriptions,antisemite=antisemitic))
+for index in range(len(dataset['Username'])):
+    messages = [utils.list_to_msg(msg) for msg in dataset['Messages'][index]]
+    antisemitic = dataset['Antisemitic'][index]
+    username = dataset['Username'][index]
+    subscriptions = dataset['Subscriptions'][index]
+    accounts.append(
+        Account(name=username, messages=messages, initial_subscriptions=subscriptions, antisemite=antisemitic))
 
 myFinder = CovertLister()
 result = myFinder.uncover_covert(accounts)

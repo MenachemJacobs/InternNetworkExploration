@@ -1,4 +1,5 @@
 import numpy.random
+import pandas as pd
 
 from utils import *
 
@@ -14,10 +15,10 @@ for i in indexes:
         antisemites.append(jikeliCorpus['Username'][i])
     else:
         normal.append(jikeliCorpus['Username'][i])
-antisemite_network = followers(antisemites, antisemites)
+antisemite_network = follower_network(antisemites, antisemites)
 distinct_names = normal
 distinct_names.extend(antisemites)
-normal_network = followers(normal, distinct_names)
+normal_network = follower_network(normal, distinct_names)
 all_network = dict()
 for key in antisemite_network.keys():
     all_network[str(key)] = antisemite_network[key]

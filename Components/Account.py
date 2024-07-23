@@ -44,7 +44,7 @@ class Account:
         """
         # TODO second iteration of project shouldn't have this flag
         self.isAntisemite = antisemite
-        self.name = name
+        self.name = str(name)
         self.messages = messages
         self.subscriptions = initial_subscriptions
 

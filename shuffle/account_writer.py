@@ -12,11 +12,11 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
     subscriptions = list()
     antisemitic = list()
     for account in accounts:
-        names.append(account.name)
+        names.append(str(account.name))
         subscriptions.append(account.subscriptions)
         antisemitic.append(account.isAntisemite)
-        messages.append([(message.date, message.text, message.score) for message in account.messages])
-    accounts_df = pd.DataFrame({ 'Username': names,'Messages': messages, 'Antisemitic': antisemitic,'Subscriptions': subscriptions})
+        messages.append([message.date,message.text,message.score] for message in account.messages)
+    accounts_df = pd.DataFrame({'Username': names,'Messages': messages, 'Antisemitic': antisemitic,'Subscriptions': subscriptions})
     return accounts_df
 
 

@@ -12,7 +12,7 @@ class TestAccountMethods(unittest.TestCase):
         self.accounts = list()
         for index in range(len(accountData['Username'])):
             msg_data = accountData['Messages'][index]
-            msg_list = [(shuffle.utils.tuple_to_message(data)) for data in msg_data]
+            msg_list = [(shuffle.utils.list_to_msg(data)) for data in msg_data]
             account = Account.Account(accountData['Username'][index], msg_list,
                                       accountData['Subscriptions'][index], accountData['Antisemitic'][index])
             self.accounts.append(account)
