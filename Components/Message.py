@@ -24,11 +24,12 @@ def random_message(num: int) -> list["Message"]:
 class Message:
     def __init__(self, username='', text=''):
         self.ID = 0
-        #TODO this should expect an account not a string
+        # TODO this should expect an account not a string
         self.username = username
         self.date = datetime.now()
         self.text = text
         self.score = random()
+        self.responses: list[int] = []
 
     def testing_constructor(self, date, text, score) -> "Message":
         self.date = date
