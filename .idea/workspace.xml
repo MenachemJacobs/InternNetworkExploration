@@ -4,15 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="randomized dates for accounts.csv">
       <change afterPath="$PROJECT_DIR$/shuffle/__init__.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tests/account_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/networkExploration.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/networkExploration.iml" afterDir="false" />
+=======
+<<<<<<< Updated upstream
+    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="improved account creation and added utility functions for date and account reading">
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shuffle/account_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/account_writer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shuffle/create_accounts.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/create_accounts.py" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/shuffle/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/utils.py" afterDir="false" />
+=======
+=======
+<<<<<<< Updated upstream
+    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="deleted network_tweets.py due to messiness">
+      <change afterPath="$PROJECT_DIR$/shuffle/account_writer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shuffle/create_accounts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/networkExploration.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/networkExploration.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shuffle/accounts.csv" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/accounts.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shuffle/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/shuffle/utils.py" afterDir="false" />
+=======
+    <list default="true" id="9c937e2a-0580-401a-ac79-1a4c7cd38703" name="Changes" comment="improved tweet synthesis">
+      <change beforePath="$PROJECT_DIR$/AdversaryRevulsion.py" beforeDir="false" afterPath="$PROJECT_DIR$/AdversaryRevulsion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" beforeDir="false" afterPath="$PROJECT_DIR$/ContextGeneration/GenerateNameNetworks.py" afterDir="false" />
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +187,7 @@
       <workItem from="1721243199694" duration="183000" />
       <workItem from="1721243413094" duration="83000" />
       <workItem from="1721244411071" duration="189000" />
+      <workItem from="1721335614437" duration="353000" />
     </task>
     <task id="LOCAL-00001" summary="updated Explorer.py to be runnable again according to instruction">
       <option name="closed" value="true" />
