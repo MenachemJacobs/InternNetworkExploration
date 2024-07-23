@@ -5,11 +5,11 @@ import nltk
 import pandas as pd
 import numpy
 import random
-
+from nltk.collocations import *
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
-
+from nltk import FreqDist
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
@@ -17,27 +17,33 @@ tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
 
 
-def replace_bigrams(tokens: list[str], replacing: list[tuple[str, str]], ratio=0.25) -> list[str]:
-    bigrams = list()
-    i = 0
-    while i < len(tokens) - 1:
-        bigrams.append((tokens[i].lower(),tokens[i+1].lower()))
-        i += 2
-    if ratio < 0 or ratio > 1:
-        raise ValueError("ratio must be between 0 and 1")
-    new_tokens = bigrams.copy()
-    rand_indices = numpy.random.choice(range(len(bigrams)), size=int(ratio * len(bigrams)))
-    for index in rand_indices:
-        replacement = numpy.random.choice(len(replacing) - 1)
-        new_tokens[index] = replacing[replacement]
-    single_tokens = list()
-    for tup in new_tokens:
-        for token in tup:
-            single_tokens.append(token)
-    return single_tokens
+def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
+    """Randomly insert :param num_insertions words from list :param inserting into list :param tokens
+    and return the list; does not modify list in place."""
+    inserted = 0
+    new_tokens = tokens.copy()
+    while inserted < num_insertions:
+        rand_index = random.randint(0, len(tokens) - 1)
+        new_tokens.insert(rand_index, numpy.random.choice(inserting))
+        inserted += 1
+    return new_tokens
 
 
-def replace_words(tokens: list[str], replacing: list[str], ratio=0.25):
+def insert_bigrams(num_insertions: int, tokens: list[str], bigrams: list[tuple[str, str]]) -> list[str]:
+    """Randomly insert :param num_insertions bigrams from list :param bigrams into list :param tokens and return the list;
+     does not modify list in place."""
+    inserted = 0
+    new_tokens = tokens.copy()
+    while inserted < num_insertions:
+        rand_index = random.randint(0, len(tokens) - 1)
+        bigram_index = numpy.random.choice(range(len(bigrams)))
+        rand_bigram = bigrams[bigram_index][0] + " " + bigrams[bigram_index][1]
+        new_tokens.insert(rand_index, rand_bigram)
+        inserted += 1
+    return new_tokens
+
+
+def replace_words(tokens: list[str], replacing: list[str], ratio=0.25) -> list[str]:
     """    :param ratio: number of tokens being replaced divided by number of tokens
 :param tokens: list of tokens to be partially replaced
     :param replacing: list of tokens to be used as replacements for tokens in replace_words"""
