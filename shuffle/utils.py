@@ -1,15 +1,11 @@
 import datetime
 import string
 
-import nltk
-import pandas as pd
 import numpy
 import random
-from nltk.collocations import *
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
-from nltk import FreqDist
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
