@@ -3,8 +3,15 @@ from nltk import word_tokenize, ngrams
 from nltk.corpus import stopwords
 from Components import Account
 
-
 uninteresting_word_list = ["https", "zionazi", "zionazis"]
+
+
+# Filter out common words and phrases
+def filter_common(counter1, counter2, num_top):
+    common_items = set(dict(counter1.most_common(num_top))).intersection(
+        set(dict(counter2.most_common(num_top))))
+
+    return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
 
 
 # TODO look for hot dates in overt to compare covert
@@ -51,6 +58,17 @@ class CovertLister:
 
         self.hot_words: list[str] = []
         self.hot_phrases: list[str] = []
+        self.hot_dates: list[str] = []
+        self.negative_feature_set = []
+
+    def classify(self, all_accounts: list[Account]):
+        self.all_accounts = all_accounts
+
+        self.uncover_overt()  # This will set overt accounts
+        self.compile_feature_set()  # This will set the feature set
+        self.uncover_covert()
+
+        return self.covert_accounts
 
     def uncover_overt(self) -> list["Account"]:
         """
@@ -60,12 +78,9 @@ class CovertLister:
             list[Account]: List of overt Account objects.
         """
 
-        self.overt_accounts = [account for account in self.all_accounts if self.test_account(account)]
-        return self.overt_accounts
-
-    # TODO replace placeholder when true classifier is developed
-    def test_account(self, account) -> bool:
-        """
+        # TODO replace placeholder when true classifier is developed
+        def test_account(account) -> bool:
+            """
         Placeholder method to test if an account is overt.
 
         Args:
@@ -74,10 +89,14 @@ class CovertLister:
         Returns:
             bool: True if the account is identified as overt; False otherwise.
         """
-        return account.isAntisemite
+            return account.isAntisemite
+
+        self.overt_accounts = [account for account in self.all_accounts if test_account(account)]
+
+        return self.overt_accounts
 
     # TODO all of this should be replaced with nltk methods for finding the key words and phrases
-    def compile_hot_lists(self, suspicious_accounts):
+    def compile_feature_set(self) -> list[list]:
         """
         Generates lists of frequently occurring words and phrases across all messages.
 
@@ -86,14 +105,14 @@ class CovertLister:
                 - hot_words (list[str]): Top 100 most frequent words.
                 - hot_phrases (list[str]): Top 100 most frequent phrases (bigrams).
         """
-        overt_word_counter = Counter()
-        overt_phrase_counter = Counter()
-        sus_word_counter = Counter()
-        sus_phrase_counter = Counter()
+        overt_word_counter, overt_phrase_counter = Counter(), Counter()
+        sus_word_counter, sus_phrase_counter = Counter(), Counter()
+        overt_date_counter, sus_date_counter = Counter(), Counter()
 
         stop_words = set(stopwords.words('english'))
+        suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
 
-        def process_messages(accounts, word_counter, phrase_counter):
+        def process_accounts(accounts, word_counter, phrase_counter, date_counter):
             for account in accounts:
                 for message in account.messages:
                     tokens = word_tokenize(message.text.lower())
@@ -107,43 +126,29 @@ class CovertLister:
                     message_bigrams = list(ngrams(tokens, 2))
                     phrase_counter.update(message_bigrams)
 
+                    date_counter.update(message.date)
+
         # Process overt accounts
-        process_messages(self.overt_accounts, overt_word_counter, overt_phrase_counter)
+        process_accounts(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)
         # Process suspicious accounts
-        process_messages(suspicious_accounts, sus_word_counter, sus_phrase_counter)
-
-        # Filter out common words and phrases
-        def filter_common(counter1, counter2, num_top):
-            common_items = set(dict(counter1.most_common(num_top))).intersection(
-                set(dict(counter2.most_common(num_top))))
-
-            return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
-            # return [item for item in counter1.keys() if item not in common_items][:num_top]
+        process_accounts(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
 
         self.hot_words = filter_common(overt_word_counter, sus_word_counter, 100)
         self.hot_phrases = filter_common(overt_phrase_counter, sus_phrase_counter, 100)
+        self.hot_dates = filter_common(overt_date_counter, sus_date_counter, 100)
 
-        # self.hot_words = overt_word_counter.most_common(100)
-        # self.hot_phrases = overt_phrase_counter.most_common(100)
+        self.negative_feature_set = [self.hot_words, self.hot_phrases, self.hot_dates]
 
-        return self.hot_words, self.hot_phrases
+        return self.negative_feature_set
 
-    def uncover_covert(self, all_accounts: list[Account]) -> list[tuple["Account", int]]:
+    def uncover_covert(self) -> list[tuple["Account", int]]:
         """
         Identifies covert accounts based on message content and hot word/phrase lists.
-
-        Args:
-            all_accounts (list[Account]): List of all Account objects to be analyzed.
 
         Returns:
             list[tuple[Account, int]]: List of tuples, each containing an Account object and its associated score.
         """
-        self.all_accounts = all_accounts
-        self.uncover_overt()
         suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
-
-        self.compile_hot_lists(suspicious_accounts)
-
         accounts_with_score = []
 
         for account in suspicious_accounts:
@@ -163,6 +168,9 @@ class CovertLister:
                     bigram = f"{words[i]} {words[i + 1]}"
                     if bigram in self.hot_phrases:
                         account_score += 1
+
+                if message.date in self.hot_dates:
+                    account_score += 1
 
             accounts_with_score.append((account, account_score))
 
