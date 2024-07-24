@@ -14,7 +14,6 @@ def filter_common(counter1, counter2, num_top):
     return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
 
 
-# TODO look for hot dates in overt to compare covert
 class CovertLister:
     """
     Class for analyzing a list of Account objects to identify overt and covert accounts based on message content.
@@ -55,6 +54,7 @@ class CovertLister:
         self.all_accounts: list[Account] = []
         self.overt_accounts: list[Account] = []
         self.covert_accounts: list[Account] = []
+        # pro_accounts = set(all_accounts) - set(overt_accounts) - set(covert_accounts)
 
         self.hot_words: list[str] = []
         self.hot_phrases: list[str] = []
@@ -66,7 +66,7 @@ class CovertLister:
 
         self.uncover_overt()  # This will set overt accounts
         self.compile_feature_set()  # This will set the feature set
-        self.uncover_covert()
+        self.uncover_covert()  # This will set covert accounts
 
         return self.covert_accounts
 

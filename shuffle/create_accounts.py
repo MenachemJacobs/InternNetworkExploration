@@ -1,7 +1,5 @@
 import datetime
-
 import numpy
-
 import hotwords
 from Components.Account import *
 from ContextGeneration.GenerateNameNetworks import *
@@ -11,11 +9,11 @@ from shuffle.utils import clustered_random_dates, clean, replace_words, insert_b
     accounts_to_dataframe, assign_messages_randomly
 
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
-#initialize network of users
+# initialize network of users
 all_users = list(set(jikeli['Username']))
 anti_users = set()
 pro_users = set()
-#prepare message and dates lists
+# prepare message and dates lists
 overt_messages = list()
 pro_messages = list()
 covert_messages = list()
@@ -46,16 +44,16 @@ anti_accounts = list()
 pro_accounts = list()
 covert_accounts = list()
 for user in anti_users:
-    anti_accounts.append(Account.Account(str(user),list(),list(),True))
+    anti_accounts.append(Account.Account(str(user), list(), list(), True))
 for user in pro_users:
     if numpy.random.choice((True, False)):
-        pro_accounts.append(Account.Account(user,list(),list(),False))
+        pro_accounts.append(Account.Account(user, list(), list(), False))
     else:
-        covert_accounts.append(Account.Account(user,list(),list(),False))
-#generate account subscriptions
-anti_network = follower_network(anti_accounts,anti_accounts,10)
-pro_network = follower_network(pro_accounts,pro_accounts,10)
-covert_network = follower_network(covert_accounts,pro_accounts + anti_accounts,10)
+        covert_accounts.append(Account.Account(user, list(), list(), False))
+# generate account subscriptions
+anti_network = follower_network(anti_accounts, anti_accounts, 10)
+pro_network = follower_network(pro_accounts, pro_accounts, 10)
+covert_network = follower_network(covert_accounts, pro_accounts + anti_accounts, 10)
 for account in anti_network.keys():
     account.subscriptions = anti_network[account]
 for account in pro_network.keys():

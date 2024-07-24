@@ -31,8 +31,8 @@ def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
 
 
 def insert_bigrams(num_insertions: int, tokens: list[str], bigrams: list[tuple[str, str]]) -> list[str]:
-    """Randomly insert :param num_insertions bigrams from list :param bigrams into list :param tokens and return the list;
-     does not modify list in place."""
+    """Randomly insert :param num_insertions bigrams from list :param bigrams into list :param tokens and return the
+    list; does not modify list in place."""
     inserted = 0
     new_tokens = tokens.copy()
     while inserted < num_insertions:
@@ -101,7 +101,7 @@ def follower_network(followers: list[Account], leaders: list[Account], connectiv
     :param connectivity: the number of people each follower follows"""
     following = dict()
     for i in range(0, len(followers)):
-        rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity,replace=False)
+        rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity, replace=False)
         for index in rand_indices:
             if followers[i] in following:
                 following[followers[i]].append(leaders[index])
@@ -113,10 +113,10 @@ def follower_network(followers: list[Account], leaders: list[Account], connectiv
 def replace_names(names: list[str], target: list[str]) -> list[str]:
     """:param names: the names being written in
     :param target: the names being written over"""
-    newList = target.copy()
+    new_list = target.copy()
     for i in range(len(target)):
-        newList[i] = names[random.randint(0, len(names) - 1)]
-    return newList
+        new_list[i] = names[random.randint(0, len(names) - 1)]
+    return new_list
 
 
 def weight_bag(cluster_size: int, cluster_num, arr: list):
