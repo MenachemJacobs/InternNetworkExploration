@@ -1,7 +1,7 @@
 import datetime
 import numpy
 from pandas import DataFrame
-
+from nltk.tokenize.casual import TweetTokenizer
 import hotwords
 from Components.Account import *
 from ContextGeneration.GenerateNameNetworks import *
@@ -9,7 +9,7 @@ import pandas as pd
 
 from shuffle.utils import clustered_random_dates, clean, replace_words, insert_bigrams, follower_network, \
     accounts_to_dataframe, assign_messages_randomly, messages_to_dataframe
-
+tokener = TweetTokenizer()
 # Read Excel file
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 
@@ -39,7 +39,7 @@ for i in range(0, len(jikeli['Text'][:7000])):
         pro_messages.append(message)
     else:
         message.score = random.uniform(0.0, 0.4)
-        tokens = (replace_words(tokens=clean(message.text), replacing=hotwords.hot_words, ratio=0.4))
+        tokens = (replace_words(tokens=tokener.tokenize(message.text), replacing=hotwords.hot_words, ratio=0.4))
         tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=hotwords.hot_phrases, num_insertions=4))
         message.text = tweet
         covert_messages.append(message)
