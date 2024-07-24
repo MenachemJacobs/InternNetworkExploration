@@ -32,8 +32,8 @@ class Message:
         self.responses: list[int] = []
 
     def testing_constructor(self, date, text, score) -> "Message":
-        self.date = date
-        self.text = text
-        self.score = score
+        self.date: datetime = date
+        self.text: str = text
+        self.score: int = score
 
         return self
