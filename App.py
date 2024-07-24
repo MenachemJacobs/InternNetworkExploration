@@ -48,7 +48,15 @@ for row in range(len(accountData['Username'])):
 
 myFinder = CovertLister()
 myFinder.classify(accounts)
-
 print(myFinder.hot_words[:10])
 print(myFinder.hot_phrases[:10])
 print(myFinder.covert_accounts[:10])
+precision = 0
+total = 0
+gold = pd.read_csv('shuffle/covert.csv')
+covert_gold = set(gold['Username'])
+for account in myFinder.covert_accounts[:10]:
+    if account[0].name in covert_gold:
+        precision += 1
+    total += 1
+print(float(precision) / float(total))

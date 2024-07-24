@@ -65,12 +65,13 @@ for user in pro_users:
 anti_network = follower_network(anti_accounts, anti_accounts, 10)
 pro_network = follower_network(pro_accounts, pro_accounts, 10)
 covert_network = follower_network(covert_accounts, pro_accounts + anti_accounts, 10)
-
+covert_users = list()
 for account in anti_network.keys():
     account.subscriptions = anti_network[account]
 for account in pro_network.keys():
     account.subscriptions = pro_network[account]
 for account in covert_network.keys():
+    covert_users.append(account.name)
     account.subscriptions = covert_network[account]
 
 # Assign messages randomly
@@ -78,9 +79,11 @@ assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messa
 assign_messages_randomly(anti_accounts[:40], overt_messages)
 assign_messages_randomly(pro_accounts[:50], pro_messages)
 
-# Save account data to CSV
+# Save data tables to CSV
+covertList = pd.DataFrame({'Username': covert_users[:10]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
 messageData = messages_to_dataframe(covert_messages + pro_messages + overt_messages)
 messageData.sort_values(by='ID',inplace=True)
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
+covertList.to_csv('covert.csv')
