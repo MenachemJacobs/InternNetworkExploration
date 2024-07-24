@@ -1,17 +1,17 @@
 from collections import Counter
 from nltk import word_tokenize, ngrams
 from nltk.corpus import stopwords
-from Components import Account
+from Components.Account import Account
 
 uninteresting_word_list = ["https", "zionazi", "zionazis"]
 
 
 # Filter out common words and phrases
-def filter_common(counter1, counter2, num_top):
-    common_items = set(dict(counter1.most_common(num_top))).intersection(
-        set(dict(counter2.most_common(num_top))))
+def filter_common(overt_counter, suspicious_counter, num_top):
+    common_items = set(dict(overt_counter.most_common(num_top))).intersection(
+        set(dict(suspicious_counter.most_common(num_top))))
 
-    return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
+    return [item[0] for item in overt_counter.most_common(num_top) if item[0] not in common_items]
 
 
 class CovertLister:
