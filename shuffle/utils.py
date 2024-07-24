@@ -101,7 +101,7 @@ def follower_network(followers: list[Account], leaders: list[Account], connectiv
     :param connectivity: the number of people each follower follows"""
     following = dict()
     for i in range(0, len(followers)):
-        rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity,replace=False)
+        rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity, replace=False)
         for index in rand_indices:
             if followers[i] in following:
                 following[followers[i]].append(leaders[index])
@@ -158,6 +158,7 @@ def replace_keyword(keyword: str, tokens: list[str], replacing_tokens: list[str]
 
 
 def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
+    """saves @param accounts as a dataframe where messages are referenced by ID number only."""
     names = list()
     messages = list()
     subscriptions = list()
@@ -166,9 +167,24 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
         names.append(str(account.name))
         subscriptions.append(account.subscriptions)
         antisemitic.append(account.isAntisemite)
-        messages.append(list([message.date,message.text,message.score] for message in account.messages))
-    accounts_df = pd.DataFrame({'Username': names,'Messages': messages, 'Antisemitic': antisemitic,'Subscriptions': subscriptions})
+        messages.append(list(message.ID for message in account.messages))
+    accounts_df = pd.DataFrame(
+        {'Username': names, 'Messages': messages, 'Antisemitic': antisemitic, 'Subscriptions': subscriptions})
     return accounts_df
+
+
+def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
+    """ Stores @param messages as a dataframe"""
+    IDs = list()
+    dates = list()
+    texts = list()
+    scores = list()
+    for message in messages:
+        IDs.append(message.ID)
+        dates.append(message.date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
+        texts.append(message.text)
+        scores.append(message.score)
+    return pd.DataFrame({'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
 
 
 def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:

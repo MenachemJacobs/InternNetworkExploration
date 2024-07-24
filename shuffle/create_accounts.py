@@ -8,7 +8,7 @@ from ContextGeneration.GenerateNameNetworks import *
 import pandas as pd
 
 from shuffle.utils import clustered_random_dates, clean, replace_words, insert_bigrams, follower_network, \
-    accounts_to_dataframe, assign_messages_randomly
+    accounts_to_dataframe, assign_messages_randomly, messages_to_dataframe
 
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 #initialize network of users
@@ -21,11 +21,12 @@ pro_messages = list()
 covert_messages = list()
 dates = clustered_random_dates(datetime.datetime(2012, 6, 15, 11, 36, 24), cluster_size=10, num_cluster=1130,
                                remainder=11)
-for i in range(0, len(jikeli['Text'])):
+for i in range(0, len(jikeli['Text'][:7000])):
     message = Message()
     message.score = jikeli['Biased'][i]
     message.text = jikeli['Text'][i]
     message.date = dates[i]
+    message.ID = jikeli['ID'][i]
     if message.score == 1:
         message.score = random.uniform(0.75, 1)
         anti_users.add(jikeli['Username'][i])
@@ -66,4 +67,7 @@ assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messa
 assign_messages_randomly(anti_accounts[:40], overt_messages)
 assign_messages_randomly(pro_accounts[:50], pro_messages)
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
+messageData = messages_to_dataframe(covert_messages + pro_messages + overt_messages)
+messageData.sort_values(by='ID',inplace=True)
+messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
