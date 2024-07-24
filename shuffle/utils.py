@@ -140,9 +140,10 @@ def jikeli_date(date_text: str) -> datetime.datetime:
 
 
 def list_to_msg(data: list) -> Message:
-    """converts a list of length 3 to a message object; @param data should be in date, text score order."""
+    """converts a list of length 4 to a message object; @param data should be in date, text score, username order."""
     msg = Message()
     msg = msg.testing_constructor(data[0], data[1], data[2])
+    msg.username = data[3]
     return msg
 
 
@@ -179,15 +180,18 @@ def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
     dates = list()
     texts = list()
     scores = list()
+    names = list()
     for message in messages:
         IDs.append(message.ID)
         dates.append(message.date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
         texts.append(message.text)
         scores.append(message.score)
-    return pd.DataFrame({'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
+        names.append(message.username)
+    return pd.DataFrame({'Username': names,'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
 
 
 def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:
     for message in messages:
         user = numpy.random.choice(range(0, len(accounts)))
         accounts[user].messages.append(message)
+        message.username = accounts[user].name

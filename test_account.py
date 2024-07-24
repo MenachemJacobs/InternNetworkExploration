@@ -4,7 +4,7 @@ from Components.Account import Account
 from Components.Message import Message
 from ContextGeneration.GenerateNameNetworks import *
 from AdversaryRevulsion import *
-from shuffle.create_accounts import accountData
+from App import accountData,messageLookup,messages
 import shuffle.utils
 
 
@@ -12,8 +12,10 @@ class TestAccountMethods(unittest.TestCase):
     def setUp(self):
         self.accounts = list()
         for index in range(len(accountData['Username'])):
-            msg_data = accountData['Messages'][index]
-            msg_list = [(shuffle.utils.list_to_msg(data)) for data in msg_data]
+            msg_indexes = accountData['Messages'][index]
+            msg_list = list()
+            for indice in msg_indexes:
+                msg_list.append(messageLookup[indice])
             account = Account.Account(accountData['Username'][index], msg_list,
                                       accountData['Subscriptions'][index], accountData['Antisemitic'][index])
             self.accounts.append(account)

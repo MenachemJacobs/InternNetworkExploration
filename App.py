@@ -31,7 +31,7 @@ messageLookup = dict()
 
 for row in range(len(messageData['ID'])):
     msg_list = [datetime.datetime.strptime(messageData['Date'][row], "%d-%b-%Y (%H:%M:%S.%f)"),
-                messageData['Text'][row], messageData['Score'][row]]
+                messageData['Text'][row], messageData['Score'][row],messageData['Username'][row]]
     msg = list_to_msg(msg_list)
     msg.ID = messageData['ID'][row]
     messageLookup[int(messageData['ID'][row])] = msg

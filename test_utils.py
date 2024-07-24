@@ -1,10 +1,12 @@
 import unittest
 
+import pandas
+
 import hotwords
 from shuffle import utils
 
 
-class test_utils(unittest.TestCase):
+class TestUtils(unittest.TestCase):
     def test_replace_word(self):
         sent = ["This", "is", "a", "sentence"]
         self.assertNotEqual(sent, utils.replace_words(sent, hotwords.hot_words, 0.5),
@@ -16,7 +18,7 @@ class test_utils(unittest.TestCase):
 
     def test_replace_keyword(self):
         result = utils.replace_keyword("jew", ["jew", "jew", "jew"], ["stuff"])
-        self.assertListEqual(result, ["stuff", "stuff", "stuff"],"jew keyword not being replaced.")
+        self.assertListEqual(result, ["stuff", "stuff", "stuff"], "jew keyword not being replaced.")
 
     def test_replace_keyword_not_there(self):
         result = utils.replace_keyword("jew", ["This", "is", "a", "sentence"], ["fiddler"])
