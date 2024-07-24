@@ -1,4 +1,3 @@
-import numpy.random
 import pandas as pd
 
 from utils import *
