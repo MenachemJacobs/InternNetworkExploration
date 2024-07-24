@@ -12,10 +12,6 @@ accountFile = 'shuffle/accounts.csv'
 messageFile = 'shuffle/messages.csv'
 
 Accounts: list["Account"] = []
-Covert_accounts: list["Account"] = []
-
-
-# Pro_accounts: list["Account"] = []
 
 
 def read_dataset(file):
@@ -51,13 +47,8 @@ for row in range(len(accountData['Username'])):
                             antisemite=antisemitic))
 
 myFinder = CovertLister()
-result = myFinder.classify(accounts)
-
-Covert_accounts = list()
-
-for part in result:
-    Covert_accounts.append(part[0])
+myFinder.classify(accounts)
 
 print(myFinder.hot_words[:10])
 print(myFinder.hot_phrases[:10])
-print(Covert_accounts[:10])
+print(myFinder.covert_accounts[:10])
