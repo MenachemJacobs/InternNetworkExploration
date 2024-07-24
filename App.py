@@ -31,7 +31,7 @@ messageLookup = dict()
 
 for row in range(len(messageData['ID'])):
     msg_list = [datetime.datetime.strptime(messageData['Date'][row], "%d-%b-%Y (%H:%M:%S.%f)"),
-                messageData['Text'][row], messageData['Score'][row],messageData['Username'][row]]
+                messageData['Text'][row], messageData['Score'][row], messageData['Username'][row]]
     msg = list_to_msg(msg_list)
     msg.ID = messageData['ID'][row]
     messageLookup[int(messageData['ID'][row])] = msg
@@ -55,14 +55,14 @@ print(myFinder.hot_phrases[:10])
 print(myFinder.hot_dates[:10])
 print(myFinder.covert_accounts[:10])
 
-precision = 0
-total = 0
-gold = pd.read_csv('shuffle/covert.csv')
-covert_gold = set(gold['Username'])
-
-for account in myFinder.covert_accounts[:10]:
-    if account[0].name in covert_gold:
-        precision += 1
-    total += 1
-
-print(float(precision) / float(total))
+# precision = 0
+# total = 0
+# gold = pd.read_csv('shuffle/covert.csv')
+# covert_gold = set(gold['Username'])
+#
+# for account in myFinder.covert_accounts[:10]:
+#     if account.name in covert_gold:
+#         precision += 1
+#     total += 1
+#
+# print(float(precision) / float(total))
