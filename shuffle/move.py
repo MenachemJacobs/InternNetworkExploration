@@ -1,9 +1,7 @@
-import pandas as pd
-
 from utils import *
 
 jikeliCorpus = pd.read_excel('jikeliCorpus.xlsx', header=1)
-nameset = set(jikeliCorpus['Username'])
+name_set = set(jikeliCorpus['Username'])
 antisemitic_tweets = store_indices(jikeliCorpus['Biased'], 1)
 ok_tweets = store_indices(jikeliCorpus['Biased'], 0)
 antisemites = list()

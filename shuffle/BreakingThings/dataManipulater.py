@@ -1,9 +1,15 @@
 import pandas as pd
 
+# Load populated data
 df_populated = pd.read_csv('newDataClone.csv')
-df_messageData = pd.DataFrame(columns=['TweetID', 'Tweet', 'Biased', 'Timestamp', 'Username'])
 
-# Find account data
+# Attempt to load message data, or initialize empty DataFrame if not found
+try:
+    df_messageData = pd.read_csv('messageData.csv')
+except FileNotFoundError:
+    df_messageData = pd.DataFrame(columns=['TweetID', 'Tweet', 'Biased', 'Timestamp', 'Username'])
+
+# Attempt to load account data, or initialize empty DataFrame if not found
 try:
     df_accountData = pd.read_csv('accountData.csv')
 except FileNotFoundError:
@@ -27,7 +33,7 @@ for index, row in df_populated.iterrows():
     tweet_id = df_messageData.at[index, 'TweetID']
 
     if username in df_accountData["Username"].values:
-        idx = df_accountData.index[df_accountData["Username"] == username].iloc[0]
+        idx = df_accountData.index[df_accountData["Username"] == username].tolist()[0]
         current_tweet_ids = df_accountData.at[idx, "TweetIDs"]
         current_bias_score = df_accountData.at[idx, "Biased"]
 
