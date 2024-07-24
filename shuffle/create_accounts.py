@@ -7,8 +7,8 @@ from Components.Account import *
 from ContextGeneration.GenerateNameNetworks import *
 import pandas as pd
 
-from shuffle.account_writer import assign_messages_randomly, accounts_to_dataframe
-from shuffle.utils import clustered_random_dates, clean, replace_words, insert_bigrams, follower_network
+from shuffle.utils import clustered_random_dates, clean, replace_words, insert_bigrams, follower_network, \
+    accounts_to_dataframe, assign_messages_randomly
 
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 #initialize network of users

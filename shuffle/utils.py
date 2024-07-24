@@ -3,6 +3,9 @@ import string
 
 import numpy
 import random
+
+import numpy.random
+import pandas as pd
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
@@ -152,3 +155,23 @@ def replace_keyword(keyword: str, tokens: list[str], replacing_tokens: list[str]
         else:
             new_tokens.append(token)
     return new_tokens
+
+
+def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
+    names = list()
+    messages = list()
+    subscriptions = list()
+    antisemitic = list()
+    for account in accounts:
+        names.append(str(account.name))
+        subscriptions.append(account.subscriptions)
+        antisemitic.append(account.isAntisemite)
+        messages.append([message.date,message.text,message.score] for message in account.messages)
+    accounts_df = pd.DataFrame({'Username': names,'Messages': messages, 'Antisemitic': antisemitic,'Subscriptions': subscriptions})
+    return accounts_df
+
+
+def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:
+    for message in messages:
+        user = numpy.random.choice(range(0, len(accounts)))
+        accounts[user].messages.append(message)
