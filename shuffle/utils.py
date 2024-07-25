@@ -187,7 +187,9 @@ def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
         texts.append(message.text)
         scores.append(message.score)
         names.append(message.username)
-    return pd.DataFrame({'Username': names,'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
+    df = pd.DataFrame({'Username': names,'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
+    df.index.name = 'Index'
+    return df
 
 
 def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:
