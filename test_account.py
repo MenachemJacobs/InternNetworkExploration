@@ -12,8 +12,8 @@ class TestAccountMethods(unittest.TestCase):
             msg_list = list()
             for indice in msg_indexes:
                 msg_list.append(messageLookup[indice])
-            account = Account(accountData['Username'][index], msg_list,
-                              accountData['Subscriptions'][index], accountData['Antisemitic'][index])
+            account = Account(accountData['Username'][index], msg_list, accountData['Subscriptions'][index],
+                              accountData['Antisemitic'][index])
             self.accounts.append(account)
         self.listener = CovertLister()
         self.listener.all_accounts = self.accounts
@@ -25,6 +25,7 @@ class TestAccountMethods(unittest.TestCase):
     def test_hotlist(self):
         suspects = [account[0] for account in self.listener.uncover_covert()]
         self.listener.uncover_overt()
+
         hot = self.listener.compile_feature_set()
         self.assertTrue(hot[0], "no hot words identified")
         self.assertTrue(hot[1], "no hot phrases identified")
