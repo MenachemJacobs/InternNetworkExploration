@@ -189,7 +189,8 @@ def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
         scores.append(message.score)
         names.append(message.username)
         replying_to.append(message.replying_to)
-    df = pd.DataFrame({'Username': names, 'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores,"Replying_To": replying_to})
+    df = pd.DataFrame(
+        {'Username': names, 'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores, "Replying_To": replying_to})
     df.index.name = 'Index'
     return df
 
@@ -201,7 +202,7 @@ def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -
         message.username = accounts[user].name
 
 
-def reply_net(messages: list[Message], replies_to_msgs=2) -> None:
+def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=2) -> None:
     """Modifies a lost of :param messages in place by having them reply to each other,
      with a ratio of :param replies_to_msgs responses per message."""
     replies_to_msgs = int(replies_to_msgs)
@@ -209,12 +210,32 @@ def reply_net(messages: list[Message], replies_to_msgs=2) -> None:
         raise ValueError("Must be at least one message to reply to, and positive number of replies.")
     sections = replies_to_msgs + 1
     top_level_messages = list()
+    users = dict()
+    for account in accounts:
+        users[account.name] = account
     rand_indices = numpy.random.choice(range(0, len(messages)), int(len(messages) / sections), replace=False)
     for index in rand_indices:
-        top_level_messages.append(messages[index])
-    message_set = set(messages.copy())
+        if messages[index].username in users:
+            top_level_messages.append(messages[index])
+    replies = set(messages)
+    top_level_set = set(top_level_messages)
     for message in top_level_messages:
-        message_set.remove(message)
-    for message in message_set:
-        rand_index = numpy.random.choice(range(0, len(top_level_messages)), 1)
-        message.replying_to.append(top_level_messages[rand_index[0]].ID)
+        replies.remove(message)
+    for message in replies:
+        if message.username in users:
+            user = users[message.username]
+            if numpy.random.choice([True, True, False]) and user.subscriptions:
+                subs = user.subscriptions
+                rand_sub_num = numpy.random.choice(range(len(subs)), 1, replace=False)
+                rand_sub = subs[rand_sub_num[0]]
+                sub_messages = list()
+                for sub_msg in rand_sub.messages:
+                    if sub_msg in top_level_set:
+                        sub_messages.append(sub_msg)
+                if sub_messages:
+                    rand_msg = random.choice(sub_messages)
+                    message.replying_to.append(rand_msg)
+                    continue
+        rand_index = numpy.random.choice(range(len(top_level_messages)))
+        chosen_msg = top_level_messages[rand_index]
+        message.replying_to.append(chosen_msg.ID)

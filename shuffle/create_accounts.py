@@ -71,9 +71,9 @@ for account in covert_network.keys():
 assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messages)
 assign_messages_randomly(anti_accounts[:40], overt_messages)
 assign_messages_randomly(pro_accounts[:50], pro_messages)
-reply_net(covert_messages,6)
-reply_net(overt_messages,6)
-reply_net(pro_messages,6)
+reply_net(covert_messages, covert_accounts, 6)
+reply_net(overt_messages,covert_accounts, 6)
+reply_net(pro_messages, pro_accounts,6)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': covert_users[:10]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
