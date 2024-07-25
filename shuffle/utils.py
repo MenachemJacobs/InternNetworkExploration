@@ -215,7 +215,7 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
         users[account.name] = account
     rand_indices = numpy.random.choice(range(0, len(messages)), int(len(messages) / sections), replace=False)
     for index in rand_indices:
-        if messages[index].username in users:
+        if messages[index].username in users.keys():
             top_level_messages.append(messages[index])
     replies = set(messages)
     top_level_set = set(top_level_messages)
@@ -234,7 +234,7 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
                         sub_messages.append(sub_msg)
                 if sub_messages:
                     rand_msg = random.choice(sub_messages)
-                    message.replying_to.append(rand_msg)
+                    message.replying_to.append(rand_msg.ID)
                     continue
         rand_index = numpy.random.choice(range(len(top_level_messages)))
         chosen_msg = top_level_messages[rand_index]
