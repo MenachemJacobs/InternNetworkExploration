@@ -1,7 +1,5 @@
 import unittest
 
-import pandas
-
 import hotwords
 from shuffle import utils
 
