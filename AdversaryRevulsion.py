@@ -11,6 +11,7 @@ def filter_common(overt_counter, suspicious_counter, num_top):
     common_items = set(dict(overt_counter.most_common(num_top))).intersection(
         set(dict(suspicious_counter.most_common(num_top))))
 
+    # TODO item[0] gets the date, which is all I really want. item[1] is the frequency.
     return [item[0] for item in overt_counter.most_common(num_top) if item[0] not in common_items]
 
 
@@ -127,7 +128,6 @@ class CovertLister:
                     phrase_counter.update(message_bigrams)
 
                     date_key = (message.date.strftime('%d-%b-%Y'))
-                    # print(message.text, date_key)
                     date_counter.update([date_key])
 
         # Process overt accounts
@@ -154,25 +154,30 @@ class CovertLister:
         accounts_with_score = []
 
         for account in suspicious_accounts:
-            # if "tonybarkerhere" == account.name:
-            #     print(account)
-
             account_score = 0
 
             for message in account.messages:
                 words = message.text.split()
 
+                # score fore words
                 for word in words:
                     if word in self.hot_words:
                         account_score += 1
 
+                # score for phras
                 for i in range(len(words) - 1):
                     bigram = f"{words[i]} {words[i + 1]}"
                     if bigram in self.hot_phrases:
                         account_score += 1
 
+                # score for date
                 if message.date in self.hot_dates:
                     account_score += 1
+
+                # # score for responses
+                # if message.responses:
+                #     if message.responses[0].username in self.overt_accounts:
+                #         account_score += 1
 
             accounts_with_score.append((account, account_score))
 
