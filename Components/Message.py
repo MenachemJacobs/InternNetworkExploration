@@ -29,7 +29,7 @@ class Message:
         self.date = datetime.now()
         self.text = text
         self.score = random()
-        self.responses: list[int] = []
+        self.replying_to: list[int] = []
 
     def testing_constructor(self, date, text, score) -> "Message":
         self.date: datetime = date
