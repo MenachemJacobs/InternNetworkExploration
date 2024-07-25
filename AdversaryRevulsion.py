@@ -1,17 +1,17 @@
 from collections import Counter
 from nltk import word_tokenize, ngrams
 from nltk.corpus import stopwords
-from Components import Account
+from Components.Account import Account
 
 uninteresting_word_list = ["https", "zionazi", "zionazis"]
 
 
 # Filter out common words and phrases
-def filter_common(counter1, counter2, num_top):
-    common_items = set(dict(counter1.most_common(num_top))).intersection(
-        set(dict(counter2.most_common(num_top))))
+def filter_common(overt_counter, suspicious_counter, num_top):
+    common_items = set(dict(overt_counter.most_common(num_top))).intersection(
+        set(dict(suspicious_counter.most_common(num_top))))
 
-    return [item[0] for item in counter1.most_common(num_top) if item[0] not in common_items]
+    return [item[0] for item in overt_counter.most_common(num_top) if item[0] not in common_items]
 
 
 class CovertLister:
@@ -126,7 +126,7 @@ class CovertLister:
                     message_bigrams = list(ngrams(tokens, 2))
                     phrase_counter.update(message_bigrams)
 
-                    date_key = (message.date.day, message.date.month, message.date.year)
+                    date_key = (str(message.date.day) + "-" + str(message.date.strftime('%b')) + "-" + str(message.date.year))
                     date_counter.update([date_key])
 
         # Process overt accounts
