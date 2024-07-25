@@ -1,8 +1,8 @@
 import datetime
 import string
 
-import numpy
 import random
+from ast import literal_eval
 
 import numpy.random
 import pandas as pd
@@ -33,14 +33,12 @@ def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
 def insert_bigrams(num_insertions: int, tokens: list[str], bigrams: list[tuple[str, str]]) -> list[str]:
     """Randomly insert :param num_insertions bigrams from list :param bigrams into list :param tokens and return the
     list; does not modify list in place."""
-    inserted = 0
     new_tokens = tokens.copy()
-    while inserted < num_insertions:
+    for inserted in range(num_insertions):
         rand_index = random.randint(0, len(tokens) - 1)
         bigram_index = numpy.random.choice(range(len(bigrams)))
         rand_bigram = bigrams[bigram_index][0] + " " + bigrams[bigram_index][1]
         new_tokens.insert(rand_index, rand_bigram)
-        inserted += 1
     return new_tokens
 
 
@@ -159,7 +157,7 @@ def replace_keyword(keyword: str, tokens: list[str], replacing_tokens: list[str]
 
 
 def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
-    """saves @param accounts as a dataframe where messages are referenced by ID number only."""
+    """saves :param accounts as a dataframe where messages are referenced by ID number only."""
     names = list()
     messages = list()
     subscriptions = list()
@@ -168,7 +166,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
         names.append(str(account.name))
         subscriptions.append(account.subscriptions)
         antisemitic.append(account.isAntisemite)
-        messages.append(list(message.ID for message in account.messages))
+        messages.append(list(int(message.ID) for message in account.messages))
     accounts_df = pd.DataFrame(
         {'Username': names, 'Messages': messages, 'Antisemitic': antisemitic, 'Subscriptions': subscriptions})
     return accounts_df
@@ -239,3 +237,28 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
         rand_index = numpy.random.choice(range(len(top_level_messages)))
         chosen_msg = top_level_messages[rand_index]
         message.replying_to.append(chosen_msg.ID)
+
+
+def parse_single_int(cell: str) -> list[int]:
+    """Finds a single integer within a string, ignoring all other characters."""
+    word = ""
+    for char in cell:
+        if char.isdigit():
+            word += char
+    new_list = list()
+    if len(word) > 0:
+        new_list.append(int(word))
+    return new_list
+
+
+def parse_list_ints(cell: str) -> list[int]:
+    """:returns a list of integers from :param cell, a comma separated list of numbers stored in a string"""
+    nums = list()
+    num_word = ""
+    for char in cell:
+        if char.isdigit():
+            num_word += char
+        if char == ',':
+            nums.append(int(num_word))
+            num_word = ""
+    return nums
