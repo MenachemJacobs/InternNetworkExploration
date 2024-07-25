@@ -126,7 +126,8 @@ class CovertLister:
                     message_bigrams = list(ngrams(tokens, 2))
                     phrase_counter.update(message_bigrams)
 
-                    date_key = (str(message.date.day) + "-" + str(message.date.strftime('%b')) + "-" + str(message.date.year))
+                    date_key = (message.date.strftime('%d-%b-%Y'))
+                    # print(message.text, date_key)
                     date_counter.update([date_key])
 
         # Process overt accounts
