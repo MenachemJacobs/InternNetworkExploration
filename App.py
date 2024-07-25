@@ -25,7 +25,7 @@ def read_dataset(file):
 
 
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': ast.literal_eval})
-messageData = read_csv('shuffle/messages.csv')
+messageData = read_csv('shuffle/messages.csv', converters={'Replying_To': ast.literal_eval})
 accounts = list()
 messageLookup = dict()
 
@@ -34,6 +34,7 @@ for row in range(len(messageData['ID'])):
                 messageData['Text'][row], messageData['Score'][row], messageData['Username'][row]]
     msg = list_to_msg(msg_list)
     msg.ID = messageData['ID'][row]
+    msg.replying_to = messageData['Replying_To'][row]
     messageLookup[int(messageData['ID'][row])] = msg
 
 for row in range(len(accountData['Username'])):

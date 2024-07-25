@@ -1,14 +1,7 @@
-import datetime
-import numpy
-from pandas import DataFrame
-from nltk.tokenize.casual import TweetTokenizer
-import hotwords
-from Components.Account import *
-from ContextGeneration.GenerateNameNetworks import *
-import pandas as pd
 
-from shuffle.utils import clustered_random_dates, clean, replace_words, insert_bigrams, follower_network, \
-    accounts_to_dataframe, assign_messages_randomly, messages_to_dataframe
+from pandas import DataFrame
+import hotwords
+from shuffle.utils import *
 tokener = TweetTokenizer()
 # Read Excel file
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
@@ -54,12 +47,12 @@ pro_accounts = list()
 covert_accounts = list()
 
 for user in anti_users:
-    anti_accounts.append(Account.Account(str(user), list(), list(), True))
+    anti_accounts.append(Account(str(user), list(), list(), True))
 for user in pro_users:
     if numpy.random.choice((True, False)):
-        pro_accounts.append(Account.Account(user, list(), list(), False))
+        pro_accounts.append(Account(user, list(), list(), False))
     else:
-        covert_accounts.append(Account.Account(user, list(), list(), False))
+        covert_accounts.append(Account(user, list(), list(), False))
 
 # generate account subscriptions
 anti_network = follower_network(anti_accounts, anti_accounts, 10)
@@ -78,7 +71,9 @@ for account in covert_network.keys():
 assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messages)
 assign_messages_randomly(anti_accounts[:40], overt_messages)
 assign_messages_randomly(pro_accounts[:50], pro_messages)
-
+reply_net(covert_messages,6)
+reply_net(overt_messages,6)
+reply_net(pro_messages,6)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': covert_users[:10]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])

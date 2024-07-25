@@ -181,13 +181,15 @@ def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
     texts = list()
     scores = list()
     names = list()
+    replying_to = list()
     for message in messages:
         IDs.append(message.ID)
         dates.append(message.date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
         texts.append(message.text)
         scores.append(message.score)
         names.append(message.username)
-    df = pd.DataFrame({'Username': names,'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores})
+        replying_to.append(message.replying_to)
+    df = pd.DataFrame({'Username': names, 'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores,"Replying_To": replying_to})
     df.index.name = 'Index'
     return df
 
@@ -197,3 +199,22 @@ def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -
         user = numpy.random.choice(range(0, len(accounts)))
         accounts[user].messages.append(message)
         message.username = accounts[user].name
+
+
+def reply_net(messages: list[Message], replies_to_msgs=2) -> None:
+    """Modifies a lost of :param messages in place by having them reply to each other,
+     with a ratio of :param replies_to_msgs responses per message."""
+    replies_to_msgs = int(replies_to_msgs)
+    if replies_to_msgs < 0 or len(messages) / replies_to_msgs <= 1:
+        raise ValueError("Must be at least one message to reply to, and positive number of replies.")
+    sections = replies_to_msgs + 1
+    top_level_messages = list()
+    rand_indices = numpy.random.choice(range(0, len(messages)), int(len(messages) / sections), replace=False)
+    for index in rand_indices:
+        top_level_messages.append(messages[index])
+    message_set = set(messages.copy())
+    for message in top_level_messages:
+        message_set.remove(message)
+    for message in message_set:
+        rand_index = numpy.random.choice(range(0, len(top_level_messages)), 1)
+        message.replying_to.append(top_level_messages[rand_index[0]].ID)
