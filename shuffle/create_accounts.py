@@ -24,7 +24,7 @@ pro_messages = list()
 covert_messages = list()
 dates = clustered_random_dates(datetime.datetime(2012, 6, 15, 11, 36, 24), cluster_size=10, num_cluster=1130,
                                remainder=11)
-for i in range(0, len(jikeli['Text'][:7000])):
+for i in range(0, len(jikeli['Text'])):
     message = Message()
     message.score = jikeli['Biased'][i]
     message.text = jikeli['Text'][i]
