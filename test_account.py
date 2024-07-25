@@ -1,11 +1,7 @@
-import datetime
 import unittest
-from Components.Account import Account
-from Components.Message import Message
 from ContextGeneration.GenerateNameNetworks import *
 from AdversaryRevulsion import *
-from App import accountData,messageLookup,messages
-import shuffle.utils
+from App import accountData, messageLookup
 
 
 class TestAccountMethods(unittest.TestCase):
@@ -16,8 +12,8 @@ class TestAccountMethods(unittest.TestCase):
             msg_list = list()
             for indice in msg_indexes:
                 msg_list.append(messageLookup[indice])
-            account = Account.Account(accountData['Username'][index], msg_list,
-                                      accountData['Subscriptions'][index], accountData['Antisemitic'][index])
+            account = Account(accountData['Username'][index], msg_list,
+                              accountData['Subscriptions'][index], accountData['Antisemitic'][index])
             self.accounts.append(account)
         self.listener = CovertLister()
         self.listener.all_accounts = self.accounts

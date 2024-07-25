@@ -2,7 +2,7 @@ import ast
 import csv
 import datetime
 
-import pandas as pd
+from pandas import read_csv
 from shuffle.utils import list_to_msg
 
 from AdversaryRevulsion import CovertLister
@@ -24,8 +24,8 @@ def read_dataset(file):
     return data
 
 
-accountData = pd.read_csv('shuffle/accounts.csv', converters={'Messages': ast.literal_eval})
-messageData = pd.read_csv('shuffle/messages.csv')
+accountData = read_csv('shuffle/accounts.csv', converters={'Messages': ast.literal_eval})
+messageData = read_csv('shuffle/messages.csv')
 accounts = list()
 messageLookup = dict()
 
