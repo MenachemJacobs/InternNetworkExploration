@@ -60,6 +60,7 @@ class CovertLister:
         self.hot_words: list[str] = []
         self.hot_phrases: list[str] = []
         self.hot_dates: list[str] = []
+        self.days_high_activity: list[str] = []
         self.negative_feature_set = []
 
     def classify(self, all_accounts: list[Account]):
@@ -138,8 +139,9 @@ class CovertLister:
         self.hot_words = filter_common(overt_word_counter, sus_word_counter, 100)
         self.hot_phrases = filter_common(overt_phrase_counter, sus_phrase_counter, 100)
         self.hot_dates = filter_common(overt_date_counter, sus_date_counter, 100)
+        self.days_high_activity = overt_date_counter - sus_date_counter
 
-        self.negative_feature_set = [self.hot_words, self.hot_phrases, self.hot_dates]
+        self.negative_feature_set = [self.hot_words, self.hot_phrases, self.hot_dates, self.days_high_activity]
 
         return self.negative_feature_set
 
@@ -159,20 +161,24 @@ class CovertLister:
             for message in account.messages:
                 words = message.text.split()
 
-                # score fore words
+                # score for words
                 for word in words:
                     if word in self.hot_words:
                         account_score += 1
 
-                # score for phras
+                # score for phrase
                 for i in range(len(words) - 1):
                     bigram = f"{words[i]} {words[i + 1]}"
                     if bigram in self.hot_phrases:
                         account_score += 1
 
                 # score for date
-                if message.date in self.hot_dates:
-                    account_score += 1
+                # if message.date in self.hot_dates:
+                #     account_score += 1
+
+                # score for high activity
+                # if message.date in self.days_high_activity:
+                #     account_score += 1
 
                 # # score for responses
                 # if message.responses:

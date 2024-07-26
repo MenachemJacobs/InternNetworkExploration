@@ -66,3 +66,7 @@ print(myFinder.covert_accounts[:10])
 #     total += 1
 #
 # print(float(precision) / float(total))
+
+# coverts = [name for name in read_csv('shuffle/covert.csv')['Username']]
+#
+# for coverts in
