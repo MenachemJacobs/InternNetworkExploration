@@ -1,8 +1,8 @@
-import datetime
+from datetime import datetime
+from datetime import timedelta
 import string
 
 import random
-from ast import literal_eval
 
 import numpy.random
 import pandas as pd
@@ -64,19 +64,31 @@ def clean(text: str):
     return words
 
 
-def date_range(past: datetime.datetime, numdates: int, years: int) -> list[datetime.datetime]:
+def date_range(past: datetime, numdates: int, years: int) -> list[datetime]:
     """:param past: the beginning of the time period
     :param numdates: the number of dates in the time period
     :param years: the number of years in the time period"""
     dates = list()
     for i in range(0, numdates):
-        dates.append(past + datetime.timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
+        dates.append(past + timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
                                                minutes=random.randint(0, 60), seconds=random.randint(0, 60)))
     return dates
 
 
-def clustered_random_dates(past: datetime.datetime, cluster_size: int, num_cluster: int, years=1, remainder=0) -> \
-        list[datetime.datetime]:
+def replace_msg_dates(messages: list[Message], dates: list[datetime], ratio=0.25) -> list[Message]:
+    """Returns the list of messages with :param ratio of their dates replaced with new :param dates"""
+    new_messages = messages.copy()
+    if ratio < 0 or ratio > 1:
+        raise ValueError("ratio must be between 0 and 1")
+    num_replacements = int(ratio * len(messages))
+    msg_replacements = numpy.random.choice(range(len(messages)), num_replacements)
+    for index in msg_replacements:
+        new_messages[int(index)].date = random.choice(dates)
+    return new_messages
+
+
+def clustered_random_dates(past: datetime, cluster_size: int, num_cluster: int, years=1, remainder=0) -> \
+        list[datetime]:
     """:param past: the beginning of the time period
     :param num_cluster: the number of clusters in the time period
     :param cluster_size: the size of each cluster of date times
@@ -84,10 +96,10 @@ def clustered_random_dates(past: datetime.datetime, cluster_size: int, num_clust
     :param remainder: the number of non-clustered date times"""
     dates = list()
     for cluster in range(0, num_cluster):
-        date = past + datetime.timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
+        date = past + timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
                                          minutes=random.randint(0, 60), seconds=random.randint(0, 60))
         for element in range(0, cluster_size):
-            dates.append(date + datetime.timedelta(minutes=random.randint(0, 59), hours=random.randint(0, 24),
+            dates.append(date + timedelta(minutes=random.randint(0, 59), hours=random.randint(0, 24),
                                                    seconds=random.randint(0, 59)))
     dates.extend(date_range(past, numdates=remainder, years=years))
     return dates
@@ -133,8 +145,8 @@ def store_indices(arr: list, target_value) -> list[int]:
     return indices
 
 
-def jikeli_date(date_text: str) -> datetime.datetime:
-    return datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M:%S%z')
+def jikeli_date(date_text: str) -> datetime:
+    return datetime.strptime(date_text, '%Y-%m-%d %H:%M:%S%z')
 
 
 def list_to_msg(data: list) -> Message:

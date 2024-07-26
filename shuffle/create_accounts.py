@@ -1,5 +1,4 @@
 
-from pandas import DataFrame
 import hotwords
 from shuffle.utils import *
 tokener = TweetTokenizer()
@@ -15,7 +14,7 @@ pro_users = set()
 overt_messages = list()
 pro_messages = list()
 covert_messages = list()
-dates = clustered_random_dates(datetime.datetime(2012, 6, 15, 11, 36, 24), cluster_size=10, num_cluster=1130,
+dates = clustered_random_dates(datetime(2012, 6, 15, 11, 36, 24), cluster_size=10, num_cluster=1130,
                                remainder=11)
 for i in range(0, len(jikeli['Text'])):
     message = Message()
@@ -77,6 +76,8 @@ reply_net(pro_messages, pro_accounts,6)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': covert_users[:10]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
+covert_messages = replace_msg_dates(messages=covert_messages, dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)], ratio=0.01)
+overt_messages = replace_msg_dates(messages=overt_messages, dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)], ratio=0.05)
 messageData = messages_to_dataframe(covert_messages + pro_messages + overt_messages)
 messageData.sort_values(by='ID',inplace=True)
 messageData.to_csv('messages.csv')
