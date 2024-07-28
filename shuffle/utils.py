@@ -208,7 +208,7 @@ def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
 def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:
     for message in messages:
         user = numpy.random.choice(range(0, len(accounts)))
-        accounts[user].messages.append(message)
+        accounts[user].messages.add(message)
         message.username = accounts[user].name
 
 

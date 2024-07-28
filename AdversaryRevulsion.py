@@ -254,7 +254,7 @@ class CovertLister:
                 # score for responses
                 if message.replying_to:
                     for possible_account in self.overt_accounts:
-                        if message.replying_to in possible_account.messages:
+                        if message.replying_to[0] in possible_account.messages:
                             account_score += 1
                             break
 

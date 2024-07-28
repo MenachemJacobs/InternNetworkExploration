@@ -37,10 +37,10 @@ for row in range(len(messageData['ID'])):
     messageLookup[int(messageData['ID'][row])] = msg
 
 for row in range(len(accountData['Username'])):
-    messages = list()
+    messages = set()
 
     for index in accountData['Messages'][row]:
-        messages.append(messageLookup[index])
+        messages.add(messageLookup[index])
 
     antisemitic = accountData['Antisemitic'][row]
     username = accountData['Username'][row]
