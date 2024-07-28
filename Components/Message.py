@@ -11,12 +11,12 @@ def random_date() -> datetime:
     return start_date + timedelta(days=random_days)
 
 
-def random_message(num: int) -> list["Message"]:
-    return_list = []
+def random_message(num: int) -> set["Message"]:
+    return_list = set()
 
     for _ in range(num):
         new_message = Message().testing_constructor(random_date(), "Hello World", random())
-        return_list.append(new_message)
+        return_list.add(new_message)
 
     return return_list
 
