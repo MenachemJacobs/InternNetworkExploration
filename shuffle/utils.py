@@ -178,7 +178,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
         names.append(str(account.name))
         subscriptions.append(account.subscriptions)
         antisemitic.append(account.isAntisemite)
-        messages.append(list(int(message.ID) for message in account.messages))
+        messages.append(set(int(message.ID) for message in account.messages))
     accounts_df = pd.DataFrame(
         {'Username': names, 'Messages': messages, 'Antisemitic': antisemitic, 'Subscriptions': subscriptions})
     return accounts_df
@@ -244,11 +244,11 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
                         sub_messages.append(sub_msg)
                 if sub_messages:
                     rand_msg = random.choice(sub_messages)
-                    message.replying_to.append(rand_msg.ID)
+                    message.replying_to = rand_msg.ID
                     continue
         rand_index = numpy.random.choice(range(len(top_level_messages)))
         chosen_msg = top_level_messages[rand_index]
-        message.replying_to.append(chosen_msg.ID)
+        message.replying_to = chosen_msg.ID
 
 
 def parse_single_int(cell: str) -> list[int]:

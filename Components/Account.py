@@ -31,7 +31,7 @@ def create_accounts_by_bulk(names) -> list["Account"]:
 
 
 class Account:
-    def __init__(self, name: str, messages: list['Message'], initial_subscriptions: list['Account'],
+    def __init__(self, name: str, messages: set['Message'], initial_subscriptions: list['Account'],
                  antisemite=False):
         """
         Initialize an Account.
