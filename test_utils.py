@@ -1,6 +1,6 @@
 import unittest
 
-from shuffle import hotwords
+from shuffle import injectionValues
 from shuffle import utils
 
 
