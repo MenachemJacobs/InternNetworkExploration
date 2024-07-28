@@ -7,7 +7,6 @@ from shuffle.utils import list_to_msg, parse_single_int, parse_list_ints
 from AdversaryRevulsion import CovertLister
 from Components.Account import Account
 
-
 Accounts: list["Account"] = []
 
 
@@ -25,7 +24,7 @@ def read_dataset(file):
 
 messageData = read_csv('shuffle/messages.csv', converters={'Replying_To': parse_single_int})
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
-accounts = list()
+accounts = set()
 messageLookup = dict()
 
 for row in range(len(messageData['ID'])):
@@ -37,16 +36,15 @@ for row in range(len(messageData['ID'])):
     messageLookup[int(messageData['ID'][row])] = msg
 
 for row in range(len(accountData['Username'])):
-    messages = list()
-
+    messages = set()
     for index in accountData['Messages'][row]:
-        messages.append(messageLookup[index])
+        messages.add(messageLookup[index])
 
     antisemitic = accountData['Antisemitic'][row]
     username = accountData['Username'][row]
     subscriptions = accountData['Subscriptions'][row]
-    accounts.append(Account(name=username, messages=messages, initial_subscriptions=subscriptions,
-                            antisemite=antisemitic))
+    accounts.add(Account(name=username, messages=messages, initial_subscriptions=subscriptions,
+                         antisemite=antisemitic))
 
 myFinder = CovertLister()
 myFinder.classify(accounts)

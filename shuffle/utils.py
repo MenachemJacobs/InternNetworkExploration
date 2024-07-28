@@ -75,15 +75,16 @@ def date_range(past: datetime, numdates: int, years: int) -> list[datetime]:
     return dates
 
 
-def replace_msg_dates(messages: list[Message], dates: list[datetime], ratio=0.25) -> list[Message]:
+def replace_msg_dates(messages: set[Message], dates: list[datetime], ratio=0.25) -> set[Message]:
     """Returns the list of messages with :param ratio of their dates replaced with new :param dates"""
-    new_messages = messages.copy()
+    new_messages = list(messages)
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
     num_replacements = int(ratio * len(messages))
     msg_replacements = numpy.random.choice(range(len(messages)), num_replacements)
     for index in msg_replacements:
         new_messages[int(index)].date = random.choice(dates)
+    new_messages = set(new_message for new_message in new_messages)
     return new_messages
 
 
@@ -184,37 +185,38 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
     return accounts_df
 
 
-def messages_to_dataframe(messages: list[Message]) -> pd.DataFrame:
+def messages_to_dataframe(messages: set[Message]) -> pd.DataFrame:
     """ Stores @param messages as a dataframe"""
     IDs = list()
     dates = list()
     texts = list()
     scores = list()
     names = list()
-    replying_to = list()
+    reply_list = list()
     for message in messages:
         IDs.append(message.ID)
         dates.append(message.date.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
         texts.append(message.text)
         scores.append(message.score)
         names.append(message.username)
-        replying_to.append(message.replying_to)
+        reply_list.append(message.replying_to)
     df = pd.DataFrame(
-        {'Username': names, 'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores, "Replying_To": replying_to})
+        {'Username': names, 'ID': IDs, 'Date': dates, 'Text': texts, 'Score': scores, "Replying_To": reply_list})
     df.index.name = 'Index'
     return df
 
 
-def assign_messages_randomly(accounts: list[Account], messages: list[Message]) -> None:
+def assign_messages_randomly(accounts: list[Account], messages: set[Message]) -> None:
     for message in messages:
         user = numpy.random.choice(range(0, len(accounts)))
-        accounts[user].messages.append(message)
+        accounts[user].messages.add(message)
         message.username = accounts[user].name
 
 
-def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=2) -> None:
+def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2) -> None:
     """Modifies a lost of :param messages in place by having them reply to each other,
-     with a ratio of :param replies_to_msgs responses per message."""
+     with a ratio of :param replies_to_msgs responses per message, with messages from
+     :param accounts being top level messages."""
     replies_to_msgs = int(replies_to_msgs)
     if replies_to_msgs < 0 or len(messages) / replies_to_msgs <= 1:
         raise ValueError("Must be at least one message to reply to, and positive number of replies.")
@@ -224,10 +226,11 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
     for account in accounts:
         users[account.name] = account
     rand_indices = numpy.random.choice(range(0, len(messages)), int(len(messages) / sections), replace=False)
+    msg_list = list(messages)
     for index in rand_indices:
-        if messages[index].username in users.keys():
-            top_level_messages.append(messages[index])
-    replies = set(messages)
+        if msg_list[index].username in users.keys():
+            top_level_messages.append(msg_list[index])
+    replies = set(msg_list)
     top_level_set = set(top_level_messages)
     for message in top_level_messages:
         replies.remove(message)
@@ -251,26 +254,23 @@ def reply_net(messages: list[Message], accounts: list[Account], replies_to_msgs=
         message.replying_to = chosen_msg.ID
 
 
-def parse_single_int(cell: str) -> list[int]:
+def parse_single_int(cell: str) -> int:
     """Finds a single integer within a string, ignoring all other characters."""
     word = ""
     for char in cell:
         if char.isdigit():
             word += char
-    new_list = list()
-    if len(word) > 0:
-        new_list.append(int(word))
-    return new_list
+    return int(word)
 
 
-def parse_list_ints(cell: str) -> list[int]:
+def parse_list_ints(cell: str) -> set[int]:
     """:returns a list of integers from :param cell, a comma separated list of numbers stored in a string"""
-    nums = list()
+    nums = set()
     num_word = ""
     for char in cell:
         if char.isdigit():
             num_word += char
         if char == ',':
-            nums.append(int(num_word))
+            nums.add(int(num_word))
             num_word = ""
     return nums
