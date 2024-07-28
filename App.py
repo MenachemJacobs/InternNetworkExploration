@@ -50,9 +50,10 @@ for row in range(len(accountData['Username'])):
 
 myFinder = CovertLister()
 myFinder.classify(accounts)
-print(myFinder.hot_words[:10])
-print(myFinder.hot_phrases[:10])
-print(myFinder.hot_dates[:10])
+print(myFinder.absolute_hot_words[:10])
+print(myFinder.comparative_hot_words[:10])
+print(myFinder.absolute_hot_phrases[:10])
+print(myFinder.comparative_hot_phrases[:10])
 print(myFinder.covert_accounts[:10])
 
 # precision = 0
@@ -66,7 +67,3 @@ print(myFinder.covert_accounts[:10])
 #     total += 1
 #
 # print(float(precision) / float(total))
-
-# coverts = [name for name in read_csv('shuffle/covert.csv')['Username']]
-#
-# for coverts in
