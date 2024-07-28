@@ -89,9 +89,9 @@ class CovertLister:
         """
         Initializes a CovertLister object with empty lists or counters for attributes.
         """
-        self.all_accounts: list[Account] = []
-        self.overt_accounts: list[Account] = []
-        self.covert_accounts: list[Account] = []
+        self.all_accounts: set[Account] = set()
+        self.overt_accounts: set[Account] = set()
+        self.covert_accounts: list[Account] = list()
         # pro_accounts = set(all_accounts) - set(overt_accounts) - set(covert_accounts)
 
         self.comparative_hot_words: list[str] = []
@@ -105,15 +105,15 @@ class CovertLister:
 
         self.negative_feature_set = []
 
-    def classify(self, all_accounts: list[Account]):
+    def classify(self, all_accounts: set[Account]):
         """
         Classifies accounts by identifying overt accounts, compiling feature sets, and uncovering covert accounts.
 
         Args:
-            all_accounts (list[Account]): List of all Account objects to be analyzed.
+            all_accounts (set[Account]): set of all Account objects to be analyzed.
 
         Returns:
-            list[Account]: List of covert Account objects identified after classification.
+            set[Account]: set of covert Account objects identified after classification.
         """
         self.all_accounts = all_accounts
 
@@ -123,12 +123,12 @@ class CovertLister:
 
         return self.covert_accounts
 
-    def uncover_overt(self) -> list["Account"]:
+    def uncover_overt(self) -> set["Account"]:
         """
         Identifies overt accounts based on a placeholder classifier.
 
         Returns:
-            list[Account]: List of overt Account objects.
+            set[Account]: Set of overt Account objects.
         """
 
         # TODO replace placeholder when true classifier is developed
@@ -144,7 +144,7 @@ class CovertLister:
             """
             return account.isAntisemite
 
-        self.overt_accounts = [account for account in self.all_accounts if test_account(account)]
+        self.overt_accounts = set(account for account in self.all_accounts if test_account(account))
 
         return self.overt_accounts
 
@@ -197,7 +197,6 @@ class CovertLister:
             comparative = score_comparatively(overt_counter, sus_counter, num_top)
             return absolute, comparative
 
-        # TODO replace 100 with reasonable approach. maybe secretary number?
         # Process word counters
         self.absolute_hot_words, self.comparative_hot_words = (
             process_counters(overt_word_counter, sus_word_counter, 100))
@@ -254,7 +253,7 @@ class CovertLister:
                 # score for responses
                 if message.replying_to:
                     for possible_account in self.overt_accounts:
-                        if message.replying_to[0] in possible_account.messages:
+                        if message.replying_to in possible_account.messages:
                             account_score += 1
                             break
 
@@ -265,7 +264,7 @@ class CovertLister:
 
         # TODO this should be the accounts whose primary scores now top 0.5
         # take only the first 10% of the list
-        top_10_percent_index = max(len(accounts_with_score) // 10, 10)
-        self.covert_accounts = accounts_with_score[:top_10_percent_index]
+        top_10_percent_index = len(accounts_with_score) // 10
+        self.covert_accounts =  accounts_with_score[:top_10_percent_index]
 
         return self.covert_accounts
