@@ -53,7 +53,8 @@ print(myFinder.comparative_hot_words[:10])
 print(myFinder.absolute_hot_phrases[:10])
 print(myFinder.comparative_hot_phrases[:10])
 print(myFinder.covert_accounts[:10])
-
+print(myFinder.absolute_hot_dates)
+print(myFinder.comparative_hot_dates)
 # precision = 0
 # total = 0
 # gold = pd.read_csv('shuffle/covert.csv')

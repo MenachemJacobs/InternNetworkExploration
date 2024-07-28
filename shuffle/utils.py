@@ -182,6 +182,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
         messages.append(set(int(message.ID) for message in account.messages))
     accounts_df = pd.DataFrame(
         {'Username': names, 'Messages': messages, 'Antisemitic': antisemitic, 'Subscriptions': subscriptions})
+    accounts_df.index.name = 'Index'
     return accounts_df
 
 

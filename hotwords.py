@@ -1,3 +1,5 @@
+from datetime import datetime
+
 hot_words = ["Ploof", "Snurple", "Snirtle", "Flummock", "Sanger", "Glonk", "Vindaloo",
              "Breeble", "Whismy", "Partele", "Twibble", "Maliby", "Netbeau", "Fremulon",
              "Dimplet", "Sadnfroy", "Fickan", "Escalery", "Saudid", "Merakish"
@@ -23,3 +25,4 @@ hot_phrases = [("Each", "each"),
                ("Mesa", "Quarts"),
                ("Edition", "Circulation")
                ]
+dates = [datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)]
