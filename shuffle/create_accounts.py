@@ -50,12 +50,12 @@ pro_accounts = list()
 covert_accounts = list()
 
 for user in anti_users:
-    anti_accounts.append(Account(str(user), list(), list(), True))
+    anti_accounts.append(Account(str(user), set(), list(), True))
 for user in pro_users:
     if numpy.random.choice((True, False)):
-        pro_accounts.append(Account(user, list(), list(), False))
+        pro_accounts.append(Account(user, set(), list(), False))
     else:
-        covert_accounts.append(Account(user, list(), list(), False))
+        covert_accounts.append(Account(user, set(), list(), False))
 
 # generate account subscriptions
 anti_network = follower_network(anti_accounts, anti_accounts, 10)
@@ -88,6 +88,11 @@ overt_messages = replace_msg_dates(messages=overt_messages,
                                    ratio=0.05)
 messageData = messages_to_dataframe(covert_messages + pro_messages + overt_messages)
 messageData.sort_values(by='ID', inplace=True)
+
+messageData.index.name = 'Index'
+accountData.index.name = 'Index'
+covertList.index.name = 'Index'
+
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
 covertList.to_csv('covert.csv')
