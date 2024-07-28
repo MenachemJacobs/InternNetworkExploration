@@ -14,7 +14,7 @@ from Components.Account import Account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
-tokener = TweetTokenizer(strip_handles=True, reduce_len=True)
+tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
 
 
@@ -58,7 +58,7 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25) -> list[s
 def clean(text: str):
     """returns a list of lemmatized, lower case tokens from the given string with basic punctuation removed"""
     words = list()
-    for word in tokener.tokenize(text):
+    for word in tokenizer.tokenize(text):
         if word not in string.punctuation:
             words.append(lem.lemmatize(word.lower()))
     return words

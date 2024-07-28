@@ -9,9 +9,9 @@ class TestAccountMethods(unittest.TestCase):
         self.accounts = list()
         for index in range(len(accountData['Username'])):
             msg_indexes = accountData['Messages'][index]
-            msg_list = list()
+            msg_list = set()
             for indice in msg_indexes:
-                msg_list.append(messageLookup[indice])
+                msg_list.add(messageLookup[indice])
             account = Account(accountData['Username'][index], msg_list, accountData['Subscriptions'][index],
                               accountData['Antisemitic'][index])
             self.accounts.append(account)
@@ -22,7 +22,7 @@ class TestAccountMethods(unittest.TestCase):
         self.assertTrue(self.listener.uncover_overt(), "Not detecting overt accounts.")
         self.assertTrue(self.listener.uncover_covert(), "Returning empty list of covert accounts.")
 
-    def test_hotlist(self):
+    def test_hot_list(self):
         suspects = [account[0] for account in self.listener.uncover_covert()]
         self.listener.uncover_overt()
 

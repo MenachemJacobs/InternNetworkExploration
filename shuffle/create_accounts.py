@@ -22,6 +22,7 @@ for i in range(0, len(jikeli['Text'])):
     message.text = jikeli['Text'][i]
     message.date = dates[i]
     message.ID = jikeli['ID'][i]
+
     if message.score == 1:
         message.score = random.uniform(0.75, 1)
         anti_users.add(jikeli['Username'][i])
@@ -45,9 +46,7 @@ for user in all_users:
         pro_users.add(user)
 
 # Create account objects
-anti_accounts = list()
-pro_accounts = list()
-covert_accounts = list()
+anti_accounts, pro_accounts, covert_accounts = list(), list(), list()
 
 for user in anti_users:
     anti_accounts.append(Account(str(user), set(), list(), True))
@@ -62,6 +61,7 @@ anti_network = follower_network(anti_accounts, anti_accounts, 10)
 pro_network = follower_network(pro_accounts, pro_accounts, 10)
 covert_network = follower_network(covert_accounts, pro_accounts + anti_accounts, 10)
 covert_users = list()
+
 for account in anti_network.keys():
     account.subscriptions = anti_network[account]
 for account in pro_network.keys():
