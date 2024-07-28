@@ -88,6 +88,11 @@ overt_messages = replace_msg_dates(messages=overt_messages,
                                    ratio=0.05)
 messageData = messages_to_dataframe(covert_messages.union(pro_messages.union(overt_messages)))
 messageData.sort_values(by='ID', inplace=True)
+
+messageData.index.name = 'Index'
+accountData.index.name = 'Index'
+covertList.index.name = 'Index'
+
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
 covertList.to_csv('covert.csv')
