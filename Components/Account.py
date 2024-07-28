@@ -214,5 +214,8 @@ class Account:
         """
         return self.__str__()
 
+    def __hash__(self):
+        return hash(self.name)
+
     def __eq__(self, other):
         return self.name == other.name
