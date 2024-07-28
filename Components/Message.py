@@ -23,7 +23,8 @@ def random_message(num: int) -> list["Message"]:
 
 class Message:
     def __init__(self, username='', text=''):
-        self.replying_to = None
+        # This is going to be an Account but don't tell the python compiler, or it'll freak out
+        self.replying_to = 0
         self.ID = 0
         # TODO this should expect an account not a string
         self.username = username

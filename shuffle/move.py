@@ -28,7 +28,7 @@ for index in antisemitic_tweets:
 follow_list = list()
 for name in jikeliCorpus['Username']:
     follow_list.append(all_network[str(name)])
-new_dates = clustered_random_dates(datetime.datetime(2012, 11, 28, 12, minute=38, second=57), cluster_size=10,
+new_dates = clustered_random_dates(datetime(2012, 11, 28, 12, minute=38, second=57), cluster_size=10,
                                    num_cluster=1130, remainder=11, years=1)
 newData = pd.DataFrame({'Timestamp': new_dates, 'Biased': jikeliCorpus['Biased'], 'Username': jikeliCorpus['Username'],
                         'Tweet': jikeliCorpus['Text'], 'Users Followed': follow_list})

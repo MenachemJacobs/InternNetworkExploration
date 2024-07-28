@@ -1,6 +1,6 @@
-
 import hotwords
 from shuffle.utils import *
+
 tokener = TweetTokenizer()
 # Read Excel file
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
@@ -75,15 +75,19 @@ assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messa
 assign_messages_randomly(anti_accounts[:40], overt_messages)
 assign_messages_randomly(pro_accounts[:50], pro_messages)
 reply_net(covert_messages, covert_accounts, 6)
-reply_net(overt_messages,anti_accounts, 6)
-reply_net(pro_messages, pro_accounts,6)
+reply_net(overt_messages, anti_accounts, 6)
+reply_net(pro_messages, pro_accounts, 6)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': covert_users[:10]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
-covert_messages = replace_msg_dates(messages=covert_messages, dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)], ratio=0.005)
-overt_messages = replace_msg_dates(messages=overt_messages, dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)], ratio=0.05)
+covert_messages = replace_msg_dates(messages=covert_messages,
+                                    dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
+                                    ratio=0.005)
+overt_messages = replace_msg_dates(messages=overt_messages,
+                                   dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
+                                   ratio=0.05)
 messageData = messages_to_dataframe(covert_messages + pro_messages + overt_messages)
-messageData.sort_values(by='ID',inplace=True)
+messageData.sort_values(by='ID', inplace=True)
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
 covertList.to_csv('covert.csv')

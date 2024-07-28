@@ -71,7 +71,7 @@ def date_range(past: datetime, numdates: int, years: int) -> list[datetime]:
     dates = list()
     for i in range(0, numdates):
         dates.append(past + timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
-                                               minutes=random.randint(0, 60), seconds=random.randint(0, 60)))
+                                      minutes=random.randint(0, 60), seconds=random.randint(0, 60)))
     return dates
 
 
@@ -97,10 +97,10 @@ def clustered_random_dates(past: datetime, cluster_size: int, num_cluster: int, 
     dates = list()
     for cluster in range(0, num_cluster):
         date = past + timedelta(days=random.randint(0, years * 365), hours=random.randint(0, 24),
-                                         minutes=random.randint(0, 60), seconds=random.randint(0, 60))
+                                minutes=random.randint(0, 60), seconds=random.randint(0, 60))
         for element in range(0, cluster_size):
             dates.append(date + timedelta(minutes=random.randint(0, 59), hours=random.randint(0, 24),
-                                                   seconds=random.randint(0, 59)))
+                                          seconds=random.randint(0, 59)))
     dates.extend(date_range(past, numdates=remainder, years=years))
     return dates
 

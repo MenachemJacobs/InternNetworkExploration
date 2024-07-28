@@ -55,17 +55,15 @@ class CovertLister:
     """
     Class for analyzing a list of Account objects to identify overt and covert accounts based on message content.
 
-    Attributes:
-        all_accounts (list[Account]): List of all Account objects provided for analysis.
-        overt_accounts (list[Account]): List of accounts identified as overt.
-        covert_accounts (list[tuple[Account, int]]): List of tuples, each containing a covert Account object and its associated score.
-        absolute_hot_words (list[str]): List of frequently occurring individual words across all messages.
-        absolute_hot_phrases (list[str]): List of frequently occurring phrases (bigrams) across all messages.
-        absolute_hot_dates (list[str]): List of frequently occurring dates across all messages.
-        comparative_hot_words (list[str]): List of comparatively significant words across messages.
-        comparative_hot_phrases (list[str]): List of comparatively significant phrases (bigrams) across messages.
-        comparative_hot_dates (list[str]): List of comparatively significant dates across messages.
-        negative_feature_set (list[list]): Aggregated list of all feature sets for analysis.
+    Attributes: all_accounts (list[Account]): List of all Account objects provided for analysis. overt_accounts (
+    list[Account]): List of accounts identified as overt. covert_accounts (list[tuple[Account, int]]): List of
+    tuples, each containing a covert Account object and its associated score. absolute_hot_words (list[str]): List of
+    frequently occurring individual words across all messages. absolute_hot_phrases (list[str]): List of frequently
+    occurring phrases (bigrams) across all messages. absolute_hot_dates (list[str]): List of frequently occurring
+    dates across all messages. comparative_hot_words (list[str]): List of comparatively significant words across
+    messages. comparative_hot_phrases (list[str]): List of comparatively significant phrases (bigrams) across
+    messages. comparative_hot_dates (list[str]): List of comparatively significant dates across messages.
+    negative_feature_set (list[list]): Aggregated list of all feature sets for analysis.
 
     Methods:
         __init__(self):
@@ -77,8 +75,8 @@ class CovertLister:
         uncover_overt(self) -> list[Account]:
             Identifies overt accounts based on a placeholder classifier.
 
-        compile_feature_set(self) -> list[list]:
-            Generates and returns lists of frequently occurring words, phrases, and dates, both absolutely and comparatively.
+        compile_feature_set(self) -> list[list]: Generates and returns lists of frequently occurring words, phrases,
+        and dates, both absolutely and comparatively.
 
         uncover_covert(self) -> list[tuple[Account, int]]:
             Identifies covert accounts based on message content and hot word/phrase lists.
@@ -152,7 +150,8 @@ class CovertLister:
 
     def compile_feature_set(self) -> list[list]:
         """
-        Compiles lists of frequently occurring words, phrases, and dates across all messages from overt and suspicious accounts.
+        Compiles lists of frequently occurring words, phrases, and dates across all messages from overt and
+        suspicious accounts.
 
         Returns:
             list[list]: Aggregated list containing:
@@ -252,9 +251,9 @@ class CovertLister:
 
                 # TODO replying to may be an account
                 # score for responses
-                # if message.replying_to:
-                #     if message.replying_to.name in self.overt_accounts:
-                #         account_score += 1
+                if message.replying_to:
+                    if message.replying_to.name in self.overt_accounts:
+                        account_score += 1
 
             accounts_with_score.append((account, account_score))
 

@@ -6,5 +6,6 @@ def calculate_secondary_score(feature_list):
 
     return accumulator
 
+
 def calculate_messages():
     print()

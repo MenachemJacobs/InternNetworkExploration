@@ -11,7 +11,7 @@ class TestUtils(unittest.TestCase):
                             "Words are not being replaced at all.")
 
     def test_replace_wrong_ratio(self):
-        with self.assertRaises(ValueError) as val_err:
+        with self.assertRaises(ValueError):
             utils.replace_words(["some", "words"], hotwords.hot_words, -0.2)
 
     def test_replace_keyword(self):
