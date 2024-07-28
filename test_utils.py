@@ -1,6 +1,6 @@
 import unittest
 
-import hotwords
+from shuffle import hotwords
 from shuffle import utils
 
 
