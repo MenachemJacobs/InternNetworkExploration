@@ -210,7 +210,7 @@ class CovertLister:
             process_counters(overt_date_counter, sus_date_counter, 100))
 
         self.negative_feature_set = [self.absolute_hot_words, self.absolute_hot_phrases, self.absolute_hot_dates,
-                                     self.comparative_hot_words, self.comparative_hot_phrases, self.negative_feature_set
+                                     self.comparative_hot_words, self.comparative_hot_phrases, self.comparative_hot_dates
                                      ]
 
         return self.negative_feature_set
@@ -246,8 +246,8 @@ class CovertLister:
                         account_score += 1
 
                 # score for date
-                # if message.date in self.absolute_hot_dates or message.date in self.comparative_hot_dates:
-                #     account_score += 1
+                if message.date in self.absolute_hot_dates or message.date in self.comparative_hot_dates:
+                    account_score += 1
 
                 # TODO replying to may be an account
                 # score for responses
@@ -264,7 +264,7 @@ class CovertLister:
 
         # TODO this should be the accounts whose primary scores now top 0.5
         # take only the first 10% of the list
-        top_10_percent_index = len(accounts_with_score) // 10
-        self.covert_accounts =  accounts_with_score[:top_10_percent_index]
+        top_10_percent_index = max(len(accounts_with_score) // 10, 10)
+        self.covert_accounts = accounts_with_score[:top_10_percent_index]
 
         return self.covert_accounts
