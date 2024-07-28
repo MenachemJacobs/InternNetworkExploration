@@ -199,16 +199,16 @@ class CovertLister:
             return absolute, comparative
 
         # Process word counters
-        self.absolute_hot_words, self.comparative_hot_words = process_counters(overt_word_counter, sus_word_counter,
-                                                                               100)
+        self.absolute_hot_words, self.comparative_hot_words = (
+            process_counters(overt_word_counter, sus_word_counter, 100))
 
         # Process phrase counters
-        self.absolute_hot_phrases, self.comparative_hot_phrases = process_counters(overt_phrase_counter,
-                                                                                   sus_phrase_counter, 100)
+        self.absolute_hot_phrases, self.comparative_hot_phrases = (
+            process_counters(overt_phrase_counter, sus_phrase_counter, 100))
 
         # Process date counters
-        self.absolute_hot_dates, self.comparative_hot_dates = process_counters(overt_date_counter, sus_date_counter,
-                                                                               100)
+        self.absolute_hot_dates, self.comparative_hot_dates = (
+            process_counters(overt_date_counter, sus_date_counter, 100))
 
         self.negative_feature_set = [self.absolute_hot_words, self.absolute_hot_phrases, self.absolute_hot_dates,
                                      self.comparative_hot_words, self.comparative_hot_phrases, self.negative_feature_set
@@ -250,9 +250,10 @@ class CovertLister:
                 # if message.date in self.absolute_hot_dates or message.date in self.comparative_hot_dates:
                 #     account_score += 1
 
-                # # score for responses
-                # if message.responses:
-                #     if message.responses[0].username in self.overt_accounts:
+                # TODO replying to may be an account
+                # score for responses
+                # if message.replying_to:
+                #     if message.replying_to.name in self.overt_accounts:
                 #         account_score += 1
 
             accounts_with_score.append((account, account_score))
@@ -260,6 +261,7 @@ class CovertLister:
         # Sort accounts by score in descending order
         accounts_with_score.sort(key=lambda x: x[1], reverse=True)
 
+        # TODO this should be the accounts whose primary scores now top 0.5
         # take only the first 10% of the list
         top_10_percent_index = len(accounts_with_score) // 10
         self.covert_accounts = accounts_with_score[:top_10_percent_index]

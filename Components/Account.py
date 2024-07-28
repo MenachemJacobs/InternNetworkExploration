@@ -42,7 +42,7 @@ class Account:
             initial_subscriptions (list[Account]): A list of initial subscriptions (Account objects).
             antisemite (bool, optional): Indicates if the account is antisemitic. Defaults to False.
         """
-        # TODO second iteration of project shouldn't have this flag
+        # TODO next iteration of project shouldn't have this flag
         self.isAntisemite = antisemite
         self.name = str(name)
         self.messages = messages
@@ -98,30 +98,23 @@ class Account:
         first_day = min(self.messages, key=lambda m: m.date).date
         last_day = max(self.messages, key=lambda m: m.date).date
         total_days = (last_day - first_day).days
-        partitions = math.floor(math.log(total_days) / math.log(1.5))
-        period_length = timedelta(days=total_days / partitions)
 
-        final_score = 0
-        current_period = first_day
+        # TODO investigate other log bases
+        num_periods = math.floor(math.log(total_days) / math.log(1.5))
+        periods: list[list['Message']] = [[] for _ in range(num_periods)]
+        period_length = timedelta(days=total_days / num_periods)
 
-        for _ in range(partitions):
-            period_messages = [m for m in self.messages if current_period <= m.date < current_period + period_length]
+        for message in self.messages:
+            period_index = (message.date - first_day) // period_length
+            periods[period_index].append(message)
 
-            if period_messages:
-                # Calculate sum of scores and number of messages in this period
-                period_score_sum = sum(m.score for m in period_messages)
-                period_num_messages = len(period_messages)
-                # Calculate the compound score for this period
-                period_compound_score = period_score_sum * period_num_messages
-                # Add the period's compound score to the final score
-                final_score += period_compound_score
+        flat_list = []
 
-            # Move to the next period
-            current_period += period_length
-            # Add the period's compound score to the final score
+        for period in periods:
+            flat_list.extend(period * len(period))
 
         # Normalize the final score by the total number of messages
-        return final_score / len(self.messages)
+        return sum(message.score for message in flat_list) / len(flat_list)
 
     # return self is necessary for chaining. It is expedient, but perhaps lazy
     def set_secondary_score(self):
@@ -131,6 +124,7 @@ class Account:
         Returns:
             Account: The current Account object.
         """
+        # TODO this is also bogus. needs replacing.
         self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
         return self
 
@@ -150,6 +144,7 @@ class Account:
 
         """Weight the secondary score of this account twice as heavily as the score from the subscriptions"""
         collated_score /= len(self.subscriptions)
+        # TODO this is bogus. Needs a real method.
         self.primary_score = (self.secondary_score + collated_score) / 2
 
     def add_subscription(self, subscriber: 'Account'):
@@ -208,7 +203,7 @@ class Account:
         Returns:
             str: The account name.
         """
-        return "Account: " + self.name
+        return "Acc: " + self.name
 
     def __repr__(self):
         """
@@ -219,5 +214,5 @@ class Account:
         """
         return self.__str__()
 
-    # def __eq__(self, other):
-    #     return self.name == other.name
+    def __eq__(self, other):
+        return self.name == other.name
