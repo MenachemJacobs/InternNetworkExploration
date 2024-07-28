@@ -197,6 +197,7 @@ class CovertLister:
             comparative = score_comparatively(overt_counter, sus_counter, num_top)
             return absolute, comparative
 
+        # TODO replace 100 with reasonable approach. maybe secretary number?
         # Process word counters
         self.absolute_hot_words, self.comparative_hot_words = (
             process_counters(overt_word_counter, sus_word_counter, 100))
@@ -264,7 +265,7 @@ class CovertLister:
 
         # TODO this should be the accounts whose primary scores now top 0.5
         # take only the first 10% of the list
-        top_10_percent_index = len(accounts_with_score) // 10
+        top_10_percent_index = max(len(accounts_with_score) // 10, 10)
         self.covert_accounts = accounts_with_score[:top_10_percent_index]
 
         return self.covert_accounts
