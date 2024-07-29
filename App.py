@@ -1,4 +1,3 @@
-import csv
 import datetime
 
 from pandas import read_csv
@@ -7,49 +6,36 @@ from shuffle.utils import list_to_msg, parse_single_int, parse_list_ints
 from AdversaryRevulsion import CovertLister
 from Components.Account import Account
 
-Accounts: list["Account"] = []
-
-
-def read_dataset(file):
-    data = []
-
-    with open(file, 'r', newline='', encoding='utf-8') as csvfile:
-        csvreader = csv.reader(csvfile)
-
-        for line in csvreader:
-            data.append(line)
-
-    return data
-
 
 messageData = read_csv('shuffle/messages.csv', converters={'Replying_To': parse_single_int})
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
-accounts = set()
-messageLookup = dict()
 
-for row in range(len(messageData['ID'])):
-    msg_list = [datetime.datetime.strptime(messageData['Date'][row], "%d-%b-%Y (%H:%M:%S.%f)"),
-                messageData['Text'][row], messageData['Score'][row], messageData['Username'][row]]
+# Create a dictionary for quick message lookup
+messageLookup = {}
+
+for _, row in messageData.iterrows():
+    msg_list = [datetime.datetime.strptime(row['Date'], "%d-%b-%Y (%H:%M:%S.%f)"),
+                row['Text'], row['Score'], row['Username']]
     msg = list_to_msg(msg_list)
-    msg.ID = messageData['ID'][row]
-    msg.replying_to = messageData['Replying_To'][row]
-    messageLookup[int(messageData['ID'][row])] = msg
+    msg.ID = row['ID']
+    msg.replying_to = row['Replying_To']
+    messageLookup[int(row['ID'])] = msg
 
-for row in range(len(accountData['Username'])):
-    messages = set()
-    for index in accountData['Messages'][row]:
-        messages.add(messageLookup[index])
+# Create accounts
+accounts = set()
 
-    antisemitic = accountData['Antisemitic'][row]
-    username = accountData['Username'][row]
-    subscriptions = accountData['Subscriptions'][row]
+for _, row in accountData.iterrows():
+    messages = {messageLookup[index] for index in row['Messages']}
+    antisemitic = row['Antisemitic']
+    username = row['Username']
+    subscriptions = row['Subscriptions']
     accounts.add(Account(name=username, messages=messages, initial_subscriptions=subscriptions,
                          antisemite=antisemitic))
 
 myFinder = CovertLister()
 myFinder.classify(accounts)
 
-for feature in myFinder.negative_feature_set:
+for feature in myFinder.feature_set:
     print(feature[:10])
 
 print(myFinder.covert_accounts[:10])

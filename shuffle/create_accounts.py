@@ -27,8 +27,8 @@ for i in range(0, len(jikeli['Text'])):
         message.score = random.uniform(0.75, 1)
         anti_users.add(jikeli['Username'][i])
         if numpy.random.choice((True, False)):
-            tokens = (replace_words(tokens=tokener.tokenize(message.text), replacing=hotwords.hot_words, ratio=0.4))
-            tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=hotwords.hot_phrases, num_insertions=3))
+            tokens = (replace_words(tokens=tokener.tokenize(message.text), replacing=injectionValues.hot_words, ratio=0.4))
+            tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=3))
             message.text = tweet
         overt_messages.add(message)
     elif numpy.random.choice((True, True, True, False)):
@@ -36,8 +36,8 @@ for i in range(0, len(jikeli['Text'])):
         pro_messages.add(message)
     else:
         message.score = random.uniform(0.0, 0.4)
-        tokens = (replace_words(tokens=tokener.tokenize(message.text), replacing=hotwords.hot_words))
-        tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=hotwords.hot_phrases, num_insertions=1))
+        tokens = (replace_words(tokens=tokener.tokenize(message.text), replacing=injectionValues.hot_words))
+        tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
         message.text = tweet
         covert_messages.add(message)
 
