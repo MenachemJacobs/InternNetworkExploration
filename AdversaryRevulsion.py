@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 
 import nltk.tokenize.casual
 from nltk import word_tokenize, ngrams
@@ -6,6 +6,12 @@ from nltk.corpus import stopwords
 from Components.Account import Account
 
 uninteresting_word_list = {"https", "zionazi", "zionazis", "kikes"}
+tokenizer = nltk.tokenize.casual.TweetTokenizer()
+stop_words = set(stopwords.words('english'))
+
+overt_word_counter, sus_word_counter = Counter(), Counter()
+overt_phrase_counter, sus_phrase_counter = Counter(), Counter()
+overt_date_counter, sus_date_counter = Counter(), Counter()
 
 
 # Filter out common words and phrases
@@ -113,7 +119,7 @@ class CovertLister:
         Returns:
             set[Account]: set of covert Account objects identified after classification.
         """
-        self.all_accounts = all_accounts
+        self.all_accounts: set[Account] = set(account for account in all_accounts)
 
         self.uncover_overt()  # Identifies overt accounts
         self.compile_feature_set()  # Compiles feature set
@@ -160,17 +166,13 @@ class CovertLister:
                 - absolute_hot_dates (list[str]): Top 100 most frequent dates.
                 - comparative_hot_dates (list[str]): Top 100 most comparative significant dates.
         """
-        overt_word_counter, sus_word_counter = Counter(), Counter()
-        overt_phrase_counter, sus_phrase_counter = Counter(), Counter()
-        overt_date_counter, sus_date_counter = Counter(), Counter()
 
-        stop_words = set(stopwords.words('english'))
         suspicious_accounts = self.all_accounts - self.overt_accounts
 
-        def process_accounts(accounts, word_counter, phrase_counter, date_counter):
+        def count_features(accounts, word_counter, phrase_counter, date_counter):
             for account in accounts:
                 for message in account.messages:
-                    tokens = [token for token in word_tokenize(message.text.lower())
+                    tokens = [token for token in tokenizer.tokenize(message.text.lower())
                               if token.isalnum() and token not in stop_words and token not in uninteresting_word_list]
 
                     # Update word counter
@@ -185,9 +187,9 @@ class CovertLister:
                     date_counter.update([date_key])
 
         # Process overt accounts
-        process_accounts(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)
+        count_features(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)
         # Process suspicious accounts
-        process_accounts(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
+        count_features(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
 
         def process_counters(overt_counter, sus_counter, num_top) -> tuple[list, list]:
             absolute: list = filter_common(overt_counter, sus_counter, num_top)
@@ -219,8 +221,6 @@ class CovertLister:
             list[tuple[Account, int]]: List of tuples, each containing a covert Account object and its associated score.
         """
         suspicious_accounts = self.all_accounts - self.overt_accounts
-        stop_words = set(stopwords.words('english'))
-        tokenizer = nltk.tokenize.casual.TweetTokenizer()
 
         word_set = set(self.absolute_hot_words) | set(self.comparative_hot_words)
         phrase_set = set(self.absolute_hot_phrases) | set(self.comparative_hot_phrases)
@@ -232,8 +232,8 @@ class CovertLister:
             account_score = 0
 
             for message in account.messages:
-                words = [word for word in tokenizer.tokenize(message.text.lower())
-                         if word not in stop_words and word not in uninteresting_word_list]
+                words = [word for word in message.text.lower().split() if word in word_set]
+                tokenizer.tokenize(message.text.lower())
 
                 word_score = sum(word in word_set for word in words)
                 phrase_score = sum(f"{words[i]} {words[i + 1]}" in phrase_set for i in range(len(words) - 1))
@@ -257,3 +257,46 @@ class CovertLister:
         self.covert_accounts = accounts_with_score[:top_10_percent_index]
 
         return self.covert_accounts
+
+
+def investigate_account(listener: CovertLister, account_name: str):
+    word_set = set(listener.absolute_hot_words) | set(listener.comparative_hot_words)
+    phrase_set = set(listener.absolute_hot_phrases) | set(listener.comparative_hot_phrases)
+    date_set = set(listener.absolute_hot_dates) | set(listener.comparative_hot_dates)
+
+    def score_account(account_to_score: Account):
+        word_list: defaultdict[str, int] = defaultdict(int)
+        phrase_list: defaultdict[str, int] = defaultdict(int)
+        date_list: defaultdict[str, int] = defaultdict(int)
+        replied_to: defaultdict[Account, int] = defaultdict(int)
+
+        for message in account_to_score.messages:
+            words = [word for word in message.text.lower().split()]
+
+            for word in words:
+                if word in word_set:
+                    word_list[word] += 1
+
+            for i in range(len(words) - 1):
+                phrase = words[i] + ' ' + words[i + 1]
+                if phrase in phrase_set:
+                    phrase_list[f"{words[i]} {words[i + 1]}"] += 1
+
+            if message.date in date_set:
+                date_list[message.date] += 1
+
+            for name in listener.overt_accounts:
+                # Check if the current message is replying to any message from account 'a'
+                if message.replying_to in name.messages:
+                    replied_to[name] += 1
+
+        return word_list, phrase_list, date_list, replied_to
+
+    for account in listener.all_accounts:
+        if account.name == 'yankthatisntbad':
+            print()
+
+        if account.name == account_name:
+            return score_account(account)
+
+    print("Couldn't find account")

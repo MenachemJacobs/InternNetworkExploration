@@ -1,19 +1,20 @@
-import string
 from datetime import datetime, timedelta
+import string
+
+import random
+
+import numpy.random
 import pandas as pd
-import numpy
-from numpy import random
-
-from nltk import TweetTokenizer, WordNetLemmatizer
+from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
+from nltk import word_tokenize
 
-from Components import Message, Account
+from Components.Account import Account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
-tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
-
+escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v'}
 
 def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
     """Randomly insert :param num_insertions words from list :param inserting into list :param tokens
@@ -55,9 +56,9 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25) -> list[s
 def clean(text: str):
     """returns a list of lemmatized, lower case tokens from the given string with basic punctuation removed"""
     words = list()
-    for word in tokenizer.tokenize(text):
-        if word not in string.punctuation:
-            words.append(lem.lemmatize(word.lower()))
+    for word in word_tokenize(text):
+        if word not in string.punctuation and word not in escape:
+            words.append(word.lower())
     return words
 
 
@@ -214,6 +215,8 @@ def assign_messages_randomly(accounts: list[Account], messages: set[Message]) ->
 def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2) -> None:
     """Modifies a lost of :param messages in place by having them reply to each other,
      with a ratio of :param replies_to_msgs responses per message, with messages from
+     :param replies_to_msgs:
+     :param messages:
      :param accounts being top level messages."""
     replies_to_msgs = int(replies_to_msgs)
     if replies_to_msgs < 0 or len(messages) / replies_to_msgs <= 1:
