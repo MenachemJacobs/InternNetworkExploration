@@ -5,11 +5,11 @@ from nltk import word_tokenize, ngrams
 from nltk.corpus import stopwords
 from Components.Account import Account
 
-uninteresting_word_list = ["https", "zionazi", "zionazis", "kikes"]
+uninteresting_word_list = {"https", "zionazi", "zionazis", "kikes"}
 
 
 # Filter out common words and phrases
-def filter_common(overt_counter, suspicious_counter, num_top):
+def filter_common(overt_counter, suspicious_counter, num_top) -> list:
     """
     Filters out common words and phrases from the top items of overt and suspicious counters.
 
@@ -21,14 +21,13 @@ def filter_common(overt_counter, suspicious_counter, num_top):
     Returns:
         list[str]: List of words/phrases that are not common between the overt and suspicious counters.
     """
-    common_items = set(dict(overt_counter.most_common(num_top))).intersection(
-        set(dict(suspicious_counter.most_common(num_top))))
+    common_items = set(overt_counter.most_common(num_top)) & set(suspicious_counter.most_common(100))
 
     # TODO item[0] gets the date, which is all I really want. item[1] is the frequency.
     return [item[0] for item in overt_counter.most_common(num_top) if item[0] not in common_items]
 
 
-def score_comparatively(overt_counter, suspicious_counter, num_top):
+def score_comparatively(overt_counter, suspicious_counter, num_top) -> list:
     """
     Computes a comparative score between overt and suspicious counters.
 
@@ -91,8 +90,7 @@ class CovertLister:
         """
         self.all_accounts: set[Account] = set()
         self.overt_accounts: set[Account] = set()
-        self.covert_accounts: list[Account] = list()
-        # pro_accounts = set(all_accounts) - set(overt_accounts) - set(covert_accounts)
+        self.covert_accounts: list[tuple[Account, int]] = []
 
         self.comparative_hot_words: list[str] = []
         self.absolute_hot_words: list[str] = []
@@ -103,9 +101,9 @@ class CovertLister:
         self.comparative_hot_dates: list[str] = []
         self.absolute_hot_dates: list[str] = []
 
-        self.negative_feature_set = []
+        self.feature_set: list[list[str]] = []
 
-    def classify(self, all_accounts: set[Account]):
+    def classify(self, all_accounts: set[Account]) -> list[tuple[Account, int]]:
         """
         Classifies accounts by identifying overt accounts, compiling feature sets, and uncovering covert accounts.
 
@@ -144,7 +142,7 @@ class CovertLister:
             """
             return account.isAntisemite
 
-        self.overt_accounts = set(account for account in self.all_accounts if test_account(account))
+        self.overt_accounts = {account for account in self.all_accounts if test_account(account)}
 
         return self.overt_accounts
 
@@ -167,20 +165,19 @@ class CovertLister:
         overt_date_counter, sus_date_counter = Counter(), Counter()
 
         stop_words = set(stopwords.words('english'))
-        suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
+        suspicious_accounts = self.all_accounts - self.overt_accounts
 
         def process_accounts(accounts, word_counter, phrase_counter, date_counter):
             for account in accounts:
                 for message in account.messages:
-                    tokens = word_tokenize(message.text.lower())
-                    tokens = [token for token in tokens if token.isalnum() and token not in stop_words
-                              and token not in uninteresting_word_list]
+                    tokens = [token for token in word_tokenize(message.text.lower())
+                              if token.isalnum() and token not in stop_words and token not in uninteresting_word_list]
 
                     # Update word counter
                     word_counter.update(tokens)
 
-                    # Update phrase counter
-                    message_bigrams = list(ngrams(tokens, 2))
+                    # Update phrase counter. It is possible the assignment should use a list.
+                    message_bigrams = ngrams(tokens, 2)
                     phrase_counter.update(message_bigrams)
 
                     # Update date counters
@@ -192,9 +189,9 @@ class CovertLister:
         # Process suspicious accounts
         process_accounts(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
 
-        def process_counters(overt_counter, sus_counter, num_top):
-            absolute = filter_common(overt_counter, sus_counter, num_top)
-            comparative = score_comparatively(overt_counter, sus_counter, num_top)
+        def process_counters(overt_counter, sus_counter, num_top) -> tuple[list, list]:
+            absolute: list = filter_common(overt_counter, sus_counter, num_top)
+            comparative: list = score_comparatively(overt_counter, sus_counter, num_top)
             return absolute, comparative
 
         # Process word counters
@@ -209,11 +206,10 @@ class CovertLister:
         self.absolute_hot_dates, self.comparative_hot_dates = (
             process_counters(overt_date_counter, sus_date_counter, 100))
 
-        self.negative_feature_set = [self.absolute_hot_words, self.absolute_hot_phrases, self.absolute_hot_dates,
-                                     self.comparative_hot_words, self.comparative_hot_phrases, self.comparative_hot_dates
-                                     ]
+        self.feature_set = [self.absolute_hot_words, self.comparative_hot_words, self.absolute_hot_phrases,
+                            self.comparative_hot_phrases, self.absolute_hot_dates, self.comparative_hot_dates]
 
-        return self.negative_feature_set
+        return self.feature_set
 
     def uncover_covert(self) -> list[tuple["Account", int]]:
         """
@@ -222,40 +218,33 @@ class CovertLister:
         Returns:
             list[tuple[Account, int]]: List of tuples, each containing a covert Account object and its associated score.
         """
-        suspicious_accounts = set(self.all_accounts) - set(self.overt_accounts)
+        suspicious_accounts = self.all_accounts - self.overt_accounts
         stop_words = set(stopwords.words('english'))
         tokenizer = nltk.tokenize.casual.TweetTokenizer()
+
+        word_set = set(self.absolute_hot_words) | set(self.comparative_hot_words)
+        phrase_set = set(self.absolute_hot_phrases) | set(self.comparative_hot_phrases)
+        date_set = set(self.absolute_hot_dates) | set(self.comparative_hot_dates)
+
         accounts_with_score = []
 
         for account in suspicious_accounts:
             account_score = 0
 
             for message in account.messages:
-                words = tokenizer.tokenize(message.text.lower())
-                words = [word for word in words if word not in stop_words and word not in uninteresting_word_list]
+                words = [word for word in tokenizer.tokenize(message.text.lower())
+                         if word not in stop_words and word not in uninteresting_word_list]
 
-                # score for words
-                for word in words:
-                    if word in self.absolute_hot_words or word in self.comparative_hot_words:
-                        account_score += 1
+                word_score = sum(word in word_set for word in words)
+                phrase_score = sum(f"{words[i]} {words[i + 1]}" in phrase_set for i in range(len(words) - 1))
+                date_score = message.date.strftime('%d-%b-%Y') in date_set
 
-                # score for phrase
-                for i in range(len(words) - 1):
-                    bigram = f"{words[i]} {words[i + 1]}"
-                    if bigram in self.absolute_hot_phrases or bigram in self.comparative_hot_phrases:
-                        account_score += 1
+                account_score += word_score + phrase_score + date_score
 
-                # score for date
-                if message.date in self.absolute_hot_dates or message.date in self.comparative_hot_dates:
-                    account_score += 1
-
-                # TODO replying to may be an account
+                # TODO replying_to may be an account
                 # score for responses
-                if message.replying_to:
-                    for possible_account in self.overt_accounts:
-                        if message.replying_to in possible_account.messages:
-                            account_score += 1
-                            break
+                if any(message.replying_to in a.messages for a in self.overt_accounts):
+                    account_score += 1
 
             accounts_with_score.append((account, account_score))
 
