@@ -6,7 +6,7 @@ from App import accountData, messageLookup
 
 class TestAccountMethods(unittest.TestCase):
     def setUp(self):
-        self.accounts = list()
+        self.accounts = set()
         for index in range(len(accountData['Username'])):
             msg_indexes = accountData['Messages'][index]
             msg_list = set()
@@ -14,7 +14,7 @@ class TestAccountMethods(unittest.TestCase):
                 msg_list.add(messageLookup[indice])
             account = Account(accountData['Username'][index], msg_list, accountData['Subscriptions'][index],
                               accountData['Antisemitic'][index])
-            self.accounts.append(account)
+            self.accounts.add(account)
         self.listener = CovertLister()
         self.listener.all_accounts = self.accounts
 
@@ -23,7 +23,6 @@ class TestAccountMethods(unittest.TestCase):
         self.assertTrue(self.listener.uncover_covert(), "Returning empty list of covert accounts.")
 
     def test_hot_list(self):
-        suspects = [account[0] for account in self.listener.uncover_covert()]
         self.listener.uncover_overt()
 
         hot = self.listener.compile_feature_set()

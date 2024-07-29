@@ -142,7 +142,7 @@ class CovertLister:
             """
             return account.isAntisemite
 
-        self.overt_accounts = {account for account in self.all_accounts if test_account(account)}
+        self.overt_accounts = set(account for account in self.all_accounts if test_account(account))
 
         return self.overt_accounts
 
