@@ -1,5 +1,4 @@
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 import string
 
 import random
@@ -216,6 +215,8 @@ def assign_messages_randomly(accounts: list[Account], messages: set[Message]) ->
 def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2) -> None:
     """Modifies a lost of :param messages in place by having them reply to each other,
      with a ratio of :param replies_to_msgs responses per message, with messages from
+     :param replies_to_msgs:
+     :param messages:
      :param accounts being top level messages."""
     replies_to_msgs = int(replies_to_msgs)
     if replies_to_msgs < 0 or len(messages) / replies_to_msgs <= 1:
