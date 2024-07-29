@@ -43,18 +43,15 @@ covert_gold = set(gold['Username'])
 returned_accounts = myFinder.covert_accounts[:10]
 print(returned_accounts)
 
-first_wrong = []
-
 for account in returned_accounts:
     if account[0].name not in covert_gold:
-        word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, returned_accounts[0][0].name)
+        word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, account[0].name)
         list_list = [word_list, phrase_list, date_list, replied_to]
 
         for sub_list in list_list:
             print(sub_list)
 
         break
-
 
 # precision = 0
 # total = 0

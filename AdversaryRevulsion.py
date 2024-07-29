@@ -172,7 +172,7 @@ class CovertLister:
         def count_features(accounts, word_counter, phrase_counter, date_counter):
             for account in accounts:
                 for message in account.messages:
-                    tokens = [token for token in word_tokenize(message.text.lower())
+                    tokens = [token for token in tokenizer.tokenize(message.text.lower())
                               if token.isalnum() and token not in stop_words and token not in uninteresting_word_list]
 
                     # Update word counter
@@ -232,8 +232,8 @@ class CovertLister:
             account_score = 0
 
             for message in account.messages:
-                words = [word for word in tokenizer.tokenize(message.text.lower())
-                         if word in word_set]
+                words = [word for word in message.text.lower().split() if word in word_set]
+                tokenizer.tokenize(message.text.lower())
 
                 word_score = sum(word in word_set for word in words)
                 phrase_score = sum(f"{words[i]} {words[i + 1]}" in phrase_set for i in range(len(words) - 1))
@@ -271,21 +271,24 @@ def investigate_account(listener: CovertLister, account_name: str):
         replied_to: defaultdict[Account, int] = defaultdict(int)
 
         for message in account_to_score.messages:
-            words = [word for word in tokenizer.tokenize(message.text.lower()) if word in word_set]
+            words = [word for word in message.text.lower().split()]
 
             for word in words:
-                word_list[word] += 1
+                if word in word_set:
+                    word_list[word] += 1
 
-            for phrase in phrase_set:
-                phrase_list[phrase] += 1
+            for i in range(len(words) - 1):
+                phrase = words[i] + ' ' + words[i + 1]
+                if phrase in phrase_set:
+                    phrase_list[f"{words[i]} {words[i + 1]}"] += 1
 
-            for date in date_set:
-                date_list[date] += 1
+            if message.date in date_set:
+                date_list[message.date] += 1
 
-            for a in listener.overt_accounts:
+            for name in listener.overt_accounts:
                 # Check if the current message is replying to any message from account 'a'
-                if message.replying_to in a.messages:
-                    replied_to[a] += 1
+                if message.replying_to in name.messages:
+                    replied_to[name] += 1
 
         return word_list, phrase_list, date_list, replied_to
 
