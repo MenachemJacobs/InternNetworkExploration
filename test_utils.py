@@ -7,12 +7,12 @@ from shuffle import utils
 class TestUtils(unittest.TestCase):
     def test_replace_word(self):
         sent = ["This", "is", "a", "sentence"]
-        self.assertNotEqual(sent, utils.replace_words(sent, hotwords.hot_words, 0.5),
+        self.assertNotEqual(sent, utils.replace_words(sent, injectionValues.hot_words, 0.5),
                             "Words are not being replaced at all.")
 
     def test_replace_wrong_ratio(self):
         with self.assertRaises(ValueError):
-            utils.replace_words(["some", "words"], hotwords.hot_words, -0.2)
+            utils.replace_words(["some", "words"], injectionValues.hot_words, -0.2)
 
     def test_replace_keyword(self):
         result = utils.replace_keyword("jew", ["jew", "jew", "jew"], ["stuff"])
