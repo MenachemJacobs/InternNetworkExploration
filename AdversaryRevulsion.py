@@ -273,14 +273,16 @@ def investigate_account(listener: CovertLister, account_name: str):
         for message in account_to_score.messages:
             words = [word for word in message.text.lower().split()]
 
-            for word in words:
+            for i in range(len(words)):
+                word = words[i]
+
                 if word in word_set:
                     word_list[word] += 1
 
-            for i in range(len(words) - 1):
-                phrase = words[i] + ' ' + words[i + 1]
-                if phrase in phrase_set:
-                    phrase_list[f"{words[i]} {words[i + 1]}"] += 1
+                if i < len(words) - 1:
+                    phrase = words[i] + ' ' + words[i + 1]
+                    if phrase in phrase_set:
+                        phrase_list[f"{words[i]} {words[i + 1]}"] += 1
 
             if message.date in date_set:
                 date_list[message.date] += 1
