@@ -6,7 +6,6 @@ from shuffle.utils import list_to_msg, parse_list_ints
 from AdversaryRevulsion import CovertLister, investigate_account
 from Components.Account import Account
 
-
 messageData = read_csv('shuffle/messages.csv')
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
 
@@ -40,10 +39,10 @@ myFinder.classify(accounts)
 
 print(myFinder.covert_accounts[:10])
 
-word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, 'mascord')
-list_list = [word_list, phrase_list, date_list, replied_to]
-for sub_list in list_list:
-    print(sub_list)
+#word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, 'mascord')
+#list_list = [word_list, phrase_list, date_list, replied_to]
+#for sub_list in list_list:
+# print(sub_list)
 
 # precision = 0
 # total = 0
