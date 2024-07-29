@@ -49,7 +49,7 @@ for account in returned_accounts:
     if account[0].name not in covert_gold:
         word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, returned_accounts[0][0].name)
         list_list = [word_list, phrase_list, date_list, replied_to]
-
+        print(account[0].name)
         for sub_list in list_list:
             print(sub_list)
 
