@@ -29,17 +29,19 @@ for i in range(0, len(jikeli['Text'])):
     if message.score == 1:
         message.score = random.uniform(0.75, 1)
         anti_users.add(jikeli['Username'][i])
-        if numpy.random.choice((True, False)):
+        if numpy.random.choice([True, False]):
             tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
             tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
             message.text = tweet
         overt_messages.add(message)
-    elif numpy.random.choice((True, True, True, False)):
-        pro_users.add(jikeli['Username'][i])
+    elif numpy.random.choice([True, True, True, False]):
+        if jikeli['Username'][i] not in anti_users and jikeli['Username'][i] not in covert_users:
+            pro_users.add(jikeli['Username'][i])
         message.score = random.uniform(0.0, 0.4)
         pro_messages.add(message)
     else:
-        covert_users.add(jikeli['Username'][i])
+        if jikeli['Username'][i] not in anti_users and jikeli['Username'][i] not in pro_users:
+            covert_users.add(jikeli['Username'][i])
         message.score = random.uniform(0.0, 0.4)
         tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
         tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
@@ -47,11 +49,10 @@ for i in range(0, len(jikeli['Text'])):
         covert_messages.add(message)
 
 # Create account objects
-
 for user in anti_users:
     anti_accounts.append(Account(str(user), set(), list(), True))
 for user in pro_users:
-    pro_accounts.append(Account(user, set(), list(), False))
+    pro_accounts.append(Account(str(user), set(), list(), False))
 for user in covert_users:
     covert_accounts.append(Account(str(user), set(), list(), False))
 
@@ -74,11 +75,14 @@ second_overt = set(overt_msg_list[int(len(overt_msg_list)/2):])
 first_pro = set(pro_msg_list[:int(len(pro_msg_list)/2)])
 second_pro = set(pro_msg_list[int(len(pro_msg_list)/2):])
 # Assign messages and replies randomly
+
 assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messages)
+
 assign_messages_randomly(anti_accounts[:40], first_overt)
 assign_messages_randomly(anti_accounts[40:80], second_overt)
 assign_messages_randomly(pro_accounts[:50], first_pro)
 assign_messages_randomly(pro_accounts[50:100], second_pro)
+
 reply_net(covert_messages, covert_accounts[:10] + anti_accounts[:40], 6)
 reply_net(first_overt, anti_accounts[:40] + pro_accounts[:20], 6)
 reply_net(second_overt, anti_accounts[40:80] + pro_accounts[50:70], 6)
@@ -95,13 +99,10 @@ overt_messages = replace_msg_dates(messages=overt_messages,
                                    dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
                                    ratio=0.05)
 messageData = messages_to_dataframe(covert_messages.union(pro_messages.union(overt_messages)))
-messageData.sort_values(by='ID', inplace=True)
-
 messageData.index.name = 'Index'
 accountData.index.name = 'Index'
 covertList.index.name = 'Index'
 traininingData.index.name = 'Index'
-
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
 traininingData.to_csv('trainining.csv')
