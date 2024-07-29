@@ -7,7 +7,7 @@ from AdversaryRevulsion import CovertLister
 from Components.Account import Account
 
 
-messageData = read_csv('shuffle/messages.csv', converters={'Replying_To': parse_single_int})
+messageData = read_csv('shuffle/messages.csv')
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
 
 # Create a dictionary for quick message lookup

@@ -1,16 +1,13 @@
-from datetime import datetime
-from datetime import timedelta
 import string
-
-import random
-
-import numpy.random
+from datetime import datetime, timedelta
 import pandas as pd
-from nltk import WordNetLemmatizer
-from nltk.corpus import stopwords
-from nltk.tokenize.casual import TweetTokenizer
+import numpy
+from numpy import random
 
-from Components.Account import Account
+from nltk import TweetTokenizer, WordNetLemmatizer
+from nltk.corpus import stopwords
+
+from Components import Message, Account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
