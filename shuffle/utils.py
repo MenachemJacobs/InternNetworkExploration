@@ -8,15 +8,14 @@ import numpy.random
 import pandas as pd
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
-from nltk.tokenize.casual import TweetTokenizer
+from nltk import word_tokenize
 
 from Components.Account import Account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
-tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
 lem = WordNetLemmatizer()
-
+escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v'}
 
 def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
     """Randomly insert :param num_insertions words from list :param inserting into list :param tokens
@@ -58,9 +57,9 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25) -> list[s
 def clean(text: str):
     """returns a list of lemmatized, lower case tokens from the given string with basic punctuation removed"""
     words = list()
-    for word in tokenizer.tokenize(text):
-        if word not in string.punctuation:
-            words.append(lem.lemmatize(word.lower()))
+    for word in word_tokenize(text):
+        if word not in string.punctuation and word not in escape:
+            words.append(word.lower())
     return words
 
 
