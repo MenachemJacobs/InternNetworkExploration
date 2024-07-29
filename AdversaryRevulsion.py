@@ -9,6 +9,10 @@ uninteresting_word_list = {"https", "zionazi", "zionazis", "kikes"}
 tokenizer = nltk.tokenize.casual.TweetTokenizer()
 stop_words = set(stopwords.words('english'))
 
+overt_word_counter, sus_word_counter = Counter(), Counter()
+overt_phrase_counter, sus_phrase_counter = Counter(), Counter()
+overt_date_counter, sus_date_counter = Counter(), Counter()
+
 
 # Filter out common words and phrases
 def filter_common(overt_counter, suspicious_counter, num_top) -> list:
@@ -115,7 +119,7 @@ class CovertLister:
         Returns:
             set[Account]: set of covert Account objects identified after classification.
         """
-        self.all_accounts = all_accounts
+        self.all_accounts: set[Account] = set(account for account in all_accounts)
 
         self.uncover_overt()  # Identifies overt accounts
         self.compile_feature_set()  # Compiles feature set
@@ -162,13 +166,10 @@ class CovertLister:
                 - absolute_hot_dates (list[str]): Top 100 most frequent dates.
                 - comparative_hot_dates (list[str]): Top 100 most comparative significant dates.
         """
-        overt_word_counter, sus_word_counter = Counter(), Counter()
-        overt_phrase_counter, sus_phrase_counter = Counter(), Counter()
-        overt_date_counter, sus_date_counter = Counter(), Counter()
 
         suspicious_accounts = self.all_accounts - self.overt_accounts
 
-        def process_accounts(accounts, word_counter, phrase_counter, date_counter):
+        def count_features(accounts, word_counter, phrase_counter, date_counter):
             for account in accounts:
                 for message in account.messages:
                     tokens = [token for token in word_tokenize(message.text.lower())
@@ -186,9 +187,9 @@ class CovertLister:
                     date_counter.update([date_key])
 
         # Process overt accounts
-        process_accounts(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)
+        count_features(self.overt_accounts, overt_word_counter, overt_phrase_counter, overt_date_counter)
         # Process suspicious accounts
-        process_accounts(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
+        count_features(suspicious_accounts, sus_word_counter, sus_phrase_counter, sus_date_counter)
 
         def process_counters(overt_counter, sus_counter, num_top) -> tuple[list, list]:
             absolute: list = filter_common(overt_counter, sus_counter, num_top)

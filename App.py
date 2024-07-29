@@ -6,7 +6,6 @@ from shuffle.utils import list_to_msg, parse_list_ints
 from AdversaryRevulsion import CovertLister, investigate_account
 from Components.Account import Account
 
-
 messageData = read_csv('shuffle/messages.csv')
 accountData = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
 
@@ -35,15 +34,27 @@ for _, row in accountData.iterrows():
 myFinder = CovertLister()
 myFinder.classify(accounts)
 
+gold = read_csv('shuffle/covert.csv')
+covert_gold = set(gold['Username'])
+
 # for feature in myFinder.feature_set:
 #     print(feature[:10])
 
-print(myFinder.covert_accounts[:10])
+returned_accounts = myFinder.covert_accounts[:10]
+print(returned_accounts)
 
-word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, 'mascord')
-list_list = [word_list, phrase_list, date_list, replied_to]
-for sub_list in list_list:
-    print(sub_list)
+first_wrong = []
+
+for account in returned_accounts:
+    if account[0].name not in covert_gold:
+        word_list, phrase_list, date_list, replied_to = investigate_account(myFinder, returned_accounts[0][0].name)
+        list_list = [word_list, phrase_list, date_list, replied_to]
+
+        for sub_list in list_list:
+            print(sub_list)
+
+        break
+
 
 # precision = 0
 # total = 0
