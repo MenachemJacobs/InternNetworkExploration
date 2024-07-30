@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 from nltk import word_tokenize
 from pandas import read_csv
 
-from Components.Account import Account
+from Components.Account import Account, random_account
 from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
@@ -329,4 +329,20 @@ def load_accounts() -> set[Account]:
         account.set_feature_scores()
         accounts.add(account)
 
+    return accounts
+
+
+def load_training_accounts():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    accounts_path = os.path.join(script_dir, 'training_accounts.csv')
+    accounts_data = read_csv(accounts_path)
+    accounts = list()
+    for i in range(len(accounts_data.index)):
+        account = random_account('training_account_' + str(i))
+        account.isAntisemite = accounts_data['Antisemitic'][i]
+        account.score_by_density = accounts_data['Density_Score'][i]
+        account.average_message_score = accounts_data['Avg_Score'][i]
+        account.positives_per_tweet = accounts_data['Positivity'][i]
+        accounts.append(account)
     return accounts
