@@ -16,6 +16,7 @@ stopList = set(stopwords.words('english'))
 lem = WordNetLemmatizer()
 escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v'}
 
+
 def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
     """Randomly insert :param num_insertions words from list :param inserting into list :param tokens
     and return the list; does not modify list in place."""

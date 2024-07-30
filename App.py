@@ -2,10 +2,10 @@ import datetime
 
 from pandas import read_csv
 
-import Diagnostics
+from ContextGeneration import Diagnostics
 from shuffle.utils import list_to_msg, parse_list_ints
 
-from AdversaryRevulsion import CovertLister, investigate_account
+from AdversaryRevulsion import CovertLister
 from Components.Account import Account
 
 messageData = read_csv('shuffle/messages.csv')
@@ -39,17 +39,17 @@ myFinder.classify(accounts)
 gold = read_csv('shuffle/covert.csv')
 covert_gold = set(gold['Username'])
 
-# for feature in myFinder.feature_set:
-#     print(feature[:10])
+for feature in myFinder.feature_set:
+    print(feature[:10])
 
 returned_accounts: set = {account[0].name for account in myFinder.covert_accounts[:10]}
 print(returned_accounts)
 
-difference_accounts = returned_accounts - covert_gold
-
-if difference_accounts:
-    first_account = next(iter(difference_accounts))
-    Diagnostics.score_the_man(myFinder, first_account[0])
+# difference_accounts = returned_accounts - covert_gold
+#
+# if difference_accounts:
+#     first_account = next(iter(difference_accounts))
+#     Diagnostics.score_the_man(myFinder, first_account)
 
 # precision = 0
 # total = 0

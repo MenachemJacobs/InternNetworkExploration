@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timedelta
 
-from pandas import DataFrame, read_csv
+from pandas import read_csv
 
 from Components.Account import Account
 from Components.Message import Message
@@ -56,4 +56,3 @@ def extract_features(account: Account,log_base: float, threshold: float) -> list
     by_day = sum_of_scores / total_days
     positivity = acceptable / len(messages)
     return [density,avg,by_day,positivity]
-
