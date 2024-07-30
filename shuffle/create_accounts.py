@@ -64,9 +64,9 @@ for user in covert_users:
     covert_accounts.append(Account(str(user), set(), set(), False))
 
 # generate account subscriptions
-anti_network = follower_network(anti_accounts, anti_accounts, 10)
-pro_network = follower_network(pro_accounts, pro_accounts, 10)
-covert_network = follower_network(covert_accounts, pro_accounts + anti_accounts, 10)
+anti_network = follower_network(anti_accounts[:40], anti_accounts[:40], 10)
+pro_network = follower_network(pro_accounts[:50], pro_accounts[:50], 10)
+covert_network = follower_network(covert_accounts[:10], pro_accounts[:50] + anti_accounts[:40], 10)
 
 for account in anti_network.keys():
     account.subscriptions = anti_network[account]
@@ -74,7 +74,16 @@ for account in pro_network.keys():
     account.subscriptions = pro_network[account]
 for account in covert_network.keys():
     account.subscriptions = covert_network[account]
+anti_network_2 = follower_network(anti_accounts[40:80], anti_accounts[40:80], 10)
+pro_network_2 = follower_network(pro_accounts[50:100], pro_accounts[50:100], 10)
+covert_network_2 = follower_network(covert_accounts[10:20], pro_accounts[50:100] + anti_accounts[40:80], 10)
 
+for account in anti_network_2.keys():
+    account.subscriptions = anti_network_2[account]
+for account in pro_network_2.keys():
+    account.subscriptions = pro_network_2[account]
+for account in covert_network_2.keys():
+    account.subscriptions = covert_network_2[account]
 overt_msg_list = list(overt_messages)
 pro_msg_list = list(pro_messages)
 first_overt = set(overt_msg_list[:int(len(overt_msg_list)/2)])
