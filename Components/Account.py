@@ -137,20 +137,12 @@ class Account:
 
         collated_score = 0
         subscriber_accounts = []
-        all_names = [account.name for account in all_accounts]
-
-        for sub in self.subscriptions:
-            if sub not in all_names:
-                print(sub)
 
         for account in all_accounts:
             if account.name in self.subscriptions:
                 subscriber_accounts.append(account)
-            else:
-                print("name not found:", account.name)
 
         for subscriber in subscriber_accounts:
-            print(subscriber)
             if subscriber.secondary_score == 1.0:
                 subscriber.set_secondary_score()
             collated_score += subscriber.secondary_score

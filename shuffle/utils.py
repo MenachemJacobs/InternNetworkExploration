@@ -288,7 +288,7 @@ def parse_char_to_string_list(char_list: list[chr]) -> list[str]:
         if char == ',':
             wordlist.append(word)
             word = ''
-        elif char not in '()[]\'':
+        elif char not in '()[]\' ':
             word += char
     if word:
         wordlist.append(word)
