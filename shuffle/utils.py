@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 import string
 
@@ -280,8 +281,15 @@ def parse_list_ints(cell: str) -> set[int]:
 
 
 def load_accounts() -> set[Account]:
-    message_data = read_csv('../shuffle/messages.csv')
-    account_data = read_csv('../shuffle/accounts.csv', converters={'Messages': parse_list_ints})
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct absolute paths to the CSV files
+    messages_path = os.path.join(script_dir, 'messages.csv')
+    accounts_path = os.path.join(script_dir, 'accounts.csv')
+
+    message_data = read_csv(messages_path)
+    account_data = read_csv(accounts_path, converters={'Messages': parse_list_ints})
 
     # Parse message data into a lookup dictionary
     message_lookup = {}

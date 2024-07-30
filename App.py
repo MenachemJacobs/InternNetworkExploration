@@ -1,15 +1,14 @@
-import datetime
-
 from pandas import read_csv
 
 from ContextGeneration import Diagnostics
 
-
 from AdversaryRevulsion import CovertLister
-from Components.Account import Account
 from shuffle import utils
 
 accounts = utils.load_accounts()
+
+for account in accounts:
+    account.set_secondary_score()
 
 myFinder = CovertLister()
 myFinder.classify(accounts)

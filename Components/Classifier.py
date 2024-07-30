@@ -1,11 +1,23 @@
-def calculate_secondary_score(feature_list):
-    accumulator = 0.0
+import pickle
 
-    for feature in feature_list:
-        accumulator += feature
+import pandas as pd
 
-    return accumulator
+
+def calculate_secondary_score(account_name: str, feature_list: list) -> float:
+    with open('Components/random_forest_classifier.pkl', 'rb') as f:
+        loaded_clf = pickle.load(f)
+
+    new_data = pd.DataFrame([feature_list])  # Replace with actual new feature data
+
+    probabilities = loaded_clf.predict_proba(new_data)
+    positive_class_prob = probabilities[0, 1]
+
+    new_predictions = loaded_clf.predict(new_data)
+    print(account_name + ":", new_predictions)
+
+    return new_predictions
 
 
 def calculate_messages():
     print()
+
