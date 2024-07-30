@@ -13,7 +13,7 @@ def random_account(name) -> "Account":
     Returns:
         Account: An Account object with random messages.
     """
-    return Account(name, random_message(5), [])
+    return Account(name, random_message(5), set())
 
 
 def create_accounts_by_bulk(names) -> list["Account"]:
@@ -151,7 +151,7 @@ class Account:
         """Weight the secondary score of this account twice as heavily as the score from the subscriptions"""
         collated_score /= len(self.subscriptions)
         # TODO this is bogus. Needs a real method.
-        self.primary_score = (self.secondary_score + collated_score) / 2
+        self.primary_score = (self.secondary_score + self.secondary_score + collated_score) / 3
 
     def add_subscription(self, subscriber: 'Account'):
         """
@@ -161,7 +161,7 @@ class Account:
             subscriber (Account): The account to subscribe to.
         """
         if isinstance(subscriber, Account) and subscriber not in self.subscriptions:
-            self.subscriptions.append(subscriber)
+            self.subscriptions.add(subscriber.name)
 
     def add_subscriptions(self, neighbors):
         """
@@ -188,7 +188,7 @@ class Account:
             bool: True if the subscription was removed, False otherwise.
         """
         if neighbor in self.subscriptions:
-            self.subscriptions.remove(neighbor)
+            self.subscriptions.remove(neighbor.name)
             return True
 
         return False

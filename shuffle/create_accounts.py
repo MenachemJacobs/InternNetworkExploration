@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import injectionValues
 from utils import *
 
@@ -59,11 +57,11 @@ for user in users.keys():
         covert_users.add(user)
 # Create account objects
 for user in anti_users:
-    anti_accounts.append(Account(str(user), set(), list(), True))
+    anti_accounts.append(Account(str(user), set(), set(), True))
 for user in pro_users:
-    pro_accounts.append(Account(str(user), set(), list(), False))
+    pro_accounts.append(Account(str(user), set(), set(), False))
 for user in covert_users:
-    covert_accounts.append(Account(str(user), set(), list(), False))
+    covert_accounts.append(Account(str(user), set(), set(), False))
 
 # generate account subscriptions
 anti_network = follower_network(anti_accounts, anti_accounts, 10)

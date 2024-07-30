@@ -12,11 +12,8 @@ def calculate_secondary_score(account_name: str, feature_list: list) -> float:
     probabilities = loaded_clf.predict_proba(new_data)
     positive_class_prob = probabilities[0, 1]
 
-    print(account_name + ":", positive_class_prob)
-
     return positive_class_prob
 
 
 def calculate_messages():
     print()
-

@@ -295,9 +295,6 @@ def investigate_account(listener: CovertLister, account_name: str):
         return word_list, phrase_list, date_list, replied_to
 
     for account in listener.all_accounts:
-        if account.name == 'yankthatisntbad':
-            print()
-
         if account.name == account_name:
             return score_account(account)
 
