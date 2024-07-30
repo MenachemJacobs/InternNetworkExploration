@@ -124,7 +124,7 @@ class Account:
             Account: The current Account object.
         """
         # TODO this is also bogus. needs replacing.
-        self.secondary_score = Classifier.calculate_secondary_score(self.feature_list)
+        self.secondary_score = Classifier.calculate_secondary_score(self.name, self.feature_list)
         return self
 
     def set_primary_score(self):

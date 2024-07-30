@@ -5,30 +5,13 @@ from pandas import read_csv
 
 from Components.Account import Account
 from Components.Message import Message
+from shuffle import utils
 from shuffle.utils import list_to_msg, parse_list_ints
 
 messageData = read_csv('shuffle/trainingMessages.csv')
 accountData = read_csv('shuffle/trainingAccounts.csv', converters={'Messages': parse_list_ints})
 # Create a dictionary for quick message lookup
-messageLookup = {}
-
-for _, row in messageData.iterrows():
-    msg_list = [datetime.strptime(row['Date'], "%d-%b-%Y (%H:%M:%S.%f)"),
-                row['Text'], row['Score'], row['Username']]
-    msg = list_to_msg(msg_list)
-    msg.ID = row['ID']
-    msg.replying_to = row['Replying_To']
-    messageLookup[int(row['ID'])] = msg
-
-# Create accounts
-training_accounts = list()
-for _, row in accountData.iterrows():
-    messages = {messageLookup[index] for index in row['Messages']}
-    antisemitic = row['Antisemitic']
-    username = row['Username']
-    subscriptions = row['Subscriptions']
-    training_accounts.append(Account(name=username, messages=messages, initial_subscriptions=subscriptions,
-                                     antisemite=antisemitic))
+training_accounts = utils.load_accounts()
 
 
 def extract_features(account: Account,log_base: float, threshold: float) -> list[float]:
