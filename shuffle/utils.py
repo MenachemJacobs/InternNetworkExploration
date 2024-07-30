@@ -178,7 +178,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
     antisemitic = list()
     for account in accounts:
         names.append(str(account.name))
-        subscriptions.append(account.subscriptions)
+        subscriptions.append([acc.name for acc in account.subscriptions])
         antisemitic.append(account.isAntisemite)
         messages.append(set(int(message.ID) for message in account.messages))
     accounts_df = pd.DataFrame(
