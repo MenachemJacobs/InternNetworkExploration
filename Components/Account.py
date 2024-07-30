@@ -1,5 +1,4 @@
 import math
-from datetime import timedelta
 from Components import Classifier
 from Components.Message import random_message, Message
 
@@ -102,10 +101,10 @@ class Account:
         # TODO investigate other log bases
         num_periods = math.floor(math.log(total_days) / math.log(1.5))
         periods: list[list['Message']] = [[] for _ in range(num_periods)]
-        period_length = timedelta(days=total_days / num_periods)
+        period_length = total_days // num_periods
 
         for message in self.messages:
-            period_index = (message.date - first_day) // period_length
+            period_index = min((message.date - first_day).days // period_length, num_periods - 1)
             periods[period_index].append(message)
 
         flat_list = []

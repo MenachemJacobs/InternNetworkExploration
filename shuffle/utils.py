@@ -8,6 +8,7 @@ import pandas as pd
 from nltk import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
+from pandas import read_csv
 
 from Components.Account import Account
 from Components.Message import Message
@@ -15,6 +16,7 @@ from Components.Message import Message
 stopList = set(stopwords.words('english'))
 lem = WordNetLemmatizer()
 escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v'}
+
 
 def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
     """Randomly insert :param num_insertions words from list :param inserting into list :param tokens
@@ -275,3 +277,32 @@ def parse_list_ints(cell: str) -> set[int]:
             nums.add(int(num_word))
             num_word = ""
     return nums
+
+
+def load_accounts() -> set[Account]:
+    message_data = read_csv('shuffle/messages.csv')
+    account_data = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
+
+    # Parse message data into a lookup dictionary
+    message_lookup = {}
+    for _, row in message_data.iterrows():
+        msg_list = [datetime.strptime(row['Date'], "%d-%b-%Y (%H:%M:%S.%f)"),
+                    row['Text'], row['Score'], row['Username']]
+        msg = list_to_msg(msg_list)
+        msg.ID = row['ID']
+        msg.replying_to = row['Replying_To']
+        message_lookup[int(row['ID'])] = msg
+
+    # Initialize Account objects and set feature scores
+    accounts = set()
+    for _, row in account_data.iterrows():
+        messages = {message_lookup[index] for index in row['Messages']}
+        antisemitic = row['Antisemitic']
+        username = row['Username']
+        subscriptions = row['Subscriptions']
+        account = Account(name=username, messages=messages, initial_subscriptions=subscriptions,
+                          antisemite=antisemitic)
+        account.set_feature_scores()
+        accounts.add(account)
+
+    return accounts
