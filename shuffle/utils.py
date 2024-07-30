@@ -280,6 +280,22 @@ def parse_list_ints(cell: str) -> set[int]:
     return nums
 
 
+def parse_char_to_string_list(char_list: list[chr]) -> list[str]:
+    wordlist = []
+    word = ''
+
+    for char in char_list:
+        if char == ',':
+            wordlist.append(word)
+            word = ''
+        elif char not in '()[]':
+            word += char
+    if word:
+        wordlist.append(word)
+
+    return wordlist
+
+
 def load_accounts() -> set[Account]:
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -307,7 +323,7 @@ def load_accounts() -> set[Account]:
         messages = {message_lookup[index] for index in row['Messages']}
         antisemitic = row['Antisemitic']
         username = row['Username']
-        subscriptions = row['Subscriptions']
+        subscriptions = {sub for sub in parse_char_to_string_list(row['Subscriptions'])}
         account = Account(name=username, messages=messages, initial_subscriptions=subscriptions,
                           antisemite=antisemitic)
         account.set_feature_scores()

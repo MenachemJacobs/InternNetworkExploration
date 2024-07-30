@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict
 
 import nltk.tokenize.casual
-from nltk import word_tokenize, ngrams
+from nltk import ngrams
 from nltk.corpus import stopwords
 from Components.Account import Account
 

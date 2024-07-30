@@ -30,7 +30,7 @@ def create_accounts_by_bulk(names) -> list["Account"]:
 
 
 class Account:
-    def __init__(self, name: str, messages: set['Message'], initial_subscriptions: list['Account'],
+    def __init__(self, name: str, messages: set['Message'], initial_subscriptions: set[str],
                  antisemite=False):
         """
         Initialize an Account.
@@ -45,7 +45,7 @@ class Account:
         self.isAntisemite = antisemite
         self.name = str(name)
         self.messages = messages
-        self.subscriptions = initial_subscriptions
+        self.subscriptions: set[str] = {sub for sub in initial_subscriptions}
 
         """Feature list"""
         self.average_message_score = None
@@ -73,6 +73,7 @@ class Account:
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
+
     def calculate_score_per_day(self):
         """
         Calculate the average score per day for the account.
@@ -86,6 +87,7 @@ class Account:
 
     """Each tweet's score is multiplied by the number of tweet's in a given period. This weighted average is then
     normalized."""
+
     def calculate_score_by_density(self):
         """
         Calculate the weighted by post density for the account.
@@ -123,20 +125,25 @@ class Account:
         Returns:
             Account: The current Account object.
         """
-        # TODO this is also bogus. needs replacing.
         self.secondary_score = Classifier.calculate_secondary_score(self.name, self.feature_list)
         return self
 
-    def set_primary_score(self):
+    def set_primary_score(self, all_accounts):
         """
         Calculate and set the primary score for the account.
         """
-
         if self.secondary_score == 1.0:
             self.set_secondary_score()
 
         collated_score = 0
-        for subscriber in self.subscriptions:
+        subscriber_accounts = []
+
+        for account in all_accounts:
+            if account.name in self.subscriptions:
+                subscriber_accounts.append(account)
+
+        for subscriber in subscriber_accounts:
+            print(subscriber)
             if subscriber.secondary_score == 1.0:
                 subscriber.set_secondary_score()
             collated_score += subscriber.secondary_score

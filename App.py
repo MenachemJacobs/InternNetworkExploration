@@ -7,8 +7,10 @@ from shuffle import utils
 
 accounts = utils.load_accounts()
 
+# TODO this is all screwed up. set_primary_accounts needs to be able to see the accounts and this was the best way I
+#  could think to do it without duplicating account creation on the other side
 for account in accounts:
-    account.set_secondary_score()
+    account.set_primary_score(accounts)
 
 myFinder = CovertLister()
 myFinder.classify(accounts)
