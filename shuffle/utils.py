@@ -280,8 +280,8 @@ def parse_list_ints(cell: str) -> set[int]:
 
 
 def load_accounts() -> set[Account]:
-    message_data = read_csv('shuffle/messages.csv')
-    account_data = read_csv('shuffle/accounts.csv', converters={'Messages': parse_list_ints})
+    message_data = read_csv('../shuffle/messages.csv')
+    account_data = read_csv('../shuffle/accounts.csv', converters={'Messages': parse_list_ints})
 
     # Parse message data into a lookup dictionary
     message_lookup = {}
