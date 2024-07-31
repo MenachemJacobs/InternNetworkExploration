@@ -1,3 +1,5 @@
+import pickle
+
 from pandas import read_csv
 
 from AdversaryRevulsion import CovertLister, investigate_account
@@ -11,6 +13,12 @@ accounts = utils.load_accounts()
 myFinder = CovertLister()
 myFinder.classify(accounts)
 
+with open('../classifiers/rfc_secondary_classifier.pkl', 'rb') as f:
+    secondary_clf = pickle.load(f)
+
+for account in accounts:
+    account.set_primary_score(accounts, secondary_clf)
+
 # Load the true covert accounts from a CSV file
 true_covert = set(read_csv('../../shuffle/covert.csv')['Username'])
 
@@ -21,8 +29,8 @@ path = 'rfc_account_classifier.pkl'
 
 # Extract features and labels for each account
 for account in accounts:
-    features = investigate_account(myFinder, account.name)
-    features.append(account.primary_score)
+    features: list[float] = investigate_account(myFinder, account.name)
+    features.append(float(account.primary_score))
     feature_lists.append(features)
     is_positive_list.append(account.name in true_covert)
 
