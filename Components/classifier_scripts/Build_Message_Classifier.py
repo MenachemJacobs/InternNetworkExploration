@@ -1,4 +1,3 @@
-# Change lines 40 & 40 & 100
 import pickle
 from pathlib import Path
 
@@ -7,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier  # Importing Random Forest C
 from sklearn.feature_extraction.text import TfidfVectorizer  # For converting text to numerical representation
 from sklearn.model_selection import train_test_split  # For splitting data into training and testing sets
 
+# Define the path to the Excel file containing the dataset
 path = Path(__file__).parent.parent.parent / "shuffle/jikeliCorpus.xlsx"
 path = path.relative_to(Path.cwd(),walk_up=True)
 path = path.absolute()
@@ -16,7 +16,7 @@ data = pd.read_excel(path,header=1)
 texts = data['Text'] # "Text" is the column name in the CSV file that contains the tweets
 labels = data['Biased'] # "Biased" is the column name in the CSV file that contains the labels determined by human annotators
 
-# Keep a copy of the original text data
+# Keep a copy of the original text data for reference
 original_texts = texts.copy()
 
 # Convert the text data into numerical values using TF-IDF.
