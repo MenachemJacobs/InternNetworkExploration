@@ -18,9 +18,6 @@ myFinder.classify(accounts)
 gold = read_csv('shuffle/covert.csv')
 covert_gold = set(gold['Username'])
 
-returned_accounts: set = {account[0].name for account in myFinder.covert_accounts[:10]}
-print(returned_accounts)
-
 for feature in myFinder.feature_set:
     print(feature[:10])
 
