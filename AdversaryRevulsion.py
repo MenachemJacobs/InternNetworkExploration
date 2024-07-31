@@ -247,7 +247,6 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
 
                 if i < len(words) - 1:
                     phrase = (words[i], words[i + 1])
-                    print(phrase)
                     if phrase in listener.absolute_hot_phrases:
                         absolute_phrase_list[words[i] + ' ' + words[i + 1]] += 1
                     if phrase in listener.comparative_hot_phrases:
