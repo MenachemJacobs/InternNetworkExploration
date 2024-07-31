@@ -34,4 +34,12 @@ for account in accounts:
     feature_lists.append(features)
     is_positive_list.append(account.name in true_covert)
 
+counter = 0
+for lists in feature_lists:
+    if (lists[6] != 0) ^ (lists[7] != 0.0):
+        print(list)
+    if (lists[6] == 0) and (lists[7] == 0.0):
+        counter += 1
+
+print(counter)
 build_classifier(feature_lists, is_positive_list, path)

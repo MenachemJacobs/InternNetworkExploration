@@ -250,17 +250,18 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
                     if phrase in listener.absolute_hot_phrases:
                         absolute_phrase_list[words[i] + ' ' + words[i + 1]] += 1
                     if phrase in listener.comparative_hot_phrases:
-                        comparative_phrase_list[words[i] + ' ' + words[i + 1] ] += 1
+                        comparative_phrase_list[words[i] + ' ' + words[i + 1]] += 1
 
             if (message.date.strftime('%d-%b-%Y')) in listener.absolute_hot_dates:
                 absolute_date_list[message.date] += 1
             if (message.date.strftime('%d-%b-%Y')) in listener.comparative_hot_dates:
                 comparative_date_list[message.date] += 1
 
-            for name in listener.overt_accounts:
-                # Check if the current message is replying to any message from account 'a'
-                if message.replying_to == name.messages:
-                    replied_to[name] += 1
+            if message.replying_to:
+                for overt in listener.overt_accounts:
+                    message_ids = set(message.ID for message in overt.messages)
+                    if message.replying_to in message_ids:
+                        replied_to[overt.name] += 1
 
         return [
             sum(absolute_word_list.values()),
