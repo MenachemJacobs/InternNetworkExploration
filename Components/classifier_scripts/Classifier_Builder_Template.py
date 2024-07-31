@@ -6,9 +6,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 
-def build_classifier(feature_list, is_positive_list, path):
+def build_classifier(feature_lists, is_positive_list, path):
     # Convert to DataFrame and Series
-    x = pd.DataFrame(feature_list)
+    x = pd.DataFrame(feature_lists)
     y = pd.Series(is_positive_list)
 
     # Step 2: Split the Data
