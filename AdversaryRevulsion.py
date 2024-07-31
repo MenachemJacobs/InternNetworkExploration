@@ -323,3 +323,4 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
             return score_account(account)
 
     print("Couldn't find account", account_name)
+    return [0] * 7  # Return a default value in case account is not found

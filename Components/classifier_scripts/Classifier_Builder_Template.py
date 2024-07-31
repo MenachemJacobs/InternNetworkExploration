@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 
 
 def build_classifier(feature_list, is_positive_list, path):
+    # Convert to DataFrame and Series
     x = pd.DataFrame(feature_list)
     y = pd.Series(is_positive_list)
 

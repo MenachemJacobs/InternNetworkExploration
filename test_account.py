@@ -1,4 +1,3 @@
-import random
 import unittest
 from ContextGeneration.GenerateNameNetworks import *
 from AdversaryRevulsion import *

@@ -3,22 +3,31 @@ import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
 
+account_feature_names = [
+    'abs_words', 'comp_words', 'abs_phrases', 'comp_phrases', 'abs_dates', 'comp_dates', 'replies', 'primary score'
+]
+secondary_feature_names = ['avg score', 'score/day', 'score/density', 'positives/tweet']
 
-# feature_names = ['abs_words', 'comp_words', 'abs_phrases', 'comp_phrases', 'abs_dates', 'comp_dates', 'replies']
-# feature_names = ['avg score', 'score/day', 'score/density', 'positives/tweet']
+account_classifier_address = 'rfc_account_classifier.pkl'
+secondary_classifier_address = 'rfc_secondary_classifier.pkl'
+
 
 def visualize_classifier(directory_address: str, feature_names: list[str]):
-    # Assuming clf is your trained RandomForestClassifier and x is your feature DataFrame
+    # Load the trained RandomForestClassifier
     with open(directory_address, 'rb') as f:
         clf = pickle.load(f)
 
     # Extract feature importance
-    importance = clf.feature_importances_
+    importances = clf.feature_importances_
+
+    # Debug prints
+    print(f"Number of features expected: {len(feature_names)}")
+    print(f"Number of importances returned by the model: {len(importances)}")
 
     # Create a DataFrame with feature names and their importance
     feature_importance_df = pd.DataFrame({
         'Feature': feature_names,
-        'Importance': importance
+        'Importance': importances
     }).sort_values(by='Importance', ascending=False)
 
     # Plotting
@@ -29,3 +38,7 @@ def visualize_classifier(directory_address: str, feature_names: list[str]):
     plt.title('Feature Importance')
     plt.gca().invert_yaxis()  # Highest importance at the top
     plt.show()
+
+
+visualize_classifier(account_classifier_address, account_feature_names)
+visualize_classifier(secondary_classifier_address, secondary_feature_names)
