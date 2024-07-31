@@ -117,6 +117,6 @@ traininingData.index.name = 'Index'
 trainingMessages = messages_to_dataframe(second_overt.union(second_pro))
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
-traininingData.to_csv('trainingAccounts.csv')
-trainingMessages.to_csv('trainingMessages.csv')
+#traininingData.to_csv('trainingAccounts.csv')
+#trainingMessages.to_csv('trainingMessages.csv')
 covertList.to_csv('covert.csv')

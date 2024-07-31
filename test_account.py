@@ -1,20 +1,12 @@
 import unittest
 from ContextGeneration.GenerateNameNetworks import *
 from AdversaryRevulsion import *
-from App import accountData, messageLookup
+from shuffle import utils
 
 
 class TestAccountMethods(unittest.TestCase):
     def setUp(self):
-        self.accounts = set()
-        for index in range(len(accountData['Username'])):
-            msg_indexes = accountData['Messages'][index]
-            msg_list = set()
-            for indice in msg_indexes:
-                msg_list.add(messageLookup[indice])
-            account = Account(accountData['Username'][index], msg_list, accountData['Subscriptions'][index],
-                              accountData['Antisemitic'][index])
-            self.accounts.add(account)
+        self.accounts = utils.load_accounts()
         self.listener = CovertLister()
         self.listener.all_accounts = self.accounts
 
