@@ -1,13 +1,27 @@
+import pickle
+from pathlib import Path
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
 import injectionValues
 from utils import *
+path = Path(__file__).parent.parent / "Components/classifier_scripts/vectorizer.pkl"
+path = path.relative_to(Path.cwd(), walk_up=True)
+with open(path, 'rb') as f:
+    vectorizer: TfidfVectorizer = pickle.load(f)
 
+path = Path(__file__).parent.parent / "Components/classifier_scripts/rfc_message_classifier.pkl"
+path = path.relative_to(Path.cwd(), walk_up=True)
+path = path.absolute()
+with open(path, 'rb') as f:
+    clf: RandomForestClassifier = pickle.load(f)
+    print(clf.classes_)
 # Read Excel file
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
-
+vectors = vectorizer.fit_transform(jikeli['Text'])
 # initialize network of users
 all_users = list(set(jikeli['Username']))
 users = dict()
-
 anti_users, covert_users, pro_users = set(), set(), set()
 overt_messages, pro_messages, covert_messages = set(), set(), set()
 anti_accounts, covert_accounts, pro_accounts = list(), list(), list()
@@ -19,13 +33,12 @@ for i in range(0, len(jikeli['Text'])):
     if jikeli['Username'][i] not in users:
         users[jikeli['Username'][i]] = 0
     message = Message()
-    message.score = jikeli['Biased'][i]
+    message.score = clf.predict_proba(vectors[i])[0][1]
     message.text = jikeli['Text'][i]
     message.date = dates[i]
     message.ID = jikeli['ID'][i]
 
-    if message.score == 1:
-        message.score = random.uniform(0.75, 1)
+    if message.score > 0.5:
         users[jikeli['Username'][i]] += 1
         if numpy.random.choice([True, False]):
             tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
@@ -37,12 +50,10 @@ for i in range(0, len(jikeli['Text'])):
             tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
             tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
             message.text = tweet
-        message.score = random.uniform(0.0, 0.4)
         pro_messages.add(message)
     else:
         if jikeli['Username'][i] not in anti_users and jikeli['Username'][i] not in pro_users:
             covert_users.add(jikeli['Username'][i])
-        message.score = random.uniform(0.0, 0.4)
         tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
         tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
         message.text = tweet
@@ -85,10 +96,10 @@ for account in covert_network_2.keys():
     account.subscriptions = covert_network_2[account]
 overt_msg_list = list(overt_messages)
 pro_msg_list = list(pro_messages)
-first_overt = set(overt_msg_list[:int(len(overt_msg_list)/2)])
-second_overt = set(overt_msg_list[int(len(overt_msg_list)/2):])
-first_pro = set(pro_msg_list[:int(len(pro_msg_list)/2)])
-second_pro = set(pro_msg_list[int(len(pro_msg_list)/2):])
+first_overt = set(overt_msg_list[:int(len(overt_msg_list) / 2)])
+second_overt = set(overt_msg_list[int(len(overt_msg_list) / 2):])
+first_pro = set(pro_msg_list[:int(len(pro_msg_list) / 2)])
+second_pro = set(pro_msg_list[int(len(pro_msg_list) / 2):])
 # Assign messages and replies randomly
 
 assign_messages_randomly(covert_accounts[:10] + anti_accounts[:40], covert_messages)
@@ -106,21 +117,14 @@ reply_net(second_pro, pro_accounts[50:100] + anti_accounts[40:65], 6)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': [account.name for account in covert_accounts[:10]]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
-traininingData = accounts_to_dataframe(pro_accounts[50:100] + anti_accounts[40:80])
 covert_messages = replace_msg_dates(messages=covert_messages,
-                                    dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
+                                    dates=injectionValues.dates,
                                     ratio=0.01)
-overt_messages = replace_msg_dates(messages=overt_messages,
-                                   dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
-                                   ratio=0.05)
+overt_messages = replace_msg_dates(messages=overt_messages, dates=injectionValues.dates,ratio=0.05)
 messageData = messages_to_dataframe(covert_messages.union(first_pro.union(first_overt)))
 messageData.index.name = 'Index'
 accountData.index.name = 'Index'
 covertList.index.name = 'Index'
-traininingData.index.name = 'Index'
-trainingMessages = messages_to_dataframe(second_overt.union(second_pro))
 messageData.to_csv('messages.csv')
 accountData.to_csv('accounts.csv')
-#traininingData.to_csv('trainingAccounts.csv')
-#trainingMessages.to_csv('trainingMessages.csv')
 covertList.to_csv('covert.csv')

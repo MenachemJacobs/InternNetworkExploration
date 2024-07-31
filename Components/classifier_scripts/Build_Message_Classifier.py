@@ -8,13 +8,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer  # For converting te
 from sklearn.model_selection import train_test_split  # For splitting data into training and testing sets
 
 path = Path(__file__).parent.parent.parent / "shuffle/jikeliCorpus.xlsx"
-path = path.relative_to(Path.cwd(),walk_up=True)
+path = path.relative_to(Path.cwd(), walk_up=True)
 path = path.absolute()
-data = pd.read_excel(path,header=1)
+data = pd.read_excel(path, header=1)
 
 # Define the texts (tweets) and labels (0 = Non-antisemitic, 1 = Antisemitic)
-texts = data['Text'] # "Text" is the column name in the CSV file that contains the tweets
-labels = data['Biased'] # "Biased" is the column name in the CSV file that contains the labels determined by human annotators
+texts = data['Text']  # "Text" is the column name in the CSV file that contains the tweets
+labels = data[
+    'Biased']  # "Biased" is the column name in the CSV file that contains the labels determined by human annotators
 
 # Keep a copy of the original text data
 original_texts = texts.copy()
@@ -31,10 +32,8 @@ test_texts = original_texts.iloc[y_test.index]
 
 random_forest = RandomForestClassifier(n_estimators=100, class_weight='balanced', random_state=42)
 
-# Update the classifiers dictionary
-
-
 random_forest.fit(X_train, y_train)
 with open('rfc_message_classifier.pkl', 'wb') as f:
     pickle.dump(random_forest, f)
-
+with open('vectorizer.pkl', 'wb') as f:
+    pickle.dump(vectorizer, f)
