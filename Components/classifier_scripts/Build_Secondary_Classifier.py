@@ -7,7 +7,7 @@ import pickle
 from shuffle import utils
 
 # Step 1: Prepare the Data
-accounts = utils.load_accounts()
+accounts = utils.load_training_accounts()
 
 feature_list = []
 is_positive_list = []
