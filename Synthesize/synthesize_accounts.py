@@ -36,8 +36,8 @@ def synthesize_and_save(metadata, frame: pd.DataFrame, file_path, num_rows=10000
 
 
 # Synthesize and save data
-pro_accounts = synthesize_and_save(pro_data, pro_df, 'shuffle/pro_account_synth.pkl')
-anti_accounts = synthesize_and_save(anti_data, anti_df, 'shuffle/anti_account_synth.pkl')
+pro_accounts = synthesize_and_save(pro_data, pro_df, '../shuffle/pro_account_synth.pkl')
+anti_accounts = synthesize_and_save(anti_data, anti_df, '../shuffle/anti_account_synth.pkl')
 
 training_accounts = pd.concat([pro_accounts, anti_accounts])
-training_accounts.to_csv('shuffle/training_accounts.csv', index=False)
+training_accounts.to_csv('../shuffle/training_accounts.csv', index=False)
