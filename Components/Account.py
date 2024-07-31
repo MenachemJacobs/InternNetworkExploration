@@ -1,5 +1,5 @@
 import math
-from Components import Classifier
+from Components import ClassifierConnectionPoint
 from Components.Message import random_message, Message
 
 
@@ -125,7 +125,7 @@ class Account:
         Returns:
             Account: The current Account object.
         """
-        self.secondary_score = Classifier.calculate_secondary_score(self.name, self.feature_list)
+        self.secondary_score = ClassifierConnectionPoint.calculate_secondary_score(self.name, self.feature_list)
         return self
 
     def set_primary_score(self, all_accounts):
@@ -136,11 +136,7 @@ class Account:
             self.set_secondary_score()
 
         collated_score = 0
-        subscriber_accounts = []
-
-        for account in all_accounts:
-            if account.name in self.subscriptions:
-                subscriber_accounts.append(account)
+        subscriber_accounts = [account for account in all_accounts if account.name in self.subscriptions]
 
         for subscriber in subscriber_accounts:
             if subscriber.secondary_score == 1.0:

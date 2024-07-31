@@ -4,17 +4,24 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import pickle
 
+from pandas import read_csv
+
+from AdversaryRevulsion import CovertLister, investigate_account
 from shuffle import utils
 
 # Step 1: Prepare the Data
 accounts = utils.load_accounts()
 
+myFinder = CovertLister()
+myFinder.classify(accounts)
+true_covert = set(read_csv('../../shuffle/covert.csv')['Username'])
+
 feature_list = []
 is_positive_list = []
 
 for account in accounts:
-    feature_list.append(account.feature_list)
-    is_positive_list.append(account.isAntisemite)
+    feature_list.append(investigate_account(myFinder, account.name))
+    is_positive_list.append(account.name in true_covert)
 
 # Convert to pandas DataFrame
 x = pd.DataFrame(feature_list)
@@ -35,7 +42,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 
 # Step 6: Save the Trained Classifier
-with open('rfc_secondary_classifier.pkl', 'wb') as f:
+with open('rfc_account_classifier.pkl', 'wb') as f:
     pickle.dump(clf, f)
 
 # To Use the saved classifier, simply

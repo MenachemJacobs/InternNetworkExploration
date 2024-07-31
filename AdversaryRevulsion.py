@@ -107,6 +107,8 @@ class CovertLister:
         self.comparative_hot_dates: list[str] = []
         self.absolute_hot_dates: list[str] = []
 
+        # TODO relative and absolute dates
+
         self.feature_set: list[list[str]] = []
 
     def classify(self, all_accounts: set[Account]) -> list[tuple[Account, int]]:
@@ -259,15 +261,22 @@ class CovertLister:
         return self.covert_accounts
 
 
-def investigate_account(listener: CovertLister, account_name: str):
-    word_set = set(listener.absolute_hot_words) | set(listener.comparative_hot_words)
-    phrase_set = set(listener.absolute_hot_phrases) | set(listener.comparative_hot_phrases)
-    date_set = set(listener.absolute_hot_dates) | set(listener.comparative_hot_dates)
+def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
+    """return the feature set scores for an individual account. Scores require the system be trained on overt
+    accounts
 
-    def score_account(account_to_score: Account):
-        word_list: defaultdict[str, int] = defaultdict(int)
-        phrase_list: defaultdict[str, int] = defaultdict(int)
-        date_list: defaultdict[str, int] = defaultdict(int)
+    :return: a list of seven integer values, corresponding to the feature set scores"""
+
+    def score_account(account_to_score: Account) -> list[int]:
+        absolute_word_list: defaultdict[str, int] = defaultdict(int)
+        comparative_word_list: defaultdict[str, int] = defaultdict(int)
+
+        absolute_phrase_list: defaultdict[str, int] = defaultdict(int)
+        comparative_phrase_list: defaultdict[str, int] = defaultdict(int)
+
+        absolute_date_list: defaultdict[str, int] = defaultdict(int)
+        comparative_date_list: defaultdict[str, int] = defaultdict(int)
+
         replied_to: defaultdict[Account, int] = defaultdict(int)
 
         for message in account_to_score.messages:
@@ -276,23 +285,37 @@ def investigate_account(listener: CovertLister, account_name: str):
             for i in range(len(words)):
                 word = words[i]
 
-                if word in word_set:
-                    word_list[word] += 1
+                if word in listener.absolute_hot_words:
+                    absolute_word_list[word] += 1
+                if word in listener.comparative_hot_words:
+                    comparative_word_list[word] += 1
 
                 if i < len(words) - 1:
                     phrase = words[i] + ' ' + words[i + 1]
-                    if phrase in phrase_set:
-                        phrase_list[f"{words[i]} {words[i + 1]}"] += 1
+                    if phrase in listener.absolute_hot_phrases:
+                        absolute_phrase_list[phrase] += 1
+                    if phrase in listener.comparative_hot_phrases:
+                        comparative_phrase_list[phrase] += 1
 
-            if message.date in date_set:
-                date_list[message.date] += 1
+            if message.date in listener.absolute_hot_dates:
+                absolute_date_list[message.date] += 1
+            if message.date in listener.comparative_hot_dates:
+                comparative_date_list[message.date] += 1
 
             for name in listener.overt_accounts:
                 # Check if the current message is replying to any message from account 'a'
-                if message.replying_to in name.messages:
+                if message.replying_to == name.messages:
                     replied_to[name] += 1
 
-        return word_list, phrase_list, date_list, replied_to
+        return [
+            sum(absolute_word_list.values()),
+            sum(comparative_word_list.values()),
+            sum(absolute_phrase_list.values()),
+            sum(comparative_phrase_list.values()),
+            sum(absolute_date_list.values()),
+            sum(comparative_date_list.values()),
+            sum(replied_to.values())
+        ]
 
     for account in listener.all_accounts:
         if account.name == account_name:
