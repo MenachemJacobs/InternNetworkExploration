@@ -1,5 +1,5 @@
 import math
-from Components import ClassifierConnectionPoint
+
 from Components.Message import random_message, Message
 
 
@@ -116,31 +116,36 @@ class Account:
         return sum(message.score for message in flat_list) / len(flat_list)
 
     # return self is necessary for chaining. It is expedient, but perhaps lazy
-    def set_secondary_score(self):
+    def set_secondary_score(self, loaded_clf):
         """
         Set the secondary score for the account.
 
         Returns:
             Account: The current Account object.
         """
-        self.secondary_score = ClassifierConnectionPoint.calculate_secondary_score(self.name, self.feature_list)
+
+        probabilities = loaded_clf.predict_proba([self.feature_list])
+        positive_class_prob = probabilities[0, 1]
+
+        self.secondary_score = positive_class_prob
         return self
 
-    def set_primary_score(self, all_accounts):
+    def set_primary_score(self, all_accounts, loaded_clf):
         """
         Calculate and set the primary score for the account.
 
-        :param all_accounts: all accounts in the system
+        :param loaded_clf: The classifier for secondary score.
+        :param all_accounts: all accounts in the system.
         """
         if self.secondary_score == 1.0:
-            self.set_secondary_score()
+            self.set_secondary_score(loaded_clf)
 
         collated_score = 0
         subscriber_accounts = [account for account in all_accounts if account.name in self.subscriptions]
 
         for subscriber in subscriber_accounts:
             if subscriber.secondary_score == 1.0:
-                subscriber.set_secondary_score()
+                subscriber.set_secondary_score(loaded_clf)
             collated_score += subscriber.secondary_score
 
         """Weight the secondary score of this account twice as heavily as the score from the subscriptions"""
