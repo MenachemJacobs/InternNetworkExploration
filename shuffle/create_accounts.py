@@ -79,11 +79,11 @@ pro_network = follower_network(pro_accounts[:50], pro_accounts[:50], 10)
 covert_network = follower_network(covert_accounts[:10], pro_accounts[:50] + anti_accounts[:40], 10)
 
 for account in anti_network.keys():
-    account.subscriptions = anti_network[account]
+    account.subscriptions = set(anti_network[account])
 for account in pro_network.keys():
-    account.subscriptions = pro_network[account]
+    account.subscriptions = set(pro_network[account])
 for account in covert_network.keys():
-    account.subscriptions = covert_network[account]
+    account.subscriptions = set(covert_network[account])
 anti_network_2 = follower_network(anti_accounts[40:80], anti_accounts[40:80], 10)
 pro_network_2 = follower_network(pro_accounts[50:100], pro_accounts[50:100], 10)
 covert_network_2 = follower_network(covert_accounts[10:20], pro_accounts[50:100] + anti_accounts[40:80], 10)
@@ -109,11 +109,9 @@ assign_messages_randomly(anti_accounts[40:80], second_overt)
 assign_messages_randomly(pro_accounts[:50], first_pro)
 assign_messages_randomly(pro_accounts[50:100], second_pro)
 
-reply_net(covert_messages, covert_accounts[:10] + anti_accounts[:40], 6)
-reply_net(first_overt, anti_accounts[:40] + pro_accounts[:20], 6)
-reply_net(second_overt, anti_accounts[40:80] + pro_accounts[50:70], 6)
-reply_net(first_pro, pro_accounts[:50] + anti_accounts[:25], 6)
-reply_net(second_pro, pro_accounts[50:100] + anti_accounts[40:65], 6)
+reply_net(set(covert_accounts[:10] + anti_accounts[:40]), sub_proba=0.5,ratio=0.7)
+reply_net(set(anti_accounts[:40] + pro_accounts[:20]), sub_proba=0.5,ratio=0.7)
+reply_net(set(pro_accounts[:50] + anti_accounts[:25]), sub_proba=0.5,ratio=0.7)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': [account.name for account in covert_accounts[:10]]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])

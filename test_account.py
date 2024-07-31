@@ -1,3 +1,4 @@
+import pickle
 import unittest
 from ContextGeneration.GenerateNameNetworks import *
 from AdversaryRevulsion import *
@@ -9,10 +10,11 @@ class TestAccountMethods(unittest.TestCase):
         self.accounts = utils.load_accounts()
         self.listener = CovertLister()
         self.listener.all_accounts = self.accounts
+        self.clf = pickle.load(open('Components/classifier_scripts/rfc_secondary_classifier.pkl','rb'))
 
     def test_uncover(self):
         self.assertTrue(self.listener.uncover_overt(), "Not detecting overt accounts.")
-        self.assertTrue(self.listener.uncover_covert(), "Returning empty list of covert accounts.")
+        self.assertTrue(self.listener.classify(self.accounts), "Returning empty list of covert accounts.")
 
     def test_hot_list(self):
         self.listener.uncover_overt()
@@ -30,7 +32,7 @@ class TestAccountMethods(unittest.TestCase):
         pro_sum = 0.0
         num_pro = 0
         for account in self.accounts:
-            account.set_secondary_score()
+            account.set_secondary_score(self.clf)
             if account.isAntisemite:
                 num_overt += 1
                 overt_sum += account.secondary_score

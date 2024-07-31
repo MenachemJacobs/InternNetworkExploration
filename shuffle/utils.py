@@ -116,9 +116,9 @@ def follower_network(followers: list[Account], leaders: list[Account], connectiv
         rand_indices = numpy.random.choice(range(0, len(leaders)), connectivity, replace=False)
         for index in rand_indices:
             if followers[i] in following:
-                following[followers[i]].append(leaders[index])
+                following[followers[i]].append(leaders[index].name)
             else:
-                following[followers[i]] = [leaders[index]]
+                following[followers[i]] = [leaders[index].name]
     return following
 
 
@@ -178,7 +178,7 @@ def accounts_to_dataframe(accounts: list[Account]) -> pd.DataFrame:
     antisemitic = list()
     for account in accounts:
         names.append(str(account.name))
-        subscriptions.append([acc.name for acc in account.subscriptions])
+        subscriptions.append([name for name in account.subscriptions])
         antisemitic.append(account.isAntisemite)
         messages.append(set(int(message.ID) for message in account.messages))
     accounts_df = pd.DataFrame(
@@ -215,48 +215,33 @@ def assign_messages_randomly(accounts: list[Account], messages: set[Message]) ->
         message.username = accounts[user].name
 
 
-def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2) -> None:
-    #TODO: this method is currently not making use of subscriptions due to them being strings now.
-    """Modifies a lost of :param messages in place by having them reply to each other,
-     with a ratio of :param replies_to_msgs responses per message, with messages from
-     :param replies_to_msgs:
-     :param messages:
-     :param accounts being top level messages."""
-    replies_to_msgs = int(replies_to_msgs)
-    if replies_to_msgs < 0 or len(messages) / replies_to_msgs <= 1:
-        raise ValueError("Must be at least one message to reply to, and positive number of replies.")
-    sections = replies_to_msgs + 1
-    top_level_messages = list()
+def reply_net(accounts: set[Account], ratio=0.5, sub_proba=0.5) -> None:
     users = dict()
     for account in accounts:
         users[account.name] = account
-    rand_indices = numpy.random.choice(range(0, len(messages)), int(len(messages) / sections), replace=False)
-    msg_list = list(messages)
-    for index in rand_indices:
-        if msg_list[index].username in users.keys():
-            top_level_messages.append(msg_list[index])
-    replies = set(msg_list)
-    top_level_set = set(top_level_messages)
-    for message in top_level_messages:
-        replies.remove(message)
+    names = {key for key in users.keys()}
+    top_level = set()
+    replies = set()
+    for account in accounts:
+        for message in account.messages:
+            if random.uniform(0, 1) < ratio and message.replying_to == 0:
+                replies.add(message)
+            else:
+                top_level.add(message)
     for message in replies:
-        if message.username in users:
-            user = users[message.username]
-            if numpy.random.choice([True, True, False]) and user.subscriptions:
-                subs = list(user.subscriptions)
-                rand_sub_num = numpy.random.choice(range(len(subs)), 1, replace=False)
-                rand_sub = subs[rand_sub_num[0]]
-                sub_messages = list()
-                for sub_msg in rand_sub.messages:
-                    if sub_msg in top_level_set:
-                        sub_messages.append(sub_msg)
-                if sub_messages:
-                    rand_msg = random.choice(sub_messages)
-                    message.replying_to = rand_msg.ID
-                    continue
-        rand_index = numpy.random.choice(range(len(top_level_messages)))
-        chosen_msg = top_level_messages[rand_index]
-        message.replying_to = chosen_msg.ID
+        user = users[message.username]
+        valid_subs = set()
+        for name in user.subscriptions:
+            if name in names:
+                valid_subs.add(users[name])
+        sub_msgs = set()
+        for sub in valid_subs:
+            sub_msgs = sub_msgs.union(sub.messages.intersection(top_level))
+        if random.uniform(0, 1) < sub_proba and sub_msgs:
+            reply_to: Message = random.choice(list(sub_msgs))
+            message.replying_to = reply_to.ID
+        else:
+            message.replying_to = random.choice(list(top_level)).ID
 
 
 def parse_single_int(cell: str) -> int:
@@ -348,6 +333,7 @@ def load_training_accounts() -> list[Account]:
         account.score_by_density = accounts_data['Density_Score'][i]
         account.average_message_score = accounts_data['Avg_Score'][i]
         account.positives_per_tweet = accounts_data['Positivity'][i]
-        account.feature_list = [account.average_message_score,account.score_per_day,account.score_by_density,account.positives_per_tweet]
+        account.feature_list = [account.average_message_score, account.score_per_day, account.score_by_density,
+                                account.positives_per_tweet]
         accounts.append(account)
     return accounts
