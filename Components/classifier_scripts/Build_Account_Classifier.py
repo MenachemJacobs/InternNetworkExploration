@@ -34,12 +34,13 @@ for account in accounts:
     feature_lists.append(features)
     is_positive_list.append(account.name in true_covert)
 
-counter = 0
+wink_counter = 0
+eyes_counter = 0
 for lists in feature_lists:
-    if (lists[6] != 0) ^ (lists[7] != 0.0):
-        print(list)
+    if (lists[6] == 0) and (lists[7] != 0.0):
+        wink_counter += 1
     if (lists[6] == 0) and (lists[7] == 0.0):
-        counter += 1
+        eyes_counter += 1
 
-print(counter)
+print("eyes", eyes_counter, "winks", wink_counter)
 build_classifier(feature_lists, is_positive_list, path)
