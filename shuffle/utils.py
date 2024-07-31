@@ -216,6 +216,7 @@ def assign_messages_randomly(accounts: list[Account], messages: set[Message]) ->
 
 
 def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2) -> None:
+    #TODO: this method is currently not making use of subscriptions due to them being strings now.
     """Modifies a lost of :param messages in place by having them reply to each other,
      with a ratio of :param replies_to_msgs responses per message, with messages from
      :param replies_to_msgs:
@@ -242,7 +243,7 @@ def reply_net(messages: set[Message], accounts: list[Account], replies_to_msgs=2
         if message.username in users:
             user = users[message.username]
             if numpy.random.choice([True, True, False]) and user.subscriptions:
-                subs = user.subscriptions
+                subs = list(user.subscriptions)
                 rand_sub_num = numpy.random.choice(range(len(subs)), 1, replace=False)
                 rand_sub = subs[rand_sub_num[0]]
                 sub_messages = list()
@@ -332,7 +333,9 @@ def load_accounts() -> set[Account]:
     return accounts
 
 
-def load_training_accounts():
+def load_training_accounts() -> list[Account]:
+    """loads Account objects using feature sets from training_accounts.csv.
+    Accounts are blank aside from isAntiSemite and features needed for secondary score calculation."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     accounts_path = os.path.join(script_dir, 'training_accounts.csv')
