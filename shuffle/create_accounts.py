@@ -121,6 +121,7 @@ covert_messages = replace_msg_dates(messages=covert_messages,
                                     dates=injectionValues.dates,
                                     ratio=0.01)
 overt_messages = replace_msg_dates(messages=overt_messages, dates=injectionValues.dates,ratio=0.05)
+pro_messages = replace_msg_dates(messages=pro_messages, dates=injectionValues.dates,ratio=0.005)
 messageData = messages_to_dataframe(covert_messages.union(first_pro.union(first_overt)))
 messageData.index.name = 'Index'
 accountData.index.name = 'Index'
