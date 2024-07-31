@@ -222,16 +222,14 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
     :return: a list of seven integer values, corresponding to the feature set scores"""
 
     def score_account(account_to_score: Account) -> list[int]:
-        absolute_word_list: defaultdict[str, int] = defaultdict(int)
-        comparative_word_list: defaultdict[str, int] = defaultdict(int)
+        features_dictionaries: defaultdict[str, int] = defaultdict(int)
 
-        absolute_phrase_list: defaultdict[str, int] = defaultdict(int)
-        comparative_phrase_list: defaultdict[str, int] = defaultdict(int)
+        feature_keys = ["absolute_hot_words", "comparative_hot_words", "absolute_hot_phrases",
+                        "comparative_hot_phrases", "absolute_hot_dates", "comparative_hot_dates",
+                        "replying_to"]
 
-        absolute_date_list: defaultdict[str, int] = defaultdict(int)
-        comparative_date_list: defaultdict[str, int] = defaultdict(int)
-
-        replied_to: defaultdict[Account, int] = defaultdict(int)
+        for key in feature_keys:
+            features_dictionaries[key] = 0
 
         for message in account_to_score.messages:
             words = [word for word in tokenizer.tokenize(message.text.lower())
@@ -241,36 +239,29 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
                 word = words[i]
 
                 if word in listener.absolute_hot_words:
-                    absolute_word_list[word] += 1
+                    features_dictionaries[feature_keys[0]] += 1
                 if word in listener.comparative_hot_words:
-                    comparative_word_list[word] += 1
+                    features_dictionaries[feature_keys[1]] += 1
 
                 if i < len(words) - 1:
                     phrase = (words[i], words[i + 1])
                     if phrase in listener.absolute_hot_phrases:
-                        absolute_phrase_list[words[i] + ' ' + words[i + 1]] += 1
+                        features_dictionaries[feature_keys[2]] += 1
                     if phrase in listener.comparative_hot_phrases:
-                        comparative_phrase_list[words[i] + ' ' + words[i + 1] ] += 1
+                        features_dictionaries[feature_keys[3]] += 1
 
             if (message.date.strftime('%d-%b-%Y')) in listener.absolute_hot_dates:
-                absolute_date_list[message.date] += 1
+                features_dictionaries[feature_keys[4]] += 1
             if (message.date.strftime('%d-%b-%Y')) in listener.comparative_hot_dates:
-                comparative_date_list[message.date] += 1
+                features_dictionaries[feature_keys[5]] += 1
 
-            for name in listener.overt_accounts:
-                # Check if the current message is replying to any message from account 'a'
-                if message.replying_to == name.messages:
-                    replied_to[name] += 1
+            if message.replying_to:
+                for overt in listener.overt_accounts:
+                    message_ids = set(message.ID for message in overt.messages)
+                    if message.replying_to in message_ids:
+                        features_dictionaries[feature_keys[6]] += 1
 
-        return [
-            sum(absolute_word_list.values()),
-            sum(comparative_word_list.values()),
-            sum(absolute_phrase_list.values()),
-            sum(comparative_phrase_list.values()),
-            sum(absolute_date_list.values()),
-            sum(comparative_date_list.values()),
-            sum(replied_to.values())
-        ]
+        return [features_dictionaries[key] for key in feature_keys]
 
     for account in listener.all_accounts:
         if account.name == account_name:
