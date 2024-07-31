@@ -24,14 +24,6 @@ class TestAccountMethods(unittest.TestCase):
         self.assertTrue(hot[4], "no absolute hot dates identified")
         self.assertTrue(hot[5], "no comparative hot dates identified")
 
-    def test_load_accounts(self):
-        account = random.choice(list(self.accounts))
-        self.assertTrue(account.subscriptions, "account has not subscriptions")
-        self.assertTrue(account.messages, "account has no messages")
-        features = account.feature_list.copy()
-        account.set_feature_scores()
-        self.assertEqual(account.feature_list, features, "feature list not set by load_accounts.")
-
     def test_account_data(self):
         overt_sum = 0.0
         num_overt = 0

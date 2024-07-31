@@ -2,6 +2,7 @@ import pickle
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 
 account_feature_names = [
     'abs_words', 'comp_words', 'abs_phrases', 'comp_phrases', 'abs_dates', 'comp_dates', 'replies', 'primary score'
@@ -15,11 +16,12 @@ secondary_classifier_address = 'rfc_secondary_classifier.pkl'
 def visualize_classifier(directory_address: str, feature_names: list[str]):
     # Load the trained RandomForestClassifier
     with open(directory_address, 'rb') as f:
-        clf = pickle.load(f)
+        clf: RandomForestClassifier = pickle.load(f)
 
     # Extract feature importance
-    importances = clf.feature_importances_
 
+    importances = clf.feature_importances_
+    print(importances)
     # Debug prints
     print(f"Number of features expected: {len(feature_names)}")
     print(f"Number of importances returned by the model: {len(importances)}")
