@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def calculate_secondary_score(account_name: str, feature_list: list) -> float:
-    with open('Components/random_forest_classifier.pkl', 'rb') as f:
+    with open('Components/classifiers/rfc_secondary_classifier.pkl', 'rb') as f:
         loaded_clf = pickle.load(f)
 
     new_data = pd.DataFrame([feature_list])  # Replace with actual new feature data
