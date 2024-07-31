@@ -35,7 +35,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 
 # Step 6: Save the Trained Classifier
-with open('random_forest_classifier.pkl', 'wb') as f:
+with open('rfc_secondary_classifier.pkl', 'wb') as f:
     pickle.dump(clf, f)
 
 # To Use the saved classifier, simply

@@ -14,9 +14,9 @@ accounts = list(utils.load_accounts())
 
 for index, acc in enumerate(accounts):
     acc.set_feature_scores()
-    df = anti_df if acc.isAntisemite else pro_df
-    df.loc[index] = [acc.average_message_score, acc.score_per_day, acc.score_by_density, acc.positives_per_tweet,
-                     acc.isAntisemite]
+    data_frame = anti_df if acc.isAntisemite else pro_df
+    data_frame.loc[index] = [acc.average_message_score, acc.score_per_day, acc.score_by_density,
+                             acc.positives_per_tweet, acc.isAntisemite]
 
 
 # Function to perform synthesis and save
