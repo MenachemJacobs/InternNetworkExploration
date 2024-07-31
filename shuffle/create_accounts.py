@@ -33,6 +33,10 @@ for i in range(0, len(jikeli['Text'])):
             message.text = tweet
         overt_messages.add(message)
     elif numpy.random.choice([True, True, True, False]):
+        if numpy.random.choice([True, False, False, False, False]):
+            tokens = (replace_words(tokens=clean(message.text), replacing=injectionValues.hot_words, ratio=0.05))
+            tweet = ' '.join(insert_bigrams(tokens=tokens, bigrams=injectionValues.hot_phrases, num_insertions=1))
+            message.text = tweet
         message.score = random.uniform(0.0, 0.4)
         pro_messages.add(message)
     else:
@@ -105,7 +109,7 @@ accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + a
 traininingData = accounts_to_dataframe(pro_accounts[50:100] + anti_accounts[40:80])
 covert_messages = replace_msg_dates(messages=covert_messages,
                                     dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
-                                    ratio=0.005)
+                                    ratio=0.01)
 overt_messages = replace_msg_dates(messages=overt_messages,
                                    dates=[datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)],
                                    ratio=0.05)

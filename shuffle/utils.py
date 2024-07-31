@@ -344,8 +344,10 @@ def load_training_accounts() -> list[Account]:
     for i in range(len(accounts_data.index)):
         account = random_account('training_account_' + str(i))
         account.isAntisemite = accounts_data['Antisemitic'][i]
+        account.score_per_day = accounts_data['Age_Score'][i]
         account.score_by_density = accounts_data['Density_Score'][i]
         account.average_message_score = accounts_data['Avg_Score'][i]
         account.positives_per_tweet = accounts_data['Positivity'][i]
+        account.feature_list = [account.average_message_score,account.score_per_day,account.score_by_density,account.positives_per_tweet]
         accounts.append(account)
     return accounts
