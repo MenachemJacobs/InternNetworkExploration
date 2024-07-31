@@ -73,7 +73,6 @@ class Account:
 
     """Averaging will only work when both the numerator (the number of messages), and the denominator are non-zero. 
     This requires the account to be at least one day old."""
-
     def calculate_score_per_day(self):
         """
         Calculate the average score per day for the account.
@@ -87,10 +86,9 @@ class Account:
 
     """Each tweet's score is multiplied by the number of tweet's in a given period. This weighted average is then
     normalized."""
-
     def calculate_score_by_density(self):
         """
-        Calculate the weighted by post density for the account.
+        Calculate the weighted by message density for the account.
 
         Returns:
             float: The density-based score.
@@ -131,6 +129,8 @@ class Account:
     def set_primary_score(self, all_accounts):
         """
         Calculate and set the primary score for the account.
+
+        :param all_accounts: all accounts in the system
         """
         if self.secondary_score == 1.0:
             self.set_secondary_score()

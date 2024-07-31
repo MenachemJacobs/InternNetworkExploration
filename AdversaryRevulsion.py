@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict
+from typing import List
 
 import nltk.tokenize.casual
 from nltk import ngrams
@@ -96,7 +97,7 @@ class CovertLister:
         """
         self.all_accounts: set[Account] = set()
         self.overt_accounts: set[Account] = set()
-        self.covert_accounts: list[tuple[Account, int]] = []
+        # self.covert_accounts: list[tuple[Account, int]] = []
 
         self.comparative_hot_words: list[str] = []
         self.absolute_hot_words: list[str] = []
@@ -111,7 +112,7 @@ class CovertLister:
 
         self.feature_set: list[list[str]] = []
 
-    def classify(self, all_accounts: set[Account]) -> list[tuple[Account, int]]:
+    def classify(self, all_accounts: set[Account]) -> list[list[str]]:
         """
         Classifies accounts by identifying overt accounts, compiling feature sets, and uncovering covert accounts.
 
@@ -119,15 +120,15 @@ class CovertLister:
             all_accounts (set[Account]): set of all Account objects to be analyzed.
 
         Returns:
-            set[Account]: set of covert Account objects identified after classification.
+            list[list]: the feature set containing all the scored features.
         """
         self.all_accounts: set[Account] = set(account for account in all_accounts)
 
         self.uncover_overt()  # Identifies overt accounts
         self.compile_feature_set()  # Compiles feature set
-        self.uncover_covert()  # Identifies covert accounts
+        # self.uncover_covert()  # Identifies covert accounts
 
-        return self.covert_accounts
+        return self.feature_set
 
     def uncover_overt(self) -> set["Account"]:
         """
@@ -215,54 +216,54 @@ class CovertLister:
 
         return self.feature_set
 
-    def uncover_covert(self) -> list[tuple["Account", int]]:
-        """
-        Identifies covert accounts based on message content and hot word/phrase lists.
-
-        Returns:
-            list[tuple[Account, int]]: List of tuples, each containing a covert Account object and its associated score.
-        """
-        suspicious_accounts = self.all_accounts - self.overt_accounts
-
-        word_set = set(self.absolute_hot_words) | set(self.comparative_hot_words)
-        phrase_set = set(self.absolute_hot_phrases) | set(self.comparative_hot_phrases)
-        date_set = set(self.absolute_hot_dates) | set(self.comparative_hot_dates)
-
-        accounts_with_score = []
-
-        for account in suspicious_accounts:
-            account_score = 0
-
-            for message in account.messages:
-                words = [word for word in message.text.lower().split() if word in word_set]
-                tokenizer.tokenize(message.text.lower())
-
-                word_score = sum(word in word_set for word in words)
-                phrase_score = sum(f"{words[i]} {words[i + 1]}" in phrase_set for i in range(len(words) - 1))
-                date_score = message.date.strftime('%d-%b-%Y') in date_set
-
-                account_score += word_score + phrase_score + date_score
-
-                # TODO replying_to may be an account
-                # score for responses
-                if any(message.replying_to in a.messages for a in self.overt_accounts):
-                    account_score += 1
-
-            accounts_with_score.append((account, account_score))
-
-        # Sort accounts by score in descending order
-        accounts_with_score.sort(key=lambda x: x[1], reverse=True)
-
-        # TODO this should be the accounts whose primary scores now top 0.5
-        # take only the first 10% of the list
-        top_10_percent_index = max(len(accounts_with_score) // 10, 10)
-        self.covert_accounts = accounts_with_score[:top_10_percent_index]
-
-        return self.covert_accounts
+    # def uncover_covert(self) -> list[tuple["Account", int]]:
+    #     """
+    #     Identifies covert accounts based on message content and hot word/phrase lists.
+    #
+    #     Returns:
+    #         list[tuple[Account, int]]: List of tuples, each containing a covert Account object and its associated score.
+    #     """
+    #     suspicious_accounts = self.all_accounts - self.overt_accounts
+    #
+    #     word_set = set(self.absolute_hot_words) | set(self.comparative_hot_words)
+    #     phrase_set = set(self.absolute_hot_phrases) | set(self.comparative_hot_phrases)
+    #     date_set = set(self.absolute_hot_dates) | set(self.comparative_hot_dates)
+    #
+    #     accounts_with_score = []
+    #
+    #     for account in suspicious_accounts:
+    #         account_score = 0
+    #
+    #         for message in account.messages:
+    #             words = [word for word in message.text.lower().split() if word in word_set]
+    #             tokenizer.tokenize(message.text.lower())
+    #
+    #             word_score = sum(word in word_set for word in words)
+    #             phrase_score = sum(f"{words[i]} {words[i + 1]}" in phrase_set for i in range(len(words) - 1))
+    #             date_score = message.date.strftime('%d-%b-%Y') in date_set
+    #
+    #             account_score += word_score + phrase_score + date_score
+    #
+    #             # TODO replying_to may be an account
+    #             # score for responses
+    #             if any(message.replying_to in a.messages for a in self.overt_accounts):
+    #                 account_score += 1
+    #
+    #         accounts_with_score.append((account, account_score))
+    #
+    #     # Sort accounts by score in descending order
+    #     accounts_with_score.sort(key=lambda x: x[1], reverse=True)
+    #
+    #     # TODO this should be the accounts whose primary scores now top 0.5
+    #     # take only the first 10% of the list
+    #     top_10_percent_index = max(len(accounts_with_score) // 10, 10)
+    #     self.covert_accounts = accounts_with_score[:top_10_percent_index]
+    #
+    #     return self.covert_accounts
 
 
 def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
-    """return the feature set scores for an individual account. Scores require the system be trained on overt
+    """return the feature set scores for an individual account. Scores require the system already be trained on overt
     accounts
 
     :return: a list of seven integer values, corresponding to the feature set scores"""
@@ -321,4 +322,4 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
         if account.name == account_name:
             return score_account(account)
 
-    print("Couldn't find account")
+    print("Couldn't find account", account_name)
