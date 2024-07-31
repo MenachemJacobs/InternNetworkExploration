@@ -14,8 +14,8 @@ data = pd.read_excel(path, header=1)
 
 # Define the texts (tweets) and labels (0 = Non-antisemitic, 1 = Antisemitic)
 texts = data['Text']  # "Text" is the column name in the CSV file that contains the tweets
-labels = data[
-    'Biased']  # "Biased" is the column name in the CSV file that contains the labels determined by human annotators
+labels = data['Biased']  # "Biased" is the column name in the CSV file that contains the labels determined by human
+# annotators
 
 # Keep a copy of the original text data for reference
 original_texts = texts.copy()
