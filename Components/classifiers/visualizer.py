@@ -21,7 +21,6 @@ def visualize_classifier(directory_address: str, feature_names: list[str]):
     # Extract feature importance
 
     importances = clf.feature_importances_
-    print(importances)
     # Debug prints
     print(f"Number of features expected: {len(feature_names)}")
     print(f"Number of importances returned by the model: {len(importances)}")
