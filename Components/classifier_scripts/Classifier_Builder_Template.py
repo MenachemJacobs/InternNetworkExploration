@@ -25,6 +25,8 @@ def build_classifier(feature_list, is_positive_list, path):
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {accuracy}")
 
+    print(clf.feature_importances_)
+
     # Step 6: Save the Trained Classifier
     with open(path, 'wb') as f:
         pickle.dump(clf, f)
