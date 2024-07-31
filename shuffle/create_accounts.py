@@ -6,20 +6,15 @@ jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
 
 # initialize network of users
 all_users = list(set(jikeli['Username']))
-anti_users = set()
-covert_users = set()
-pro_users = set()
+users = dict()
 
-# prepare message and dates lists
-overt_messages = set()
-pro_messages = set()
-covert_messages = set()
+anti_users, covert_users, pro_users = set(), set(), set()
+overt_messages, pro_messages, covert_messages = set(), set(), set()
+anti_accounts, covert_accounts, pro_accounts = list(), list(), list()
+
 dates = clustered_random_dates(datetime(2012, 6, 15, 11, 36, 24), cluster_size=10, num_cluster=1130,
                                remainder=11)
-anti_accounts = list()
-covert_accounts = list()
-pro_accounts = list()
-users = dict()
+
 for i in range(0, len(jikeli['Text'])):
     if jikeli['Username'][i] not in users:
         users[jikeli['Username'][i]] = 0
