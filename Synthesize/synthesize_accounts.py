@@ -20,8 +20,8 @@ for index, acc in enumerate(accounts):
 
 
 # Function to perform synthesis and save
-def synthesize_and_save(metadata, df, file_path, num_rows=10000):
-    metadata.detect_from_dataframe(df)
+def synthesize_and_save(metadata, frame: pd.DataFrame, file_path, num_rows=10000):
+    metadata.detect_from_dataframe(frame)
     metadata.update_column('Avg_Score', sdtype='numerical')
     metadata.update_column('Density_Score', sdtype='numerical')
     metadata.update_column('Positivity', sdtype='numerical')
@@ -29,7 +29,7 @@ def synthesize_and_save(metadata, df, file_path, num_rows=10000):
     metadata.update_column('Age_Score', sdtype='numerical')
 
     synth = TVAESynthesizer(metadata, enforce_min_max_values=True)
-    synth.fit(df)
+    synth.fit(frame)
     sampled_data = synth.sample(num_rows=num_rows)
     synth.save(file_path)
     return sampled_data

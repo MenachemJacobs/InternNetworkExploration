@@ -4,7 +4,6 @@ from ContextGeneration import Diagnostics
 
 from AdversaryRevulsion import CovertLister
 from shuffle import utils
-
 accounts = utils.load_accounts()
 
 # TODO this is all screwed up. set_primary_accounts needs to be able to see the accounts and this was the best way I
