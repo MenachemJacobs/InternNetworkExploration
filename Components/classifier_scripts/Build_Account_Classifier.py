@@ -16,7 +16,7 @@ is_positive_list = []
 path = 'rfc_account_classifier.pkl'
 
 for account in accounts:
-    feature_list.append(investigate_account(myFinder, account.name))
+    feature_list.append(investigate_account(myFinder, account.name).append(account.primary_score))
     is_positive_list.append(account.name in true_covert)
 
 build_classifier(feature_list, is_positive_list, path)

@@ -35,6 +35,6 @@ class Message:
     def testing_constructor(self, date, text, score) -> "Message":
         self.date: datetime = date
         self.text: str = text
-        self.score: int = score
+        self.score: float = score
 
         return self
