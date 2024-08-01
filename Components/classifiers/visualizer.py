@@ -1,4 +1,5 @@
 import pickle
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,11 +10,11 @@ account_feature_names = [
 ]
 secondary_feature_names = ['avg score', 'score/day', 'score/density', 'positives/tweet']
 
-account_classifier_address = 'rfc_account_classifier.pkl'
-secondary_classifier_address = 'rfc_secondary_classifier.pkl'
+account_classifier_address = Path(__file__).parent / 'rfc_account_classifier.pkl'
+secondary_classifier_address =  Path(__file__).parent / 'rfc_secondary_classifier.pkl'
 
 
-def visualize_classifier(directory_address: str, feature_names: list[str]):
+def visualize_classifier(directory_address: Path, feature_names: list[str]):
     # Load the trained RandomForestClassifier
     with open(directory_address, 'rb') as f:
         clf: 'RandomForestClassifier' = pickle.load(f)

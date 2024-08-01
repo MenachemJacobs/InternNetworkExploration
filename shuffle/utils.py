@@ -16,7 +16,7 @@ from Components.Message import Message
 
 stopList = set(stopwords.words('english'))
 lem = WordNetLemmatizer()
-escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v'}
+escape = {'\'', '\\', '\n', '\r', '\t', '\b', '\f', '\v','/n'}
 
 
 def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
@@ -61,7 +61,7 @@ def clean(text: str):
     words = list()
     for word in word_tokenize(text):
         if word not in string.punctuation and word not in escape:
-            words.append(word.lower())
+            words.append(word.lower().replace('  ', ' '))
     return words
 
 

@@ -2,7 +2,7 @@ import pickle
 import pandas as pd
 from shuffle import utils
 
-secondary_path = 'Components/classifiers/fc_secondary_classifier.pkl'
+secondary_path = 'Components/classifiers/rfc_secondary_classifier.pkl'
 account_path = 'Components/classifiers/rfc_account_classifier.pkl'
 
 accounts = utils.load_accounts()
