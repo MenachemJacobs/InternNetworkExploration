@@ -250,9 +250,10 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
                     if phrase in listener.comparative_hot_phrases:
                         features_dictionaries[feature_keys[3]] += 1
 
-            if (message.date.strftime('%d-%b-%Y')) in listener.absolute_hot_dates:
+            formatted_date = str(message.date.strftime('%d-%b-%Y'))
+            if formatted_date in listener.absolute_hot_dates:
                 features_dictionaries[feature_keys[4]] += 1
-            if (message.date.strftime('%d-%b-%Y')) in listener.comparative_hot_dates:
+            if formatted_date in listener.comparative_hot_dates:
                 features_dictionaries[feature_keys[5]] += 1
 
             if message.replying_to:
@@ -261,7 +262,8 @@ def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
                     if message.replying_to in message_ids:
                         features_dictionaries[feature_keys[6]] += 1
 
-        return [features_dictionaries[key] for key in feature_keys]
+        values = [features_dictionaries[key] for key in feature_keys]
+        return values
 
     for account in listener.all_accounts:
         if account.name == account_name:

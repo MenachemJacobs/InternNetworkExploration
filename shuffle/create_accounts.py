@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 import injectionValues
 from utils import *
+
 path = Path(__file__).parent.parent / "Components/classifier_scripts/vectorizer.pkl"
 path = path.relative_to(Path.cwd(), walk_up=True)
 with open(path, 'rb') as f:
@@ -109,17 +110,17 @@ assign_messages_randomly(anti_accounts[40:80], second_overt)
 assign_messages_randomly(pro_accounts[:50], first_pro)
 assign_messages_randomly(pro_accounts[50:100], second_pro)
 
-reply_net(set(covert_accounts[:10] + anti_accounts[:40]), sub_proba=0.5,ratio=0.7)
-reply_net(set(anti_accounts[:40] + pro_accounts[:20]), sub_proba=0.5,ratio=0.7)
-reply_net(set(pro_accounts[:50] + anti_accounts[:25]), sub_proba=0.5,ratio=0.7)
+reply_net(set(covert_accounts[:10] + anti_accounts[:40]), sub_proba=0.5, ratio=0.7)
+reply_net(set(anti_accounts[:40] + pro_accounts[:20]), sub_proba=0.5, ratio=0.7)
+reply_net(set(pro_accounts[:50] + anti_accounts[:25]), sub_proba=0.5, ratio=0.7)
 # Save data tables to CSV
 covertList = pd.DataFrame({'Username': [account.name for account in covert_accounts[:10]]})
 accountData = accounts_to_dataframe(covert_accounts[:10] + pro_accounts[:50] + anti_accounts[:40])
 covert_messages = replace_msg_dates(messages=covert_messages,
                                     dates=injectionValues.dates,
                                     ratio=0.01)
-overt_messages = replace_msg_dates(messages=overt_messages, dates=injectionValues.dates,ratio=0.05)
-pro_messages = replace_msg_dates(messages=pro_messages, dates=injectionValues.dates,ratio=0.005)
+overt_messages = replace_msg_dates(messages=overt_messages, dates=injectionValues.dates, ratio=0.05)
+pro_messages = replace_msg_dates(messages=pro_messages, dates=injectionValues.dates, ratio=0.005)
 messageData = messages_to_dataframe(covert_messages.union(first_pro.union(first_overt)))
 messageData.index.name = 'Index'
 accountData.index.name = 'Index'
