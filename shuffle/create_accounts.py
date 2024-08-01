@@ -18,7 +18,7 @@ with open(path, 'rb') as f:
     print(clf.classes_)
 # Read Excel file
 jikeli = pd.read_excel('jikeliCorpus.xlsx', header=1)
-vectors = vectorizer.fit_transform(jikeli['Text'])
+vectors = vectorizer.transform(jikeli['Text'])
 # initialize network of users
 all_users = list(set(jikeli['Username']))
 users = dict()

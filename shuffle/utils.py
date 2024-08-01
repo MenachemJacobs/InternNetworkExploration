@@ -327,7 +327,7 @@ def load_training_accounts() -> list[Account]:
     accounts_data = read_csv(accounts_path)
     accounts = list()
     for i in range(len(accounts_data.index)):
-        account = random_account('training_account_' + str(i))
+        account = Account('training_account_' + str(i), {Message()},set(""))
         account.isAntisemite = accounts_data['Antisemitic'][i]
         account.score_per_day = accounts_data['Age_Score'][i]
         account.score_by_density = accounts_data['Density_Score'][i]
