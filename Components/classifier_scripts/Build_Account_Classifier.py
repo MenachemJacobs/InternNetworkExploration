@@ -5,6 +5,7 @@ from pathlib import Path
 from pandas import read_csv
 
 from AdversaryRevulsion import CovertLister, investigate_account
+from Components.classifier_scripts.Build_Secondary_Classifier import build_secondary_classifier
 from Components.classifier_scripts.Classifier_Builder_Template import build_classifier
 from shuffle import utils
 from Synthesize.synthesize_accounts import train_accounts
@@ -16,8 +17,10 @@ def build_account_classifier():
     with open(json_path, 'r') as f:
         flags: dict = json.load(f)
         f.close()
-    if 'training_accounts' not in flags.keys() or not flags['training_accounts']:
+    if 'training_accounts' not in flags.keys() or flags['training_accounts'] == 'false':
         train_accounts()
+    if 'secondary_classifier' not in flags.keys() or flags['secondary_classifier'] == 'false':
+        build_secondary_classifier()
     # Step 1: Prepare the Data
     accounts = utils.load_accounts()
 
@@ -58,6 +61,9 @@ def build_account_classifier():
     build_classifier(feature_lists, is_positive_list, path)
     with open(json_path, 'w') as f:
         flags['account_classifier'] = True
+        flags['secondary_classifier'] = False
+        flags['training_accounts'] = False
+        flags['create_accounts'] = False
         json.dump(flags, f)
         f.close()
 

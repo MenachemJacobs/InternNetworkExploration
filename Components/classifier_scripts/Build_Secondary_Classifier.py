@@ -12,7 +12,7 @@ def build_secondary_classifier():
     with open(json_path, 'r') as f:
         flags: dict = json.load(f)
         f.close()
-    if 'create_accounts' not in flags.keys() or not flags['create_accounts']:
+    if 'create_accounts' not in flags.keys() or flags['create_accounts'] == 'false':
         create_accounts()
     # Step 1: Prepare the Data
     accounts = utils.load_training_accounts()
