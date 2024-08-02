@@ -31,15 +31,15 @@ def insert_tokens(num_insertions: int, tokens: list[str], inserting: list[str]):
     return new_tokens
 
 
-def insert_bigrams(num_insertions: int, tokens: list[str], bigrams: list[tuple[str, str]]) -> list[str]:
+def insert_bigrams(tokens: list[str], bigrams: list[tuple[str, str]],ratio=0.25,) -> list[str]:
     """Randomly insert :param num_insertions bigrams from list :param bigrams into list :param tokens and return the
     list; does not modify list in place."""
     new_tokens = tokens.copy()
-    for inserted in range(num_insertions):
-        rand_index = random.randint(0, len(tokens) - 1)
-        bigram_index = numpy.random.choice(range(len(bigrams)))
-        rand_bigram = bigrams[bigram_index][0] + " " + bigrams[bigram_index][1]
-        new_tokens.insert(rand_index, rand_bigram)
+    for index in range(len(new_tokens)):
+        if random.uniform(0, 1) < ratio:
+            rand_bigram_tup = random.choice(bigrams)
+            rand_bigram = rand_bigram_tup[0] + " " + rand_bigram_tup[1]
+            new_tokens.insert(index, rand_bigram)
     return new_tokens
 
 
@@ -50,9 +50,9 @@ def replace_words(tokens: list[str], replacing: list[str], ratio=0.25) -> list[s
     if ratio < 0 or ratio > 1:
         raise ValueError("ratio must be between 0 and 1")
     new_tokens = tokens.copy()
-    rand_indices = numpy.random.choice(range(0, len(tokens)), int(ratio * len(tokens)))
-    for i in rand_indices:
-        new_tokens[i] = numpy.random.choice(replacing).lower()
+    for i in range(len(new_tokens)):
+        if random.uniform(0, 1) < ratio:
+            new_tokens[i] = numpy.random.choice(replacing).lower()
     return new_tokens
 
 

@@ -2,7 +2,7 @@
 import pickle
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
 
 
@@ -23,13 +23,19 @@ def build_classifier(feature_lists, is_positive_list, path):
     # Step 5: Evaluate the Classifier (Optional)
     y_pred = clf.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
     print(f"Accuracy: {accuracy}")
-
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
     print(clf.feature_importances_)
 
     # Step 6: Save the Trained Classifier
     with open(path, 'wb') as f:
         pickle.dump(clf, f)
+        f.close()
 
     # To Use the saved classifier, simply
     # with open('random_forest_classifier.pkl', 'rb') as f:

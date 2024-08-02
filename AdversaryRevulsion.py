@@ -5,7 +5,7 @@ from nltk import ngrams
 from nltk.corpus import stopwords
 from Components.Account import Account
 
-uninteresting_word_list = {"https", "zionazi", "zionazis", "kikes"}
+uninteresting_word_list = {}
 tokenizer = nltk.tokenize.casual.TweetTokenizer()
 stop_words = set(stopwords.words('english'))
 
@@ -136,20 +136,7 @@ class CovertLister:
             set[Account]: Set of overt Account objects.
         """
 
-        # TODO replace placeholder when true classifier is developed
-        def test_account(account) -> bool:
-            """
-            Placeholder method to test if an account is overt.
-
-            Args:
-                account (Account): An Account object to be tested.
-
-            Returns:
-                bool: True if the account is identified as overt; False otherwise.
-            """
-            return account.isAntisemite
-
-        self.overt_accounts = set(account for account in self.all_accounts if test_account(account))
+        self.overt_accounts = set(account for account in self.all_accounts if account.primary_score > 0.5)
 
         return self.overt_accounts
 
@@ -215,14 +202,14 @@ class CovertLister:
         return self.feature_set
 
 
-def investigate_account(listener: CovertLister, account_name: str) -> list[int]:
+def investigate_account(listener: CovertLister, account_name: str) -> list[float]:
     """return the feature set scores for an individual account. Scores require the system already be trained on overt
     accounts
 
     :return: a list of seven integer values, corresponding to the feature set scores"""
 
-    def score_account(account_to_score: Account) -> list[int]:
-        features_dictionaries: defaultdict[str, int] = defaultdict(int)
+    def score_account(account_to_score: Account) -> list[float]:
+        features_dictionaries: defaultdict[str, float] = defaultdict(float)
 
         feature_keys = ["absolute_hot_words", "comparative_hot_words", "absolute_hot_phrases",
                         "comparative_hot_phrases", "absolute_hot_dates", "comparative_hot_dates",

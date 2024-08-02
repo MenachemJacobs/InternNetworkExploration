@@ -8,7 +8,6 @@ from AdversaryRevulsion import CovertLister, investigate_account
 from Components.classifier_scripts.Build_Secondary_Classifier import build_secondary_classifier
 from Components.classifier_scripts.Classifier_Builder_Template import build_classifier
 from shuffle import utils
-from Synthesize.synthesize_accounts import train_accounts
 
 
 def build_account_classifier():
@@ -17,25 +16,32 @@ def build_account_classifier():
     with open(json_path, 'r') as f:
         flags: dict = json.load(f)
         f.close()
-    if 'training_accounts' not in flags.keys() or flags['training_accounts'] == 'false':
-        train_accounts()
-    if 'secondary_classifier' not in flags.keys() or flags['secondary_classifier'] == 'false':
+    if 'secondary_classifier' not in flags or not flags['secondary_classifier']:
         build_secondary_classifier()
     # Step 1: Prepare the Data
     accounts = utils.load_accounts()
-
-    # Initialize CovertLister
-    myFinder = CovertLister()
-    myFinder.classify(accounts)
-
+    # Load the true covert accounts from a CSV file
+    true_covert = set(read_csv('../../shuffle/covert.csv')['Username'])
     with open('../classifiers/rfc_secondary_classifier.pkl', 'rb') as f:
         secondary_clf = pickle.load(f)
 
     for account in accounts:
+        account.set_feature_scores()
+        account.set_secondary_score(secondary_clf)
         account.set_primary_score(accounts, secondary_clf)
 
-    # Load the true covert accounts from a CSV file
-    true_covert = set(read_csv('../../shuffle/covert.csv')['Username'])
+    # Initialize CovertLister
+    myFinder = CovertLister()
+    myFinder.classify(accounts)
+    print(myFinder.absolute_hot_words[:10])
+    print(myFinder.absolute_hot_phrases[:10])
+    print(myFinder.absolute_hot_dates[:10])
+    print(myFinder.comparative_hot_words[:10])
+    print(myFinder.comparative_hot_phrases[:10])
+    print(myFinder.comparative_hot_dates[:10])
+
+
+
 
     # Initialize lists to store features and labels
     feature_lists = []
@@ -64,6 +70,7 @@ def build_account_classifier():
         flags['secondary_classifier'] = False
         flags['training_accounts'] = False
         flags['create_accounts'] = False
+        flags['message_classifier'] = False
         json.dump(flags, f)
         f.close()
 

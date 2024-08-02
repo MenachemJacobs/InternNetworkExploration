@@ -10,4 +10,4 @@ hot_phrases = [("Each", "each"), ("Brighter", "bitter"), ("Mob", "mab"), ("Pony"
                ("Case", "Ears"), ("Steele", "Bubble"), ("Neon", "Graffiti"), ("Warehouse", "Boulevard"),
                ("Asphalt", "Metro"), ("Sediment", "Plateau"), ("Mesa", "Quarts"), ("Edition", "Circulation")]
 
-dates = [datetime(2012, 1, 18), datetime(2012, 7, 15), datetime(2012, 8, 16)]
+dates = [datetime(2012, 9, 18), datetime(2012, 7, 15), datetime(2012, 8, 16),datetime(2012,12,14),datetime(2012,11,20)]

@@ -16,7 +16,7 @@ def synthesize_and_save(metadata, frame: pd.DataFrame, file_path, num_rows=10000
     metadata.update_column('Antisemitic', sdtype='boolean')
     metadata.update_column('Age_Score', sdtype='numerical')
 
-    synth = TVAESynthesizer(metadata, enforce_min_max_values=True)
+    synth = TVAESynthesizer(metadata, enforce_min_max_values=True,enforce_rounding=True)
     synth.fit(frame)
     sampled_data = synth.sample(num_rows=num_rows)
     synth.save(file_path)
@@ -28,7 +28,7 @@ def train_accounts():
     with open(json_path, 'r') as f:
         flags: dict = json.load(f)
         f.close()
-    if 'create_accounts' not in flags.keys() or flags['create_accounts'] == 'false':
+    if 'create_accounts' not in flags.keys() or not flags['create_accounts']:
         create_accounts.create_accounts()
     anti_data, pro_data = SingleTableMetadata(), SingleTableMetadata()
     anti_df = pd.DataFrame(columns=['Avg_Score', 'Age_Score', 'Density_Score', 'Positivity', 'Antisemitic'],
@@ -47,8 +47,8 @@ def train_accounts():
     # Synthesize and save data
     path = Path(__file__).parent.parent / 'shuffle'
     path = path.absolute()
-    pro_accounts = synthesize_and_save(pro_data, pro_df, path / 'pro_account_synth.pkl')
-    anti_accounts = synthesize_and_save(anti_data, anti_df, path / 'anti_account_synth.pkl')
+    pro_accounts = synthesize_and_save(pro_data, pro_df, path / 'pro_account_synth.pkl',num_rows=10000)
+    anti_accounts = synthesize_and_save(anti_data, anti_df, path / 'anti_account_synth.pkl',num_rows=10000)
 
     training_accounts = pd.concat([pro_accounts, anti_accounts])
     training_accounts.to_csv(path / 'training_accounts.csv', index=False)

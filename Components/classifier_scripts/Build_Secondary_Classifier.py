@@ -3,7 +3,7 @@ from pathlib import Path
 
 from Components.classifier_scripts.Classifier_Builder_Template import build_classifier
 from shuffle import utils
-from shuffle.create_accounts import create_accounts
+from Synthesize.synthesize_accounts import train_accounts
 
 
 def build_secondary_classifier():
@@ -12,8 +12,8 @@ def build_secondary_classifier():
     with open(json_path, 'r') as f:
         flags: dict = json.load(f)
         f.close()
-    if 'create_accounts' not in flags.keys() or flags['create_accounts'] == 'false':
-        create_accounts()
+    if 'training_accounts' not in flags or not flags['training_accounts']:
+        train_accounts()
     # Step 1: Prepare the Data
     accounts = utils.load_training_accounts()
 

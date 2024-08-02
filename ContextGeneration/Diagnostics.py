@@ -1,11 +1,13 @@
+from pathlib import Path
+
 from pandas import read_csv
 
 from shuffle import injectionValues
 
 from AdversaryRevulsion import CovertLister, investigate_account
 from Components.Account import Account
-
-true_covert = set(read_csv('shuffle/covert.csv')['Username'])
+path = Path(__file__).parent.parent / 'shuffle/covert.csv'
+true_covert = set(read_csv(path)['Username'])
 true_hot_words = set(word for word in injectionValues.hot_words)
 true_hot_phrases = set(phrase for phrase in injectionValues.hot_phrases)
 
