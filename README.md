@@ -7,12 +7,12 @@ Feature Extraction: Trains a bot to identify key features from textual data.
 Natural Language Processing: Utilizes NLTK for tokenization, stemming, lemmatization, and feature tagging.
 
 Architecture
-Dataset Preparation
+Dataset Preparation:
 Preprocess the input dataset by cleaning, normalizing, and tokenizing text data.
-Apply data augmentation techniques to create synthesized data for model training.
+Applies data augmentation techniques to create synthesized data for model training.
 
 Bot Training
-Train the bot using supervised learning models on the augmented dataset.
+Trains the bot using supervised learning models on the augmented dataset.
 Use NLTK to extract linguistic features like part-of-speech tags, named entities, and n-grams.
 
 Feature Identification
